@@ -206,7 +206,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Breadcrumbs */}
-        <div className="text-xs font-bold text-slate-500 mb-8 flex flex-wrap items-center gap-2 lowercase capitalize">
+        {/* <div className="text-xs font-bold text-slate-500 mb-8 flex flex-wrap items-center gap-2 lowercase capitalize">
           <Link to="/" className="text-[#00A9D7] hover:underline">Home</Link>
           <span className="text-slate-400">›</span>
           <Link to="/india-tours" className="text-[#00A9D7] hover:underline">India Tour Packages</Link>
@@ -214,7 +214,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
           <span className="text-[#00A9D7] cursor-pointer hover:underline">{packageData.location} Tour Packages</span>
           <span className="text-slate-400">›</span>
           <span className="text-slate-500">{packageData.title}</span>
-        </div>
+        </div> */}
 
         {/* Header Section */}
         <div className="flex flex-col gap-4 mb-8">
@@ -260,10 +260,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                   alt=""
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                 />
-                {idx === 4 && (
-                  <div className="absolute bottom-6 right-6 bg-black/60 backdrop-blur-md text-white px-5 py-2.5 rounded-xl flex items-center gap-2 border border-white/20 cursor-pointer hover:bg-black/80 transition-all shadow-xl">
-                    =                  </div>
-                )}
+
               </div>
             ))}
           </div>

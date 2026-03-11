@@ -179,9 +179,9 @@ export const popularTours = [
     tag: "Romantic",
     category: "Standard",
     gallery: [
-      "https://images.unsplash.com/photo-1534171472159-edb6d1e0b63c?q=80&w=600",
-      "https://images.unsplash.com/photo-1523805081730-614449379e7d?q=80&w=600",
-      "https://images.unsplash.com/photo-1519066629447-267fffa62d4b?q=80&w=600",
+      "/images/AbhudaiCityTour (1).jpg",
+      "/images/AbhudaiCityTourthree.jpg",
+      "/images/AbhudaiCityTourTwo.webp",
       "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=600",
       "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?q=80&w=600"
     ],
