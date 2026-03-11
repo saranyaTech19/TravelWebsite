@@ -231,7 +231,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2 border border-slate-200 px-3 py-1.5 rounded-lg bg-white shadow-sm">
               <Share2 className="w-3.5 h-3.5 text-[#00A9D7]" />
-              <span className="text-[11px] font-black text-slate-600 uppercase tracking-widest">Customizable</span>
+              <span className="text-[11px] font-black text-slate-600 uppercase tracking-widest">Share</span>
             </div>
             <div className="flex items-center gap-2 border border-slate-200 px-3 py-1.5 rounded-lg bg-white shadow-sm">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
@@ -262,9 +262,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                 />
                 {idx === 4 && (
                   <div className="absolute bottom-6 right-6 bg-black/60 backdrop-blur-md text-white px-5 py-2.5 rounded-xl flex items-center gap-2 border border-white/20 cursor-pointer hover:bg-black/80 transition-all shadow-xl">
-                    <Camera className="w-4 h-4" />
-                    <span className="text-[13px] font-black uppercase tracking-widest">28+ Photos</span>
-                  </div>
+                    =                  </div>
                 )}
               </div>
             ))}
@@ -280,9 +278,8 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
               {['OVERVIEW', 'ITINERARY', 'INCLUSIONS', 'REVIEWS'].map((tab) => (
                 <button
                   key={tab}
-                  className={`text-[13px] font-black tracking-widest pb-4 transition-all relative ${
-                    activeTab === tab.toLowerCase() ? 'text-[#00A9D7]' : 'text-slate-400 hover:text-slate-600'
-                  }`}
+                  className={`text-[13px] font-black tracking-widest pb-4 transition-all relative ${activeTab === tab.toLowerCase() ? 'text-[#00A9D7]' : 'text-slate-400 hover:text-slate-600'
+                    }`}
                   onClick={() => setActiveTab(tab.toLowerCase())}
                 >
                   {tab}
@@ -301,13 +298,13 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                     <h2 className="text-3xl font-black text-slate-900 tracking-tight">Tour Overview</h2>
                     <div className="space-y-6 text-slate-600 text-lg leading-relaxed font-bold opacity-80">
                       <p>
-                        Experience the breathtaking beauty of {packageData.location} with our specially curated tour package. 
-                        This journey is designed to offer an unparalleled experience, blending adventure with relaxation as you explore 
+                        Experience the breathtaking beauty of {packageData.location} with our specially curated tour package.
+                        This journey is designed to offer an unparalleled experience, blending adventure with relaxation as you explore
                         the most stunning landscapes and hidden gems of the region.
                       </p>
                       <p>
-                        Whether you're looking for a romantic getaway, a family adventure, or a solo exploration, 
-                        this {packageData.duration} package ensures you see the best of what {packageData.location} has to offer. 
+                        Whether you're looking for a romantic getaway, a family adventure, or a solo exploration,
+                        this {packageData.duration} package ensures you see the best of what {packageData.location} has to offer.
                         From premium accommodations to expert-guided tours, every detail is handled for your comfort and enjoyment.
                       </p>
                     </div>
@@ -337,31 +334,31 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
               )}
 
               {activeTab === 'itinerary' && (
-                 <div className="space-y-10 animate-in fade-in duration-500">
-                   <h2 className="text-3xl font-black text-slate-900 tracking-tight">Itinerary</h2>
-                   <div className="relative pl-1">
-                     <div className="absolute left-[13px] top-6 bottom-6 w-[2px] bg-slate-100" />
-                     <div className="space-y-12">
-                       {(packageData.itinerary || [
-                         { title: "Departure & Sunset Cruise", description: "Board the luxury yacht at the marina. Enjoy a welcome reception as we set sail. Experience the spectacular sunset with live music and dinner." },
-                         { title: "Coastal Exploration", description: "Wake up to ocean views and enjoy a gourmet breakfast. Anchor near a secluded cove for swimming and paddleboarding. Evening features a dinner under the stars." },
-                         { title: "Return Journey", description: "Morning yoga session on the deck followed by brunch. Leisurely cruise back to the marina, arriving by early afternoon with unforgettable memories." }
-                       ]).map((item: any, i: number) => (
-                         <div key={i} className="relative pl-12 group">
-                           <div className="absolute left-0 top-1 w-7 h-7 rounded-full bg-[#00A9D7] flex items-center justify-center text-white text-[13px] font-black z-10 shadow-lg shadow-blue-200">
-                             {i + 1}
-                           </div>
-                           <div className="space-y-3">
-                             <h3 className="text-xl font-black text-slate-900 group-hover:text-[#00A9D7] transition-colors line-clamp-1">Day {i + 1}: {item.title}</h3>
-                             <p className="text-slate-600 text-base font-bold opacity-80 leading-relaxed max-w-2xl">
-                               {item.description || "Explore the local attractions and enjoy the scenic beauty of the region."}
-                             </p>
-                           </div>
-                         </div>
-                       ))}
-                     </div>
-                   </div>
-                 </div>
+                <div className="space-y-10 animate-in fade-in duration-500">
+                  <h2 className="text-3xl font-black text-slate-900 tracking-tight">Itinerary</h2>
+                  <div className="relative pl-1">
+                    <div className="absolute left-[13px] top-6 bottom-6 w-[2px] bg-slate-100" />
+                    <div className="space-y-12">
+                      {(packageData.itinerary || [
+                        { title: "Departure & Sunset Cruise", description: "Board the luxury yacht at the marina. Enjoy a welcome reception as we set sail. Experience the spectacular sunset with live music and dinner." },
+                        { title: "Coastal Exploration", description: "Wake up to ocean views and enjoy a gourmet breakfast. Anchor near a secluded cove for swimming and paddleboarding. Evening features a dinner under the stars." },
+                        { title: "Return Journey", description: "Morning yoga session on the deck followed by brunch. Leisurely cruise back to the marina, arriving by early afternoon with unforgettable memories." }
+                      ]).map((item: any, i: number) => (
+                        <div key={i} className="relative pl-12 group">
+                          <div className="absolute left-0 top-1 w-7 h-7 rounded-full bg-[#00A9D7] flex items-center justify-center text-white text-[13px] font-black z-10 shadow-lg shadow-blue-200">
+                            {i + 1}
+                          </div>
+                          <div className="space-y-3">
+                            <h3 className="text-xl font-black text-slate-900 group-hover:text-[#00A9D7] transition-colors line-clamp-1">Day {i + 1}: {item.title}</h3>
+                            <p className="text-slate-600 text-base font-bold opacity-80 leading-relaxed max-w-2xl">
+                              {item.description || "Explore the local attractions and enjoy the scenic beauty of the region."}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               )}
 
               {activeTab === 'inclusions' && (
@@ -417,7 +414,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
               {activeTab === 'reviews' && (
                 <div className="space-y-12 animate-in fade-in duration-500">
                   <h2 className="text-3xl font-black text-slate-900 tracking-tight">Guest Reviews</h2>
-                  
+
                   <div className="flex items-center gap-8 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
                     <div className="text-7xl font-black text-slate-900">4.8</div>
                     <div className="space-y-2">
@@ -459,9 +456,9 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Selected Package</label>
                   <div className="relative">
-                    <input 
-                      type="text" 
-                      readOnly 
+                    <input
+                      type="text"
+                      readOnly
                       value={packageData.title}
                       className="w-full px-6 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50/50 text-slate-800 font-bold outline-none cursor-not-allowed"
                     />
@@ -472,8 +469,8 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Full Name</label>
                   <div className="relative group">
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="full_name"
                       value={formData.full_name}
                       onChange={handleChange}
@@ -487,8 +484,8 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Email Address</label>
                   <div className="relative group">
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
@@ -502,8 +499,8 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Travel Date</label>
                   <div className="relative group">
-                    <input 
-                      type="date" 
+                    <input
+                      type="date"
                       name="travel_date"
                       value={formData.travel_date}
                       onChange={handleChange}
@@ -517,8 +514,8 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Phone Number</label>
                   <div className="relative group">
-                    <input 
-                      type="tel" 
+                    <input
+                      type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
