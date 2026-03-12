@@ -83,18 +83,18 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
     <div className="min-h-screen bg-brand-bg">
       {/* Hero Header */}
       <section className=" w-full flex items-center overflow-hidden bg-white px-6 md:px-14 ">
-        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 py-20">
+        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 pt-20">
           {/* Left Content */}
-          <div className="flex flex-col justify-center">
-            <div className="flex flex-col gap-5">
-              <h1 className="text-5xl md:text-[59px] font-sans font-black text-slate-600 leading-[1.1] tracking-wide">
+          <div className="flex flex-col justify-center ">
+            <div className="flex flex-col gap-5 justify-center items-center lg:items-start">
+              <h1 className="text-3xl md:text-[59px] text-center lg:text-left font-sans font-black text-slate-600 leading-[1.1] tracking-wide mt-[50px] lg:mt-0">
                 Book Your <span className="text-[#2CB8E5]">India</span><br />
                 <span className="text-[#2CB8E5]">Tours Today</span>
               </h1>
-              <p className="text-slate-500 text-lg md:text-xl max-w-lg leading-relaxed">
+              <p className="text-slate-500 text-lg md:text-xl max-w-lg leading-relaxed text-center lg:text-left">
                 Explore the rich culture, historic landmarks, scenic landscapes, and vibrant traditions of India with our specially curated tour packages.              </p>
               <div className="flex flex-wrap gap-4">
-                <button 
+                <button
                   onClick={onBookClick}
                   className="flex items-center gap-2 px-8 py-4 rounded-full border border-[#2CB8E5] text-[#2CB8E5] font-bold text-sm hover:bg-[#2CB8E5]/5 transition-all group">
                   Book Now
@@ -107,12 +107,12 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
             </div>
 
             <div className="mt-[20px]">
-              <img src="/images/INDIA.png" alt="" className="max-w-xs md:max-w-md" />
+              <img src="/images/INDIA.png" alt="" className=" md:max-w-md" />
             </div>
           </div>
 
           {/* Right Content - Hero Image */}
-          <div className="w-[600px] h-[492px]"
+          <div className="lg:w-[600px] lg:h-[492px] w-full h-[300px]"
             style={{
               backgroundImage: "url('/images/indiaRight.png')",
               backgroundSize: "contain",
@@ -127,20 +127,20 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
       <section className="relative overflow-hidden py-4 bg-white">
         <div className="max-w-[1440px] mx-auto relative z-10 px-6 md:px-14">
           <div className="text-left mb-12">
-            <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight">
+            <h2 className="text-4xl text-center lg:text-left md:text-[38px] font-sans font-black text-slate-900 leading-tight">
               Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
             </h2>
           </div>
 
-          <div className="flex  justify-center gap-12 relative">
+          <div className="flex flex-col lg:flex-row  justify-center gap-12 relative">
             {OFFERS.map((offer) => (
               <div
                 key={offer.id}
-                className="relative rounded-[40px] overflow-hidden p-10 h-[300px] w-[550px] bg-no-repeat bg-center bg-cover rounded-[2.5rem]   group cursor-pointer"
+                className="relative rounded-[40px] overflow-hidden lg:p-10  p-5 h-[300px] lg:w-[550px] w-full bg-no-repeat bg-center bg-cover rounded-[2.5rem]   group cursor-pointer"
                 style={{ backgroundImage: `url(${offer.image})` }}
               >
                 {/* TITLE */}
-                <h3 className="text-white font-black text-[32px] leading-tight">
+                <h3 className="text-white font-black lg:text-[32px] text-[20px] leading-tight">
                   {offer.title}<br />
                 </h3>
 
@@ -161,7 +161,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
       <div className="max-w-screen-2xl mx-auto px-6 py-4">
         {/* Trending Destinations Banner with First 4 Cards */}
         <div
-          className="w-full h-[360px] mx-auto  relative flex flex-col items-center justify-start pt-24 pb-20 overflow-visible mt-12 rounded-[40px]"
+          className="w-full h-[360px] mx-auto  relative flex flex-col items-center justify-start lg:pt-24 pb-20 overflow-visible mt-12 rounded-[40px] p-cards"
           style={{
             backgroundImage: "url('/images/bannerfive.png')",
             backgroundSize: "cover",
@@ -169,7 +169,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="text-white text-[38px] font-bold text-center mb-12">International Trips from India
+          <div className="lg:text-white text-black text-[38px] font-bold text-center mb-12">International Trips from India
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
@@ -180,7 +180,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
         </div>
 
         {/* North India Tours Section */}
-        <div className="max-w-[1440px] mx-auto py-16 px-6 md:px-14 mt-40">
+        <div className="max-w-[1440px] mx-auto py-16 px-6 md:px-14 lg:mt-40 mt-[20px]">
           <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight mb-12">
             North India <span className="text-[#00A9D7]">Tours</span>
           </h2>

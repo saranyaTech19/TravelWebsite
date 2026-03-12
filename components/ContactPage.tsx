@@ -118,12 +118,12 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       </div>
 
       <div className="w-full md:w-[80%] mx-auto px-6 py-[30px]">
-        <div className="flex flex-col md:flex-row justify-between md:items-start items-center  gap-8">
+        <div className="flex flex-col md:flex-row justify-between md:items-start items-center justify-center gap-8">
           <div className="space-y-2">
-            <h2 className="text-3xl md:text-[38px] font-sans font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl md:text-[38px] text-center lg:text-left font-sans font-black text-slate-900 tracking-tight">
               Get in touch with us
             </h2>
-            <h3 className="text-3xl md:text-[38px] font-sans font-black text-[#00A9D7] tracking-tight">
+            <h3 className="text-3xl md:text-[38px] text-center lg:text-left font-sans font-black text-[#00A9D7] tracking-tight">
               We're here to assist you
             </h3>
           </div>
@@ -144,7 +144,7 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-[30px]">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 lg:gap-y-10 gap-y-6">
               <div className="">
                 <label className="text-[17px] font-medium text-slate-800 block">First Name</label>
                 <input
@@ -216,9 +216,9 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
 
       </div>
-      <div className="mt-20 mb-48">
+      <div className="mt-20 lg:mb-48">
         <div
-          className="w-full h-[300px] relative flex flex-col items-center justify-start pt-16 overflow-visible rounded-[3rem]"
+          className="w-full h-[300px] relative flex flex-col items-center justify-start pt-16 overflow-visible rounded-[3rem]   hidden lg:block  "
           style={{
             backgroundImage: "url('/images/bannerfive.png')",
             backgroundSize: "cover",
@@ -267,6 +267,62 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+        {/* mobile */}
+        {/* mobile */}
+        <div className="lg:hidden block text-center px-4">
+
+          <h2 className="text-3xl font-sans font-white text-slate-900 mb-10 font-bold">
+            We are always happy to assist you
+          </h2>
+
+          {/* Contact Card */}
+          <div className="w-full bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 border border-slate-50">
+
+            <div className="grid grid-cols-1 gap-8 divide-y divide-[#00A9D7]/30">
+
+              {/* Office */}
+              <div className="pt-6">
+                <h4 className="text-lg font-bold text-slate-900 mb-4">Our Office</h4>
+                <div className="w-8 h-1 bg-[#00A9D7] mb-6 mx-auto"></div>
+
+                <p className="text-slate-600 text-[14px] leading-relaxed">
+                  Dream Destinas Tours & Travels (A Division of Global Connect World Travel)
+                  1st Floor, Tenco Complex, Pallikkunnu, Kannur, Kerala – 670004
+                </p>
+              </div>
+
+              {/* Phone */}
+              <div className="pt-6">
+                <h4 className="text-lg font-bold text-slate-900 mb-4">Phone Support</h4>
+                <div className="w-8 h-1 bg-[#00A9D7] mb-6 mx-auto"></div>
+
+                <p className="text-slate-600 text-[14px]">
+                  +971 58 952 0398 <br />
+                  +91 89210 959738 (India)
+                </p>
+
+                <p className="text-slate-600 text-[14px] mt-2">
+                  +91 80758521708 <br />
+                  +91 7025791083 (Dubai)
+                </p>
+              </div>
+
+              {/* Email */}
+              <div className="pt-6">
+                <h4 className="text-lg font-bold text-slate-900 mb-4">Email Address</h4>
+                <div className="w-8 h-1 bg-[#00A9D7] mb-6 mx-auto"></div>
+
+                <p className="text-slate-600 text-[14px] break-all">
+                  santhosh@globalconnectworldtravel.com
+                  <br />
+                  booking@globalconnectworldtravel.com
+                </p>
+              </div>
+
+            </div>
+
           </div>
         </div>
       </div>

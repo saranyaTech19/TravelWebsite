@@ -29,15 +29,15 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
         {/* DUBAI Background Watermark */}
 
 
-        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 py-20">
+        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 pt-20">
           {/* Left Content */}
           <div className="flex flex-col justify-center">
-            <div className="flex flex-col gap-5">
-              <h1 className="text-5xl md:text-[59px] font-sans font-black text-slate-600 leading-[1.1] tracking-wide">
+            <div className="flex flex-col gap-5 justify-center items-center lg:items-start">
+              <h1 className="text-3xl md:text-[59px] font-sans font-black text-slate-600 leading-[1.1] tracking-wide mt-[50px] lg:mt-0">
                 Book Your <span className="text-[#2CB8E5]">Dubai</span><br />
                 <span className="text-[#2CB8E5]">Tours Today</span>
               </h1>
-              <p className="text-slate-500 text-lg md:text-xl max-w-lg leading-relaxed">
+              <p className="text-slate-500 text-lg md:text-xl max-w-lg leading-relaxed text-center lg:text-left">
                 Explore Dubai’s famous landmarks, desert safaris, luxury shopping, and top attractions with our curated tour experiences.             </p>
               <div className="flex flex-wrap gap-4">
                 <button
@@ -53,12 +53,12 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
             </div>
 
             <div className="mt-[20px]">
-              <img src="/images/DUBAI.png" alt="" className="max-w-xs md:max-w-md" />
+              <img src="/images/DUBAI.png" alt="" className=" md:max-w-md" />
             </div>
           </div>
 
           {/* Right Content - Hero Image */}
-          <div className="w-[600px] h-[492px]"
+          <div className="lg:w-[600px] lg:h-[492px] w-full h-[300px]"
             style={{
               backgroundImage: "url('/images/dubaibanner.png')",
               backgroundSize: "contain",
@@ -75,20 +75,20 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
       <section className="relative overflow-hidden py-4 bg-white">
         <div className="max-w-[1440px] mx-auto relative z-10 px-6 md:px-14">
           <div className="text-left mb-12">
-            <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight">
+            <h2 className="text-4xl text-4xl text-center lg:text-left md:text-[38px] font-sans font-black text-slate-900 leading-tight">
               Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
             </h2>
           </div>
 
-          <div className="flex  justify-center gap-12 relative">
+          <div className="flex  flex-col lg:flex-row justify-center gap-12 relative">
             {OFFERS.map((offer) => (
               <div
                 key={offer.id}
-                className="relative rounded-[40px] overflow-hidden p-10 h-[300px] w-[550px] bg-no-repeat bg-center bg-cover rounded-[2.5rem]   group cursor-pointer"
+                className="relative rounded-[40px] overflow-hidden lg:p-10  p-5 h-[300px] lg:w-[550px] bg-no-repeat bg-center bg-cover rounded-[2.5rem]   group cursor-pointer"
                 style={{ backgroundImage: `url(${offer.image})` }}
               >
                 {/* TITLE */}
-                <h3 className="text-white font-black text-[32px] leading-tight">
+                <h3 className="text-white font-black lg:text-[32px] text-[20px] leading-tight">
                   {offer.title}<br />
                 </h3>
 
@@ -166,7 +166,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
 
         {/* Trending Destinations Banner with First 4 Cards */}
         <div
-          className="w-full h-[360px] mx-auto  relative flex flex-col items-center justify-start pt-24 pb-20 overflow-visible mt-12 rounded-[40px]"
+          className="w-full h-[360px] mx-auto  relative flex flex-col items-center justify-start lg:pt-24 pb-20 overflow-visible mt-12 rounded-[40px] p-cards"
           style={{
             backgroundImage: "url('/images/bannerfive.png')",
             backgroundSize: "cover",
@@ -174,7 +174,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="text-white text-[38px] font-bold text-center mb-12">International Trips from Dubai</div>
+          <div className="lg:text-white text-black text-[38px] font-bold text-center mb-12">International Trips from Dubai</div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
             {popularTours.slice(0, 4).map((tour) => (
@@ -234,7 +234,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
         </div>
 
         {/* Dubai Tour Section */}
-        <div className="max-w-[1440px] mx-auto py-16 px-6 md:px-14 mt-[180px]">
+        <div className="max-w-[1440px] mx-auto py-16 px-6 md:px-14 lg:mt-[180px]">
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {standardTours.slice(4).map((tour) => (

@@ -235,16 +235,16 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
         <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 py-20">
           {/* Left Content */}
           <div className="flex flex-col justify-center">
-            <div className="flex flex-col gap-5">
-              <h1 className="text-5xl md:text-[56px] font-sans font-black text-slate-600 leading-[1.1] tracking-wide">
+            <div className="flex flex-col gap-5 justify-center items-center lg:items-start">
+              <h1 className="text-3xl md:text-[56px] text-center lg:text-left font-sans font-black text-slate-600 leading-[1.1] tracking-wide mt-[50px] lg:mt-0">
                 Book Your <span className="text-[#2CB8E5]">Special</span><br />
                 <span className="text-[#2CB8E5]">Packages Today</span>
               </h1>
-              <p className="text-slate-500 text-lg md:text-xl max-w-lg leading-relaxed">
+              <p className="text-slate-500 text-lg md:text-xl max-w-lg leading-relaxed text-center lg:text-left">
                 Curated journeys designed for those who seek the extraordinary. Explore our exclusive travel packages tailored to your desires.
               </p>
               <div className="flex flex-wrap gap-4">
-                <button 
+                <button
                   onClick={onBookClick}
                   className="flex items-center gap-2 px-8 py-4 rounded-full border border-[#2CB8E5] text-[#2CB8E5] font-bold text-sm hover:bg-[#2CB8E5]/5 transition-all group">
                   Book Now
@@ -262,11 +262,11 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
           </div>
 
           {/* Right Content - Hero Image */}
-          <div className="w-[600px] h-[492px]"
+          <div className="lg:w-[600px] lg:h-[492px] w-full h-[300px]  lg:bg-center lg:bg-right bg-center "
             style={{
               backgroundImage: "url('/images/dubaibanner.png')",
               backgroundSize: "contain",
-              backgroundPosition: "center right",
+              // backgroundPosition: "center right",
               backgroundRepeat: "no-repeat",
             }}
           ></div>
@@ -343,7 +343,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
           <section className="relative overflow-hidden py-4 bg-white">
             <div className="max-w-[1440px] mx-auto relative z-10 px-6 md:px-14">
               <div className="text-left mb-12">
-                <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight">
+                <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight text-center lg:text-left">
                   Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
                 </h2>
               </div>
@@ -352,7 +352,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                 {OFFERS.map((offer) => (
                   <div
                     key={offer.id}
-                    className="relative rounded-3xl overflow-hidden p-6 h-[180px] bg-no-repeat bg-right-bottom bg-contain shadow-sm border border-slate-100"
+                    className="relative rounded-3xl overflow-hidden p-6 h-[180px] bg-no-repeat bg-right-bottom lg:bg-contain bg-cover shadow-sm border border-slate-100"
                     style={{ backgroundImage: `url(${offer.image})` }}
                   >
                     <h3 className="text-white font-bold text-[20px] leading-tight">
@@ -371,7 +371,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
           {/* Packages Grid Section */}
           <div className="max-w-screen-2xl mx-auto px-6 py-4">
             <div
-              className="w-full h-[360px] mx-auto relative flex flex-col items-center justify-start pt-24 pb-20 overflow-visible mt-12 rounded-[40px]"
+              className="w-full h-[360px] mx-auto relative flex flex-col items-center justify-start lg:pt-24 pb-20 overflow-visible mt-12 rounded-[40px] p-cards"
               style={{
                 backgroundImage: "url('/images/bannerfive.png')",
                 backgroundSize: "cover",
@@ -379,9 +379,9 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <div className="text-white text-[38px] font-bold text-center mb-12">Amazing Trendings desinations</div>
+              <div className="text-black lg:text-white text-[38px] font-bold text-center lg:mb-12">Amazing Trendings desinations</div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14 pt-[30px]">
                 {packagesList.slice(0, 4).map((pkg) => (
                   <div
                     key={pkg.id}
@@ -421,9 +421,9 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
               </div>
             </div>
 
-            <div className="max-w-[1440px] mx-auto py-16 px-6 md:px-14 mt-[200px]">
+            <div className="max-w-[1440px] mx-auto lg:py-16 px-6 md:px-14 lg:mt-[200px]">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {packagesList.map((pkg) => (
+                {packagesList.slice(4, 8).map((pkg) => (
                   <div
                     key={pkg.id}
                     onClick={() => handleBookNow(pkg)}

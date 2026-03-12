@@ -250,7 +250,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-500 text-sm">Copyright &copy; 2023</p>
+          <p className="text-slate-500 text-sm">Copyright &copy; 2026</p>
           <div className="flex gap-4 text-sm font-medium">
             <span className="text-slate-500">All Rights Reserved |</span>
             <a href="#" className="text-[#00A9D7] hover:underline">Terms and Conditions</a>
