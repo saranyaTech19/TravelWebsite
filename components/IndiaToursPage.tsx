@@ -5,7 +5,7 @@ import { LocationIcon } from './Icons';
 import { Users } from 'lucide-react';
 
 const OFFERS = [
-  { id: 1, title: 'INTERNATIONAL TOURS FROM INDIA', image: '/images/indiai.png', },
+  { id: 1, title: 'INTERNATIONAL TOURS FROM INDIA', image: '/images/indiaFrom.png', },
   // { id: 2, title: 'DUBAI TOURS', image: '/images/airplanes.png', },
   { id: 3, title: 'INDIA LOCAL TOURS', image: '/images/indiaL.png', },
   // { id: 4, title: 'DUBAI LOCAL TOURS', image: '/images/jeep.png', },
@@ -33,17 +33,7 @@ function TourCard({ tour, onExplore, onBookClick }: any) {
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
 
-          {/* Top Rated Badge */}
-          <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full shadow-md">
-            <span className="text-[#00A9D7] text-[10px] font-black uppercase tracking-wider">Top Rated</span>
-          </div>
 
-          {/* Heart Icon */}
-          <button className="absolute top-4 right-4 w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform group/heart">
-            <svg className="w-4 h-4 text-slate-400 group-hover/heart:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-          </button>
         </div>
       </div>
 
@@ -69,7 +59,7 @@ function TourCard({ tour, onExplore, onBookClick }: any) {
         </div>
 
         <div className="mt-auto flex items-center justify-center">
-          <button 
+          <button
             onClick={(e) => {
               e.stopPropagation();
               onBookClick();
@@ -104,13 +94,15 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
               <p className="text-slate-500 text-lg md:text-xl max-w-lg leading-relaxed">
                 Explore the rich culture, historic landmarks, scenic landscapes, and vibrant traditions of India with our specially curated tour packages.              </p>
               <div className="flex flex-wrap gap-4">
-                <button className="flex items-center gap-2 px-8 py-4 rounded-full border border-[#2CB8E5] text-[#2CB8E5] font-bold text-sm hover:bg-[#2CB8E5]/5 transition-all group">
-                  Tour Guide
+                <button 
+                  onClick={onBookClick}
+                  className="flex items-center gap-2 px-8 py-4 rounded-full border border-[#2CB8E5] text-[#2CB8E5] font-bold text-sm hover:bg-[#2CB8E5]/5 transition-all group">
+                  Book Now
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </button>
-                <button className="px-8 py-4 rounded-full border border-[#2CB8E5] text-[#2CB8E5] font-bold text-sm hover:bg-[#2CB8E5]/5 transition-all">
+                {/* <button className="px-8 py-4 rounded-full border border-[#2CB8E5] text-[#2CB8E5] font-bold text-sm hover:bg-[#2CB8E5]/5 transition-all">
                   Explore More
-                </button>
+                </button> */}
               </div>
             </div>
 

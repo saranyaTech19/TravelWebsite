@@ -32,10 +32,47 @@ const AIRLINES = [
 ];
 
 export const TOURS = [
-    { id: 201, title: 'Rajasthan Heritage & Palaces Tour', location: 'Rajasthan, India', price: '$450', rating: '4.9', duration: '7 days 6 nights', guest: '2-4 guest', image: '/images/jaipur mahal.jfif', tag: 'Heritage' },
-    { id: 202, title: 'Mumbai City Lights & Street Food', location: 'Mumbai, India', price: '$120', rating: '4.8', duration: '2 days 1 nights', guest: '2-6 guest', image: '/images/mumbai street food.jpg', tag: 'City' },
-    { id: 203, title: 'Dubai Mall & Burj Khalifa Experience', location: 'Dubai, UAE', price: '$199', rating: '5.0', duration: '1 day', guest: '1-10 guest', image: '/images/burij khalifa.avif', tag: 'Luxury' },
-    { id: 204, title: 'Goa Coastal Adventure & Water Sports', location: 'Goa, India', price: '$85', rating: '4.7', duration: '1 day', guest: '2-8 guest', image: '/images/raul-varela-MnDgb8HH-y8-unsplash.jpg', tag: 'Adventure' },
+    {
+        id: 201, title: 'Rajasthan Heritage & Palaces Tour', location: 'Rajasthan, India', price: '$450', rating: '4.9', duration: '7 days 6 nights', guest: '2-4 guest', image: '/images/htwo.jpg', tag: 'Heritage',
+        gallery: [
+            "/images/hone.jpg",
+            "/images/htwo.jpg",
+            "/images/AbhudaiCityTourTwo.webp",
+            "/images/hthree.jpg",
+            "/images/hfour.jpg"
+        ],
+    },
+    {
+        id: 202, title: 'Mumbai City Lights & Street Food', location: 'Mumbai, India', price: '$120', rating: '4.8', duration: '2 days 1 nights', guest: '2-6 guest', image: '/images/mumbai street food.jpg', tag: 'City',
+        gallery: [
+            "/images/mumfour.jpg",
+            "/images/mumone.jpg",
+            "/images/mumtwo.jpg",
+            "/images/mumthree.jpg",
+            "/images/hfour.jpg"
+        ],
+    },
+    {
+        id: 203, title: 'Dubai Mall & Burj Khalifa Experience', location: 'Dubai, UAE', price: '$199', rating: '5.0', duration: '1 day', guest: '1-10 guest', image: '/images/burij khalifa.avif', tag: 'Luxury',
+        gallery: [
+            "/images/dm.jpg",
+            "/images/DmFive.jpg",
+            "/images/dmThree.jpg",
+            "/images/dmtwo.jpg",
+            "/images/hfour.jpg"
+        ],
+    },
+    {
+        id: 204, title: 'Goa Coastal Adventure & Water Sports', location: 'Goa, India', price: '$85', rating: '4.7', duration: '1 day', guest: '2-8 guest', image: '/images/raul-varela-MnDgb8HH-y8-unsplash.jpg', tag: 'Adventure',
+
+        gallery: [
+            "/images/goa.jpg",
+            "/images/goa.jpg",
+            "/images/goaThree.jpg",
+            "/images/goaTwo.jpg",
+            "/images/hfour.jpg"
+        ],
+    },
 ];
 
 export const PACKAGES = [
@@ -66,12 +103,12 @@ const INSTAGRAM = [
 ];
 
 const TRENDING_DESTINATIONS = [
-    { id: 1, image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800&auto=format&fit=crop' },
-    { id: 2, image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop' },
-    { id: 3, image: 'https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=800&auto=format&fit=crop' },
-    { id: 4, image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=800&auto=format&fit=crop' },
-    { id: 5, image: 'https://images.unsplash.com/photo-1551882547-ff43c33f7825?q=80&w=800&auto=format&fit=crop' },
-    { id: 6, image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop' },
+    { id: 1, image: '/images/AbhudaiCityTourthree.jpg' },
+    { id: 2, image: '/images/maladives.jpg' },
+    { id: 3, image: '/images/siya.jpg' },
+    { id: 4, image: '/images/desertone.jpg' },
+    { id: 5, image: '/images/desrtFour.jpg' },
+    { id: 6, image: '/images/safari.jpg' },
 ];
 
 interface SubHomeProps {
@@ -149,18 +186,17 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
             {/* 1. HERO SECTION (BANNER) */}
             <section
-                className="relative w-full h-[760px] bg-cover bg-center overflow-hidden flex items-center justify-center pt-32 pb-20"
+                className="relative w-full h-[760px] bg-cover bg-center overflow-hidden flex items-center justify-center  "
                 style={{
-                    backgroundImage: "url('/images/bannerbg.png')",
-                    backgroundSize: "100% 100%",
-                    backgroundPosition: "0px 70px",
-                    backgroundRepeat: "no-repeat"
+                    backgroundImage: "url('/images/homeBg.png')",
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center"
                 }}
             >
-                <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.5px]" />
 
                 <div className="relative z-10 left-[60px] max-w-[1440px] mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                    <div className="space-y-8">
+                    <div className="mt-[-60px]">
                         <h2 className="text-5xl md:text-[60px] font-sans font-bold text-white drop-shadow-2xl leading-tight animate-fade-in-up">
                             Book Your Next <br /> Adventure Today
                         </h2>
@@ -178,7 +214,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                         </div>
 
                         {/* Premium Redesigned Search Bar - Single Location Input */}
-                        <div className="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-[32px] shadow-3xl p-3 animate-fade-in-up delay-400 mt-12 border border-white/20">
+                        <div className="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-[32px] shadow-3xl p-3 animate-fade-in-up delay-400  border border-white/20 mt-[20px]">
                             <div className="flex items-center gap-4">
                                 <div className="flex-1 flex items-center gap-4 px-6 py-3 bg-gray-50/50 rounded-2xl border border-gray-100 group focus-within:border-[#00A9D7]/30 focus-within:bg-white transition-all">
                                     <MapPin className="w-5 h-5 text-[#00A9D7]" />
@@ -190,7 +226,13 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                         className="bg-transparent text-lg font-bold text-gray-800 focus:outline-none w-full placeholder:text-gray-400 border-none ring-0"
                                     />
                                 </div>
-                                <button className="px-10 h-14 bg-[#00A9D7] hover:bg-[#008db3] text-white rounded-2xl flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest transition-all shadow-lg hover:shadow-xl shrink-0 group">
+                                <button
+                                    onClick={() => {
+                                        if (searchQuery.trim()) {
+                                            navigate(`/packages?search=${encodeURIComponent(searchQuery.trim())}`);
+                                        }
+                                    }}
+                                    className="px-10 h-14 bg-[#00A9D7] hover:bg-[#008db3] text-white rounded-2xl flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest transition-all shadow-lg hover:shadow-xl shrink-0 group">
                                     <Search className="w-4 h-4 transition-transform group-hover:scale-110" />
                                     Search
                                 </button>
@@ -201,10 +243,10 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             </section>
 
             {/* 2. DREAM DESTINATION SECTION */}
-            <section className="global-page-container relative overflow-hidden">
-                <div className="max-w-7xl mx-auto relative z-10">
-                    <div className="text-left mb-20 animate-fade-in-up">
-                        <h2 className="text-5xl md:text-[38px] font-sans font-black text-slate-900 leading-tight px-[20px]">
+            <section className="global-page-container mt-[-95px] relative overflow-hidden">
+                <div className="max-w-7xl mx-auto  z-10">
+                    <div className="text-left mb-10 animate-fade-in-up">
+                        <h2 className="text-5xl md:text-[45px] font-sans font-black text-slate-900 leading-tight px-[20px]">
                             Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
                         </h2>
                     </div>
@@ -260,7 +302,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                         backgroundRepeat: "no-repeat",
                     }}
                 >
-                    <div className="text-white text-[38px] font-bold text-center">Amazing Trendings Desinations</div>
+                    <div className="text-white text-[45px] font-bold text-center">Amazing Trendings Desinations</div>
 
                     {/* Decorative Dashed Line */}
                     <div className="absolute top-[60%] left-0 right-0 -translate-y-1/2 pointer-events-none z-0 opacity-40">
@@ -291,17 +333,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                         <div className="w-full h-full rounded-[24px] overflow-hidden relative">
                                             <img src={tour.image} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 
-                                            {/* Top Rated Badge */}
-                                            <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full shadow-md">
-                                                <span className="text-[#35BCE2] text-[10px] font-black uppercase tracking-wider">Top Rated</span>
-                                            </div>
 
-                                            {/* Heart Icon */}
-                                            <button className="absolute top-4 right-4 w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform group/heart">
-                                                <svg className="w-4 h-4 text-slate-400 group-hover/heart:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                </svg>
-                                            </button>
                                         </div>
                                     </div>
 
@@ -391,14 +423,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                         <div className="relative p-3 h-[200px]">
                                             <div className="w-full h-full rounded-[24px] overflow-hidden relative">
                                                 <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                                                <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full shadow-md">
-                                                    <span className="text-[#00A9D7] text-[10px] font-black uppercase tracking-wider">Top Rated</span>
-                                                </div>
-                                                <button className="absolute top-4 right-4 w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform group/heart">
-                                                    <svg className="w-4 h-4 text-slate-400 group-hover/heart:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                    </svg>
-                                                </button>
+
                                             </div>
                                         </div>
 
@@ -439,7 +464,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             </section> */}
             {/* sections 5*/}
 
-            <section className="w-full h-[621px] relative overflow-hidden flex items-center justify-end px-6 lg:px-40 mt-[250px]" style={{
+            <section className="w-full h-[621px] relative overflow-hidden flex items-center justify-end px-6 lg:px-40 mt-[275px]" style={{
                 backgroundImage: "url('/images/bannerFour.png')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -473,10 +498,10 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             </section>
 
             {/* section 6 */}
-            <div className="mt-[30px]">
+            <div className="my-[40px]">
 
                 <div
-                    className="w-full h-[340px] relative flex flex-col items-center justify-start pt-[20px] overflow-visible rounded-[40px]"
+                    className="w-full h-[340px] relative flex flex-col items-center justify-start mt-[40px] overflow-visible rounded-[40px]"
                     style={{
                         backgroundImage: "url('/images/bannerfive.png')",
                         backgroundSize: "cover",
@@ -485,7 +510,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                     }}
                 >
                     <div className="relative z-10 mt-[30px] ">
-                        <h2 className="text-4xl md:text-[38px] font-sans font-black text-white text-center drop-shadow-lg pt-[20px] ">
+                        <h2 className="text-4xl md:text-[45px] font-sans font-black text-white text-center drop-shadow-lg pt-[59px] ">
                             Trending India And Around  Destinations
                         </h2>
                     </div>

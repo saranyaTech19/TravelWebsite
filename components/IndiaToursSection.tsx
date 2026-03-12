@@ -12,18 +12,17 @@ export const indiaTours = [
     id: 101,
     title: "Delhi City Highlights",
     location: "Delhi, India",
-    image: "/images/delhi highlights.jpg",
+    image: "/images/delhiicityone.png",
     description: "Explore the historic monuments and vibrant markets of India's capital city.",
     rating: "4.95 (840)",
     duration: "2 Days",
     tag: "Cultural",
     category: "North",
     gallery: [
-      "https://images.unsplash.com/photo-1587474260584-1f20d430c35a?q=80&w=600",
-      "https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=600",
-      "https://images.unsplash.com/photo-1585123334904-845d60e97b29?q=80&w=600",
-      "https://images.unsplash.com/photo-1621644784742-998845112f46?q=80&w=600",
-      "https://images.unsplash.com/photo-1624314138470-5ca973e895c1?q=80&w=600"
+      "/images/delhiicityTwo.png",
+      "/images/delhiiCityThree.png",
+      "/images/DelhiiCityFour.png",
+      "/images/DelhiiCityFive.png",
     ],
     itinerary: [
       { day: "Day 1", title: "Old Delhi Heritage", detail: "Visit the iconic Red Fort and Jama Masjid." },
@@ -34,18 +33,17 @@ export const indiaTours = [
     id: 102,
     title: "Agra (Taj Mahal) Heritage",
     location: "Agra, UP",
-    image: "https://images.unsplash.com/photo-1564507592333-c60657eea023?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/majestic-mausoleum-ancient-god-spiritual-journey-generated-by-ai (1).jpg",
     description: "Witness the eternal beauty of the Taj Mahal, a masterpiece of Mughal architecture.",
     rating: "4.98 (1200)",
     duration: "1 Day",
     tag: "Historic",
     category: "North",
     gallery: [
-      "https://images.unsplash.com/photo-1564507592333-c60657eea023?q=80&w=600",
-      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=600",
-      "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=600",
-      "https://images.unsplash.com/photo-1610443107062-63778583482d?q=80&w=600",
-      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?q=80&w=600"
+      "/images/Tajii.jpg",
+      "/images/Tajiiis.jpg",
+      "/images/TajiisFour.jpg",
+      "/images/majestic-mausoleum-ancient-god-spiritual-journey-generated-by-ai (1).jpg",
     ],
     itinerary: [
       { day: "Day 1", title: "Monument of Love", detail: "Experience the Taj Mahal at sunrise and sunset." }
@@ -55,18 +53,17 @@ export const indiaTours = [
     id: 103,
     title: "Jaipur Pink City Tour",
     location: "Jaipur, Rajasthan",
-    image: "https://images.unsplash.com/photo-1534051139411-2eb750fa4e76?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/jaipur.jpg",
     description: "Discover the majestic forts and palaces of Jaipur, the royal city of Rajasthan.",
     rating: "4.92 (750)",
     duration: "3 Days",
     tag: "Royal",
     category: "North",
     gallery: [
-      "https://images.unsplash.com/photo-1477587458883-47145ed94245?q=80&w=600",
-      "https://images.unsplash.com/photo-1534051139411-2eb750fa4e76?q=80&w=600",
-      "https://images.unsplash.com/photo-1599661046289-e318978b66bc?q=80&w=600",
-      "https://images.unsplash.com/photo-1524230507669-5ff97982bb5e?q=80&w=600",
-      "https://images.unsplash.com/photo-1624314138470-5ca973e895c1?q=80&w=600"
+      "/images/jaipur.jpg",
+      "/images/jaipurFour.jpg",
+      "/images/jaipurThree.jpg",
+      "/images/jaipurTwo.jpg",
     ],
     itinerary: [
       { day: "Day 1", title: "Forts of Jaipur", detail: "Visit the grand Amer Fort and Nahargarh Fort." },
@@ -78,18 +75,17 @@ export const indiaTours = [
     id: 104,
     title: "Kashmir Paradise Valley",
     location: "Kashmir, J&K",
-    image: "https://images.unsplash.com/photo-1561054453-382a87850228?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/kahtwo.jpg",
     description: "Experience the ethereal beauty of Dal Lake and the snow-capped mountains of Kashmir.",
     rating: "4.97 (560)",
     duration: "6 Days",
     tag: "Nature",
     category: "North",
     gallery: [
-      "https://images.unsplash.com/photo-1561054453-382a87850228?q=80&w=600",
-      "https://images.unsplash.com/photo-1598305372104-f2a13f2441ce?q=80&w=600",
-      "https://images.unsplash.com/photo-1589308454676-4654fd86f8c2?q=80&w=600",
-      "https://images.unsplash.com/photo-1623150532298-2503956bf155?q=80&w=600",
-      "https://images.unsplash.com/photo-1618018265007-8e6f1f4417f7?q=80&w=600"
+      "/images/kashone.jpg",
+      "/images/kashmir.jfif",
+      "/images/KashMirThree.jpg",
+      "/images/KashmirTwo.jpg",
     ],
     itinerary: [
       { day: "Day 1", title: "Arrival in Srinagar", detail: "Check-in to a traditional houseboat on Dal Lake." },
@@ -101,18 +97,17 @@ export const indiaTours = [
     id: 105,
     title: "Leh Ladakh Adventure",
     location: "Leh, Ladakh",
-    image: "https://images.unsplash.com/photo-1581791534721-e599df4417f7?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/ladaonetwo.jpg",
     description: "Conquer high-altitude passes and visit ancient monasteries in the land of high passes.",
     rating: "4.99 (420)",
     duration: "7 Days",
     tag: "Adventure",
     category: "North",
     gallery: [
-      "https://images.unsplash.com/photo-1519066629447-267fffa62d4b?q=80&w=600",
-      "https://images.unsplash.com/photo-1581791534721-e599df4417f7?q=80&w=600",
-      "https://images.unsplash.com/photo-1549421263-5ec394a5ad4c?q=80&w=600",
-      "https://images.unsplash.com/photo-1540324151-2e6377858348?q=80&w=600",
-      "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=600"
+      "/images/ladaone.jpg",
+      "/images/ladaonetwo.jpg",
+      "/images/ladaoneThree.jpg",
+      "/images/ladaFour.jpg",
     ],
     itinerary: [
       { day: "Day 1", title: "Leh Acclimatization", detail: "Ease into the altitude with a rest day." },
@@ -124,18 +119,18 @@ export const indiaTours = [
     id: 106,
     title: "Varanasi Spiritual Ghats",
     location: "Varanasi, UP",
-    image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/varansiiImgthree.jpg",
     description: "Immerse yourself in the spiritual energy of the oldest living city in the world.",
     rating: "4.88 (980)",
     duration: "3 Days",
     tag: "Spiritual",
     category: "North",
     gallery: [
-      "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?q=80&w=600",
-      "https://images.unsplash.com/photo-1518066629447-267fffa62d4b?q=80&w=600",
-      "https://images.unsplash.com/photo-1598533161405-19e359005917?q=80&w=600",
-      "https://images.unsplash.com/photo-1627830601330-ed4020fd8e2d?q=80&w=600",
-      "https://images.unsplash.com/photo-1621644784742-998845112f46?q=80&w=600"
+      "/images/varansiiSix.jpg",
+      "/images/varansiiimgTwo.jpg",
+      "/images/varansiiFive.png",
+      "/images/varansii.jpg",
+
     ],
     itinerary: [
       { day: "Day 1", title: "Ganga Aarti Experience", detail: "Witness the magnificent evening prayer." },
@@ -154,10 +149,9 @@ export const indiaTours = [
     category: "North",
     gallery: [
       "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=600",
-      "https://images.unsplash.com/photo-1605141203445-1200e5e7f1e5?q=80&w=600",
-      "https://images.unsplash.com/photo-1610448107577-fb17e3f79e27?q=80&w=600",
-      "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=600",
-      "https://images.unsplash.com/photo-1618018265007-8e6f1f4417f7?q=80&w=600"
+      "/images/Hima.jpg",
+      "/images/HimaThree.jpg",
+      "/images/HimaTwo.jpg",
     ],
     itinerary: [
       { day: "Day 1", title: "Colonial Shimla", detail: "Stroll along the historic Mall Road." },
@@ -177,10 +171,10 @@ export const indiaTours = [
     tag: "Relaxing",
     category: "South",
     gallery: [
-      "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=600",
-      "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=600",
-      "https://images.unsplash.com/photo-1589136777351-fdc9c9c85f95?q=80&w=600",
-      "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?q=80&w=600",
+      "/images/keone.jpg",
+      "/images/ker2.jpg",
+      "/images/kerthree.jpg",
+      "/images/kerelaFour.jpg",
       "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600"
     ],
     itinerary: [
@@ -193,18 +187,17 @@ export const indiaTours = [
     id: 202,
     title: "Ooty Queen of Hills",
     location: "Ooty, Tamil Nadu",
-    image: "https://images.unsplash.com/photo-1590483488277-285628574768?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/oooFour.png",
     description: "A charming hill station known for its tea estates and colonial-era architecture.",
     rating: "4.87 (540)",
     duration: "3 Days",
     tag: "Hill Station",
     category: "South",
     gallery: [
-      "https://images.unsplash.com/photo-1590483488277-285628574768?q=80&w=1200&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1587474260584-1f20d430c35a?q=80&w=600",
-      "https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=600",
-      "https://images.unsplash.com/photo-1621644784742-998845112f46?q=80&w=600",
-      "https://images.unsplash.com/photo-1618018265007-8e6f1f4417f7?q=80&w=600"
+      "/images/ootyone.webp",
+      "/images/ootyTwo.webp",
+      "/images/oothree.jpg",
+      "/images/oooFive.png",
     ],
     itinerary: [
       { day: "Day 1", title: "Nilgiri Mountain Railway", detail: "Ride the toy train for spectacular views." }
@@ -214,18 +207,17 @@ export const indiaTours = [
     id: 203,
     title: "Kodaikanal Lakeside",
     location: "Kodaikanal, TN",
-    image: "https://images.unsplash.com/photo-1588666309990-d68f08e3d4a6?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/kodaiOne.png",
     description: "Discover the princess of hill stations with its enchanting lake and mist-covered forests.",
     rating: "4.89 (430)",
     duration: "3 Days",
     tag: "Lake Side",
     category: "South",
     gallery: [
-      "https://images.unsplash.com/photo-1588666309990-d68f08e3d4a6?q=80&w=600",
-      "https://images.unsplash.com/photo-1598305372104-f2a13f2441ce?q=80&w=600",
-      "https://images.unsplash.com/photo-1589308454676-4654fd86f8c2?q=80&w=600",
-      "https://images.unsplash.com/photo-1623150532298-2503956bf155?q=80&w=600",
-      "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=600"
+      "/images/KodaiFour.png",
+      "/images/KodaiThre.png",
+      "/images/kodaiTwo.png",
+      "/images/kodaiOne.png",
     ],
     itinerary: [
       { day: "Day 1", title: "Kodai Lake Serenity", detail: "Enjoy boating and nature walks by the lake." }
@@ -235,18 +227,17 @@ export const indiaTours = [
     id: 204,
     title: "Mysore Royal Heritage",
     location: "Mysore, Karnataka",
-    image: "https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/mysorethree.jpg",
     description: "Visit the magnificent Mysore Palace and experience the city's rich cultural heritage.",
     rating: "4.93 (720)",
     duration: "2 Days",
     tag: "Royal",
     category: "South",
     gallery: [
-      "https://images.unsplash.com/photo-1582298538104-fe2e74c27f59?q=80&w=600",
-      "https://images.unsplash.com/photo-1581335967167-336df322814b?q=80&w=600",
-      "https://images.unsplash.com/photo-1519066629447-267fffa62d4b?q=80&w=600",
-      "https://images.unsplash.com/photo-1549421263-5ec394a5ad4c?q=80&w=600",
-      "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=600"
+      "/images/mysoreimg2.jpg",
+      "/images/mysoreimage1.jpg",
+      "/images/mysoreFour.jpg",
+      "/images/mysorethree.jpg",
     ],
     itinerary: [
       { day: "Day 1", title: "Palace Illumination", detail: "Witness the majestic palace lit up at night." }
@@ -256,18 +247,17 @@ export const indiaTours = [
     id: 205,
     title: "Coorg Coffee Plantations",
     location: "Coorg, Karnataka",
-    image: "https://images.unsplash.com/photo-1549421263-5ec394a5ad4c?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/coorgone.png",
     description: "Escape to the Scotland of India, famous for its coffee estates and misty hills.",
     rating: "4.94 (610)",
     duration: "4 Days",
     tag: "Nature",
     category: "South",
     gallery: [
-      "https://images.unsplash.com/photo-1549421263-5ec394a5ad4c?q=80&w=600",
-      "https://images.unsplash.com/photo-1540324151-2e6377858348?q=80&w=600",
-      "https://images.unsplash.com/photo-1582390169123-5e75da9bc554?q=80&w=600",
-      "https://images.unsplash.com/photo-1627830601330-ed4020fd8e2d?q=80&w=600",
-      "https://images.unsplash.com/photo-1518066629447-267fffa62d4b?q=80&w=600"
+      "/images/coorgTwo.png",
+      "/images/coorgThree.png",
+      "/images/CoorgFour.png",
+      "/images/coorgFive.png",
     ],
     itinerary: [
       { day: "Day 1", title: "Coffee Estate Walk", detail: "Learn about coffee harvesting and processing." }
@@ -277,18 +267,17 @@ export const indiaTours = [
     id: 206,
     title: "Madurai Temple City",
     location: "Madurai, TN",
-    image: "https://images.unsplash.com/photo-1582390169123-5e75da9bc554?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/maduraione.png",
     description: "Explore the historic Meenakshi Amman Temple and the vibrant culture of Madurai.",
     rating: "4.86 (390)",
     duration: "2 Days",
     tag: "Spiritual",
     category: "South",
     gallery: [
-      "https://images.unsplash.com/photo-1582390169123-5e75da9bc554?q=80&w=600",
-      "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=600",
-      "https://images.unsplash.com/photo-1589136777351-fdc9c9c85f95?q=80&w=600",
-      "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?q=80&w=600",
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600"
+      "/images/MaduraiTwo.png",
+      "/images/MaduraiThree.png",
+      "/images/MaduraiFour.png",
+      "/images/MaduraiFive.png",
     ],
     itinerary: [
       { day: "Day 1", title: "Night Ceremony", detail: "Witness the unique bedtime ritual at the temple." }
@@ -298,18 +287,17 @@ export const indiaTours = [
     id: 207,
     title: "Rameswaram Island Pilgrimage",
     location: "Rameswaram, TN",
-    image: "https://images.unsplash.com/photo-1582390169123-5e75da9bc554?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/raone.png",
     description: "Embark on a spiritual journey to one of the most sacred pilgrimage sites in India.",
     rating: "4.90 (510)",
     duration: "2 Days",
     tag: "Spiritual",
     category: "South",
     gallery: [
-      "https://images.unsplash.com/photo-1540324151-2e6377858348?q=80&w=600",
-      "https://images.unsplash.com/photo-1582390169123-5e75da9bc554?q=80&w=600",
-      "https://images.unsplash.com/photo-1627830601330-ed4020fd8e2d?q=80&w=600",
-      "https://images.unsplash.com/photo-1518066629447-267fffa62d4b?q=80&w=600",
-      "https://images.unsplash.com/photo-1561054453-382a87850228?q=80&w=600"
+      "/images/raTwo.png",
+      "/images/Rathee.png",
+      "/images/Rafour.png",
+      "/images/raFive.png",
     ],
     itinerary: [
       { day: "Day 1", title: "Adam's Bridge Views", detail: "Scenic drive across the Pamban Bridge." }

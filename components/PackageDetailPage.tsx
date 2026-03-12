@@ -158,9 +158,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
           <div className="flex flex-col gap-8 max-w-5xl">
             {/* Top row: Badge and Rating */}
             <div className="flex flex-wrap items-center gap-6">
-              <div className="bg-white px-6 py-2.5 rounded-full shadow-lg">
-                <span className="text-[#00A9D7] text-xs font-black uppercase tracking-widest">Top Rated</span>
-              </div>
+
               <div className="flex items-center gap-1.5 bg-black/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (

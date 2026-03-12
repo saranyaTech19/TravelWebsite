@@ -106,24 +106,24 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   return (
     <div className="min-h-screen bg-brand-bg">
       {/* Hero Header Section */}
-      <div className="h-[340px] w-full flex items-center justify-center" style={{
+      <div className="lg:h-[340px]  h-[300px] w-full flex items-center justify-center lg:bg-contain bg-cover  " style={{
         backgroundImage: "url('/images/contact.png')",
-        backgroundSize: "contain",
+        // backgroundSize: "contain",
         backgroundPosition: "100% 100%",
         backgroundRepeat: "no-repeat",
       }}>
-        <h1 className="text-5xl md:text-6xl font-sans font-black text-white text-center drop-shadow-lg">
+        <h1 className="text-3xl  md:text-6xl font-sans font-black text-white text-center drop-shadow-lg">
           Get In Touch
         </h1>
       </div>
 
-      <div className="w-[80%] mx-auto px-6 py-[30px]">
-        <div className="flex flex-col md:flex-row justify-between items-start  gap-8">
+      <div className="w-full md:w-[80%] mx-auto px-6 py-[30px]">
+        <div className="flex flex-col md:flex-row justify-between md:items-start items-center  gap-8">
           <div className="space-y-2">
-            <h2 className="text-5xl md:text-[38px] font-sans font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl md:text-[38px] font-sans font-black text-slate-900 tracking-tight">
               Get in touch with us
             </h2>
-            <h3 className="text-5xl md:text-[38px] font-sans font-black text-[#00A9D7] tracking-tight">
+            <h3 className="text-3xl md:text-[38px] font-sans font-black text-[#00A9D7] tracking-tight">
               We're here to assist you
             </h3>
           </div>
@@ -249,10 +249,10 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="w-8 h-1 bg-[#00A9D7] mb-8"></div>
                 <div className="space-y-2">
                   <p className="text-slate-600 text-[15px]">
-                    +971 58 952 0398, +91 89210 959738<span className="text-slate-400 font-medium">(India)</span>
+                    +971 58 952 0398,<br /> +91 89210 959738<span className="text-slate-400 font-medium">(India)</span>
                   </p>
                   <p className="text-slate-600 text-[15px]">
-                    +91 80758521708 ,+91 7025791083 <span className="text-slate-400 font-medium">(Dubai)</span>
+                    +91 80758521708 ,<br />+91 7025791083 <span className="text-slate-400 font-medium">(Dubai)</span>
                   </p>
                 </div>
               </div>

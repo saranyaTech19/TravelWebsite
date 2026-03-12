@@ -164,6 +164,9 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
               alt="Global Connect"
               className="h-16 md:h-20 w-auto object-contai"
             />
+            <p class="text-sm text-[#00A9D7]  mt-2 leading-relaxed">
+              “Travel the world, discover new places, and create unforgettable memories.”
+            </p>
             <div className="flex gap-4">
               {[Facebook, Twitter, Instagram, Linkedin, Youtube].map((Icon, idx) => (
                 <a key={idx} href="#" className="text-[#00A9D7] hover:opacity-70 transition-opacity">
@@ -171,6 +174,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
                 </a>
               ))}
             </div>
+
           </div>
 
           {/* Column 2: Product */}
@@ -179,7 +183,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
             <ul className="space-y-4">
               {[
                 { label: 'Home', path: '/' },
-                { label: 'Holidays', path: '/holidays' },
+                // { label: 'Holidays', path: '/holidays' },
                 { label: 'Dubai', path: '/dubai-tours' },
                 { label: 'India', path: '/india-tours' },
                 { label: 'Packages', path: '/packages' },
@@ -226,13 +230,20 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
               <div className="flex items-start gap-3 text-slate-600 text-sm">
                 <MapPin className="w-5 h-5 text-[#00A9D7] mt-1 shrink-0" />
                 <span>
-                  Dubai Address : No 413, Hamsah A Building, Al Karama, Dubai, UAE
+                  Dubai Address : No 413, Hamsah A Building,<br /> Al Karama, Dubai, UAE
                 </span>
                 <br />
-                <span>
-                  Kerala Address: 1st Floor, Tenco Complex, Pallikunnu, Kannur, Kerala - 670004                </span>
+
 
               </div>
+              <div className="flex items-start gap-3 text-slate-600 text-sm">
+                <MapPin className="w-5 h-5 text-[#00A9D7] mt-1 shrink-0" />
+
+                <span>
+                  Kerala Address: 1st Floor, Tenco Complex,<br /> Pallikunnu, Kannur, Kerala - 670004                </span>
+
+              </div>
+
             </div>
           </div>
         </div>
