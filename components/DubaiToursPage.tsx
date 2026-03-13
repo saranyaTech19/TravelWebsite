@@ -33,7 +33,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
           {/* Left Content */}
           <div className="flex flex-col justify-center">
             <div className="flex flex-col gap-5 justify-center items-center lg:items-start">
-              <h1 className="text-3xl md:text-[59px] font-sans font-black text-slate-600 leading-[1.1] tracking-wide mt-[50px] lg:mt-0">
+              <h1 className="text-3xl md:text-[59px] font-sans text-center lg:text-left font-black text-slate-600 leading-[1.1] tracking-wide mt-[50px] lg:mt-0">
                 Book Your <span className="text-[#2CB8E5]">Dubai</span><br />
                 <span className="text-[#2CB8E5]">Tours Today</span>
               </h1>
@@ -75,7 +75,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
       <section className="relative overflow-hidden py-4 bg-white">
         <div className="max-w-[1440px] mx-auto relative z-10 px-6 md:px-14">
           <div className="text-left mb-12">
-            <h2 className="text-4xl text-4xl text-center lg:text-left md:text-[38px] font-sans font-black text-slate-900 leading-tight">
+            <h2 className="text-3xl l text-center lg:text-left md:text-[38px] font-sans font-black text-slate-900 leading-tight">
               Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
             </h2>
           </div>
@@ -174,7 +174,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="lg:text-white text-black text-[38px] font-bold text-center mb-12">International Trips from Dubai</div>
+          <div className="lg:text-white text-black lg:text-[38px] text-3xl font-bold text-center mb-12">International Trips from Dubai</div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
             {popularTours.slice(0, 4).map((tour) => (
@@ -294,8 +294,8 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
         </div>
 
         {/* Dubai Local Tour Section */}
-        <div className="max-w-[1440px] mx-auto py-12 px-6 md:px-14">
-          <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight mb-12">
+        <div className="max-w-[1440px] mx-auto pb-12 px-6 md:px-14">
+          <h2 className="text-4xl md:text-[38px] text-center lg:text-left font-sans font-black text-slate-900 leading-tight mb-6">
             Dubai <span className="text-[#00A9D7]">Local Tour</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

@@ -186,22 +186,22 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
             {/* 1. HERO SECTION (BANNER) */}
             <section
-                className="relative w-full h-[760px] bg-cover bg-center overflow-hidden flex items-center justify-center  "
-                style={{
-                    backgroundImage: "url('/images/homeBg.png')",
-                    backgroundSize: "contain",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center"
-                }}
+                className="relative w-full lg:h-[760px] h-[500px] bg-[#00A9D7] lg:bg-white  bg-cover bg-center overflow-hidden flex items-center justify-center   lg:bg-[url('/images/homeBg.png')] lg:bg-contain lg:bg-no-repeat lg:bg-center "
+            // style={{
+            //     backgroundImage: "url('/images/homeBg.png')",
+            //     backgroundSize: "contain",
+            //     backgroundRepeat: "no-repeat",
+            //     backgroundPosition: "center"
+            // }}
             >
 
-                <div className="relative z-10 left-[60px] max-w-[1440px] mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                    <div className="mt-[-60px]">
-                        <h2 className="text-5xl md:text-[60px] font-sans font-bold text-white drop-shadow-2xl leading-tight animate-fade-in-up">
+                <div className="relative z-10 lg:left-[60px] max-w-[1440px] mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                    <div className="lg:mt-[-60px] mt-[82px]">
+                        <h2 className="text-[30px] md:text-[60px] font-sans font-bold text-center lg:text-left text-white drop-shadow-2xl leading-tight animate-fade-in-up">
                             Book Your Next <br /> Adventure Today
                         </h2>
 
-                        <div className="flex gap-4 animate-fade-in-up delay-200">
+                        <div className="flex gap-4 animate-fade-in-up delay-200 justify-center lg:justify-start">
                             {/* <button className="px-8 py-3 rounded-full border border-white/40 text-white font-bold text-sm flex items-center gap-2 hover:bg-white/20 transition-all group backdrop-blur-md">
                                 Tour Guide <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                             </button> */}
@@ -215,8 +215,8 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
                         {/* Premium Redesigned Search Bar - Single Location Input */}
                         <div className="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-[32px] shadow-3xl p-3 animate-fade-in-up delay-400  border border-white/20 mt-[20px]">
-                            <div className="flex items-center gap-4">
-                                <div className="flex-1 flex items-center gap-4 px-6 py-3 bg-gray-50/50 rounded-2xl border border-gray-100 group focus-within:border-[#00A9D7]/30 focus-within:bg-white transition-all">
+                            <div className="flex items-center lg:gap-4 gap-2">
+                                <div className="flex-1 flex items-center gap-4 lg:px-6 px-2 py-3 bg-gray-50/50 rounded-2xl border border-gray-100 group focus-within:border-[#00A9D7]/30 focus-within:bg-white transition-all">
                                     <MapPin className="w-5 h-5 text-[#00A9D7]" />
                                     <input
                                         type="text"
@@ -232,9 +232,9 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                             navigate(`/packages?search=${encodeURIComponent(searchQuery.trim())}`);
                                         }
                                     }}
-                                    className="px-10 h-14 bg-[#00A9D7] hover:bg-[#008db3] text-white rounded-2xl flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest transition-all shadow-lg hover:shadow-xl shrink-0 group">
-                                    <Search className="w-4 h-4 transition-transform group-hover:scale-110" />
-                                    Search
+                                    className="lg:px-10 lg:h-14 h-10 bg-[#00A9D7] hover:bg-[#008db3] text-white rounded-2xl flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest transition-all shadow-lg hover:shadow-xl shrink-0 group">
+                                    <Search className="lg:w-4 lg:h-4  w-10 transition-transform group-hover:scale-110" />
+                                    <span className="lg:block hidden"> Search</span>
                                 </button>
                             </div>
                         </div>
@@ -242,11 +242,14 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                 </div>
             </section>
 
+
+
+
             {/* 2. DREAM DESTINATION SECTION */}
-            <section className="global-page-container mt-[-95px] relative overflow-hidden">
+            <section className="global-page-container lg:mt-[-95px] relative overflow-hidden">
                 <div className="max-w-7xl mx-auto  z-10">
                     <div className="text-left mb-10 animate-fade-in-up">
-                        <h2 className="text-5xl md:text-[45px] font-sans font-black text-slate-900 leading-tight px-[20px]">
+                        <h2 className="text-3xl text-center lg:text-left md:text-[45px] font-sans font-black text-slate-900 leading-tight px-[20px]">
                             Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
                         </h2>
                     </div>
@@ -260,7 +263,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                         {OFFERS.map((offer, idx) => (
                             <div
                                 key={offer.id}
-                                className={`relative rounded-3xl overflow-hidden p-6 h-[180px]  bg-no-repeat bg-right-bottom bg-contain  `}
+                                className={`relative rounded-3xl overflow-hidden p-6 h-[180px]  bg-no-repeat bg-right-bottom bg-cover  `}
                                 style={{ backgroundImage: `url(${offer.image})` }}
                             >
 
@@ -290,11 +293,14 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                 </div>
             </section>
 
+
+
+
             {/* section 3 */}
 
             <section className="bg-white  ">
                 <div
-                    className="w-full h-[360px] relative flex flex-col items-center justify-start pt-24 overflow-visible global-page-container  mt-[30px]"
+                    className="w-full h-[360px] relative flex flex-col items-center justify-start lg:pt-24 overflow-visible global-page-container p-cards   lg:mt-[30px]"
                     style={{
                         backgroundImage: "url('/images/bannerfive.png')",
                         backgroundSize: "cover",
@@ -302,7 +308,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                         backgroundRepeat: "no-repeat",
                     }}
                 >
-                    <div className="text-white text-[45px] font-bold text-center">Amazing Trendings Desinations</div>
+                    <div className="lg:text-white text-3xl text-black lg:text-[45px] text-3xl font-bold text-center">Amazing Trendings Desinations</div>
 
                     {/* Decorative Dashed Line */}
                     <div className="absolute top-[60%] left-0 right-0 -translate-y-1/2 pointer-events-none z-0 opacity-40">
@@ -464,25 +470,25 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             </section> */}
             {/* sections 5*/}
 
-            <section className="w-full h-[621px] relative overflow-hidden flex items-center justify-end px-6 lg:px-40 mt-[275px]" style={{
-                backgroundImage: "url('/images/bannerFour.png')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat"
+            <section className="w-full lg:h-[621px] h-[400px] relative bg-[#00A9D7] lg:bg-white overflow-hidden lg:bg-[url('/images/bannerFour.png')] lg:bg-cover lg:bg-no-repeat lg:bg-center flex items-center justify-end px-6 lg:px-40 lg:mt-[275px] mt-[20px]" style={{
+                // backgroundImage: "url('/images/bannerFour.png')",
+                // backgroundSize: "cover",
+                // backgroundPosition: "center",
+                // backgroundRepeat: "no-repeat"
             }}>
-                <div className="absolute left-10 top-12 z-10 max-w-2xl text-white space-y-8 animate-fade-in-right">
-                    <h2 className="text-6xl md:text-[60px] font-sans font-black leading-[1.1] tracking-tight drop-shadow-lg">
+                <div className="absolute lg:left-10 left-0 lg:top-12 z-10 max-w-2xl text-white space-y-8 animate-fade-in-right">
+                    <h2 className="text-3xl md:text-[60px] text-center lg:text-left font-sans font-black leading-[1.1] tracking-tight drop-shadow-lg">
                         30% off for Online <br />
                         <span className="text-white">1st Booking</span>
                     </h2>
 
-                    <p className="text-xl md:text-[20px] font-medium leading-relaxed opacity-90 drop-shadow-md max-w-xl">
+                    <p className="text-xl md:text-[20px] text-center lg:text-left font-medium leading-relaxed opacity-90 drop-shadow-md max-w-xl">
                         From sun-kissed beaches to vibrant city escapes,
                         soak up the perfect weather and create
                         unforgettable memories.
                     </p>
 
-                    <div className="flex flex-wrap gap-6 pt-4">
+                    <div className="flex flex-wrap gap-6 pt-4 justify-center lg:justify-start">
                         <button
                             onClick={onBookClick}
                             className="px-10 py-4 bg-white/20 backdrop-blur-md border-2 border-white rounded-full text-white font-black uppercase text-sm tracking-widest flex items-center gap-3 hover:bg-white hover:text-[#00A9D7] transition-all group shadow-xl"
@@ -510,7 +516,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                     }}
                 >
                     <div className="relative z-10 mt-[30px] ">
-                        <h2 className="text-4xl md:text-[45px] font-sans font-black text-white text-center drop-shadow-lg pt-[59px] ">
+                        <h2 className="text-3xl md:text-[45px] font-sans font-black text-white text-center drop-shadow-lg lg:pt-[59px] ">
                             Trending India And Around  Destinations
                         </h2>
                     </div>

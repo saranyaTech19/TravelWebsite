@@ -169,7 +169,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="lg:text-white text-black text-[38px] font-bold text-center mb-12">International Trips from India
+          <div className="lg:text-white text-black lg:text-[38px] text-3xl font-bold text-center mb-12">International Trips from India
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
@@ -180,11 +180,11 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
         </div>
 
         {/* North India Tours Section */}
-        <div className="max-w-[1440px] mx-auto py-16 px-6 md:px-14 lg:mt-40 mt-[20px]">
-          <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight mb-12">
+        <div className="max-w-[1440px] mx-auto pt-16 px-6 md:px-14 lg:mt-40 mt-[20px]">
+          <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight mb-12 pt-[30px]">
             North India <span className="text-[#00A9D7]">Tours</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-[20px]">
             {northTours.slice(4).map((tour) => (
               <TourCard key={tour.id} tour={tour} onExplore={onExplore} onBookClick={onBookClick} />
             ))}

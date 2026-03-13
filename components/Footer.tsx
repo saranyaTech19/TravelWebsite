@@ -164,7 +164,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
               alt="Global Connect"
               className="h-16 md:h-20 w-auto object-contai"
             />
-            <p class="text-sm text-[#00A9D7]  mt-2 leading-relaxed">
+            <p class="text-sm text-slate-600   mt-2 leading-relaxed">
               “Travel the world, discover new places, and create unforgettable memories.”
             </p>
             <div className="flex gap-4">
@@ -250,9 +250,9 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-500 text-sm">Copyright &copy; 2026</p>
+          <p className="text-slate-500 text-sm">Copyright &copy; 2026 All Rights Reserved</p>
           <div className="flex gap-4 text-sm font-medium">
-            <span className="text-slate-500">All Rights Reserved |</span>
+            {/* <span className="text-slate-500">All Rights Reserved |</span> */}
             <a href="#" className="text-[#00A9D7] hover:underline">Terms and Conditions</a>
             <span className="text-slate-300">|</span>
             <a href="#" className="text-[#00A9D7] hover:underline">Privacy Policy</a>

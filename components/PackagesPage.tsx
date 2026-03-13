@@ -191,7 +191,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
   }, [isPausedSouth]);
 
   const handleBookNow = (pkg: any) => {
-    navigate(`/package/${pkg.id}`);
+    onExplore(pkg);
   };
 
   const bestSellingRef = useRef<HTMLDivElement>(null);
@@ -232,7 +232,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
     <div className="min-h-screen bg-brand-bg">
       {/* Hero Header */}
       <section className=" w-full flex items-center overflow-hidden bg-white px-6 md:px-14 ">
-        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 py-20">
+        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 pt-20">
           {/* Left Content */}
           <div className="flex flex-col justify-center">
             <div className="flex flex-col gap-5 justify-center items-center lg:items-start">
@@ -352,7 +352,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                 {OFFERS.map((offer) => (
                   <div
                     key={offer.id}
-                    className="relative rounded-3xl overflow-hidden p-6 h-[180px] bg-no-repeat bg-right-bottom lg:bg-contain bg-cover shadow-sm border border-slate-100"
+                    className="relative rounded-3xl overflow-hidden p-6 h-[180px] bg-no-repeat bg-right-bottom lg:bg-cover bg-cover shadow-sm border border-slate-100"
                     style={{ backgroundImage: `url(${offer.image})` }}
                   >
                     <h3 className="text-white font-bold text-[20px] leading-tight">

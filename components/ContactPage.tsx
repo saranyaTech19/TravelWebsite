@@ -249,10 +249,10 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="w-8 h-1 bg-[#00A9D7] mb-8"></div>
                 <div className="space-y-2">
                   <p className="text-slate-600 text-[15px]">
-                    +971 58 952 0398,<br /> +91 89210 959738<span className="text-slate-400 font-medium">(India)</span>
+                    +971 58 952 0398,<br /> +91 89210 959738<span className="text-slate-400 font-medium"></span>
                   </p>
                   <p className="text-slate-600 text-[15px]">
-                    +91 80758521708 ,<br />+91 7025791083 <span className="text-slate-400 font-medium">(Dubai)</span>
+                    +91 80758521708 ,<br />+91 7025791083 <span className="text-slate-400 font-medium"></span>
                   </p>
                 </div>
               </div>
@@ -300,12 +300,12 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
                 <p className="text-slate-600 text-[14px]">
                   +971 58 952 0398 <br />
-                  +91 89210 959738 (India)
+                  +91 89210 959738
                 </p>
 
                 <p className="text-slate-600 text-[14px] mt-2">
                   +91 80758521708 <br />
-                  +91 7025791083 (Dubai)
+                  +91 7025791083
                 </p>
               </div>
 

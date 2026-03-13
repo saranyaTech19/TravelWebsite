@@ -195,7 +195,7 @@ const Navbar: React.FC<NavbarProps> = ({ onBookClick, onNavigate }) => {
       </header>
 
       {/* Mobile Menu (simplified for redesign) */}
-      <div className={`fixed inset-0 z-[65] bg-white pt-24 px-6 transition-transform duration-500 lg:hidden ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className={`fixed inset-0 z-[65] bg-white pt-32 px-6 transition-transform duration-500 lg:hidden ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex flex-col gap-4">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
