@@ -155,7 +155,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
         backgroundRepeat: "no-repeat",
       }}>
         <div className="max-w-[1440px] mx-auto w-full px-6 md:px-14 relative z-10 pt-20">
-          <div className="flex flex-col gap-8 max-w-5xl">
+          <div className="flex flex-col lg:gap-8 max-w-5xl">
             {/* Top row: Badge and Rating */}
             <div className="flex flex-wrap items-center gap-6">
 
@@ -170,12 +170,12 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
             </div>
 
             {/* Title */}
-            <h1 className="text-5xl lg:text-[50px] font-sans font-black text-white leading-[1] tracking-tight drop-shadow-2xl">
+            <h1 className="text-3xl text-center lg:text-left lg:text-[50px] font-sans font-black text-white leading-[1] tracking-tight drop-shadow-2xl">
               {packageData.title}
             </h1>
 
             {/* Bottom row: Info Icons */}
-            <div className="flex flex-wrap items-center gap-10 text-white/95 font-bold text-lg mt-4">
+            <div className="flex flex-wrap items-center lg:gap-10 gap-4 text-white/95 font-bold text-lg mt-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
                   <MapPin className="w-5 h-5 text-white" />
@@ -293,29 +293,29 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                     <h2 className="text-3xl font-black text-slate-900 tracking-tight">Tour Overview</h2>
                     <div className="space-y-6 text-slate-600 text-lg leading-relaxed font-bold opacity-80">
                       <p>
-                        Experience the breathtaking beauty of {packageData.location} with our specially curated tour package.
-                        This journey is designed to offer an unparalleled experience, blending adventure with relaxation as you explore
-                        the most stunning landscapes and hidden gems of the region.
+                        {packageData.overview || `Experience the breathtaking beauty of ${packageData.location} with our specially curated tour package. This journey is designed to offer an unparalleled experience, blending adventure with relaxation as you explore the most stunning landscapes and hidden gems of the region.`}
                       </p>
-                      <p>
-                        Whether you're looking for a romantic getaway, a family adventure, or a solo exploration,
-                        this {packageData.duration} package ensures you see the best of what {packageData.location} has to offer.
-                        From premium accommodations to expert-guided tours, every detail is handled for your comfort and enjoyment.
-                      </p>
+                      {!packageData.overview && (
+                        <p>
+                          Whether you're looking for a romantic getaway, a family adventure, or a solo exploration, 
+                          this {packageData.duration} package ensures you see the best of what {packageData.location} has to offer. 
+                          From premium accommodations to expert-guided tours, every detail is handled for your comfort and enjoyment.
+                        </p>
+                      )}
                     </div>
                   </div>
 
                   <div className="pt-4 space-y-8">
                     <h2 className="text-3xl font-black text-slate-900 tracking-tight">Highlights</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
-                      {[
+                      {(packageData.highlights || [
                         "Spectacular scenic views throughout the journey",
                         "Complimentary welcome drinks and local snacks",
                         "Professional guide for all sightseeing tours",
                         "Premium airport and intercity transfers",
                         "Chance to explore hidden local attractions",
                         "Luxury accommodation in top-rated hotels"
-                      ].map((highlight, idx) => (
+                      ]).map((highlight: string, idx: number) => (
                         <div key={idx} className="flex items-center gap-4 group">
                           <div className="w-6 h-6 rounded-full bg-[#00A9D7]/10 flex items-center justify-center shrink-0">
                             <Check className="w-4 h-4 text-[#00A9D7]" />
@@ -367,13 +367,13 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                         <h3 className="text-xl font-black text-green-600">Included</h3>
                       </div>
                       <div className="space-y-5">
-                        {[
+                        {(packageData.inclusions || [
                           "2 nights luxury cabin accommodation",
                           "All meals (Breakfast, Lunch, Dinner)",
                           "Welcome drinks and snacks",
                           "Use of water sports equipment",
                           "Professional guide and crew"
-                        ].map((item, idx) => (
+                        ]).map((item: string, idx: number) => (
                           <div key={idx} className="flex items-center gap-4 text-slate-700 font-bold opacity-80">
                             <Check className="w-4 h-4 text-green-500 shrink-0" />
                             <span>{item}</span>
@@ -388,13 +388,13 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                         <h3 className="text-xl font-black text-red-600">Excluded</h3>
                       </div>
                       <div className="space-y-5">
-                        {[
+                        {(packageData.exclusions || [
                           "Flights to/from departure point",
                           "Premium alcoholic beverages",
                           "Personal expenses",
                           "Travel insurance",
                           "Gratuities for crew"
-                        ].map((item, idx) => (
+                        ]).map((item: string, idx: number) => (
                           <div key={idx} className="flex items-center gap-4 text-slate-700 font-bold opacity-80">
                             <Plus className="w-4 h-4 text-red-400 shrink-0 rotate-45" />
                             <span>{item}</span>
@@ -531,9 +531,9 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                 >
                   {isSubmitting ? 'Submitting...' : 'Book Now'}
                 </button>
-                <p className="text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                {/* <p className="text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
                   You won't be charged yet
-                </p>
+                </p> */}
                 {error && <p className="text-red-500 text-xs font-bold text-center">{error}</p>}
                 {isSubmitted && <p className="text-green-500 text-xs font-bold text-center">Inquiry sent successfully!</p>}
               </div>
