@@ -25,6 +25,28 @@ export const popularTours = [
       "/images/thaiThe.jpg",
       "/images/thaione.jpg"
     ],
+    overview: "Explore the Land of Smiles with our comprehensive Thailand tour. From the vibrant street life of Bangkok to the serene beaches of Phuket and the misty mountains of the North, experience the rich culture and hospitality that Thailand is famous for.",
+    highlights: [
+      "Visit the majestic Grand Palace and Temple of Emerald Buddha",
+      "Island hopping tour in the crystal clear waters of Phuket",
+      "Authentic Thai cooking class with a local chef",
+      "Traditional Thai massage session for relaxation",
+      "Exploring the bustling night markets in Bangkok"
+    ],
+    inclusions: [
+      "Luxury 4-star hotel accommodations",
+      "Daily international breakfast buffet",
+      "All inter-city transfers in private AC vehicles",
+      "Guided temple tours with English-speaking guides",
+      "Speedboat transfers for island hopping"
+    ],
+    exclusions: [
+      "International flight tickets",
+      "Personal shopping and souvenirs",
+      "Travel insurance",
+      "Alcoholic drinks during meals",
+      "Gratuities for guides and drivers"
+    ],
     itinerary: [
       { day: "Day 1", title: "Dune Bashing", detail: "Thrilling 4x4 drive across the golden sand dunes." },
       { day: "Day 2", title: "Camel Trek", detail: "Traditional camel ride through the desert landscape." },
@@ -46,6 +68,28 @@ export const popularTours = [
       "/images/baliimageoneFour.jpg",
       "/images/baliimageoneThree.jpg",
       "/images/baliimageone.jpg"
+    ],
+    overview: "Find your zen in the Island of the Gods. Our Bali retreat combines spiritual exploration in Ubud with relaxing beach days in Seminyak, offering a perfect balance of culture, nature, and tropical relaxation.",
+    highlights: [
+      "Spiritual morning yoga session overlooking rice terraces",
+      "Visit the sacred Uluwatu Temple at sunset",
+      "Private Balinese cooking class and market tour",
+      "Snorkeling adventure in the Blue Lagoon",
+      "Traditional Balinese spa and flower bath"
+    ],
+    inclusions: [
+      "Private pool villa accommodation",
+      "Daily healthy organic breakfast",
+      "Private car and driver for all sightseeing",
+      "All entrance fees for temples and parks",
+      "Aromatherapy massage session"
+    ],
+    exclusions: [
+      "International airfare to Denpasar",
+      "Personal laundry and phone calls",
+      "Additional meals not specified",
+      "Water sports activities in Nusa Dua",
+      "Tips for local guides"
     ],
     itinerary: [
       { day: "Day 1", title: "Level 124 & 125", detail: "Access to the main observation decks for panoramic views." },
@@ -69,6 +113,28 @@ export const popularTours = [
       "/images/mal2.jpg",
       "/images/mal3.jpg",
       "/images/mal4.jpg"
+    ],
+    overview: "Escape to the ultimate luxury of the Maldives. Stay in a private villa perched over crystal-clear turquoise waters and enjoy world-class diving, private beach dinners, and unparalleled serenity in this island paradise.",
+    highlights: [
+      "Direct ocean access from your private overwater villa",
+      "Guided snorkeling tour with sea turtles",
+      "Private sandbank picnic with gourmet lunch",
+      "Sunset dolphin cruise with champagne",
+      "World-class spa treatment with ocean views"
+    ],
+    inclusions: [
+      "Overwater villa accommodation at a luxury resort",
+      "All-inclusive meal plan (All meals and drinks)",
+      "Speedboat/Seaplane transfers from Malé Airport",
+      "Complimentary non-motorized water sports",
+      "Private butler service 24/7"
+    ],
+    exclusions: [
+      "International flights to Malé",
+      "Personal laundry and scuba diving lessons",
+      "Motorized water sports (Jet ski, etc.)",
+      "Souvenirs from the resort boutique",
+      "Tips and gratuities"
     ],
     itinerary: [
       { day: "Day 1", title: "Marina Cruise", detail: "Glide past the JBR and Blue Waters Island." },

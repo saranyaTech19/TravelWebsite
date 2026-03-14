@@ -10,8 +10,8 @@ import { useRef } from 'react';
 import { LocationIcon } from './Icons';
 
 const OFFERS = [
-  { id: 1, title: 'INDIA TOURS', image: '/images/travel.png', },
-  { id: 2, title: 'DUBAI TOURS', image: '/images/airplanes.png', },
+  { id: 1, title: 'INDIA TOURS', image: '/images/indiaFrom.png', },
+  { id: 2, title: 'DUBAI TOURS', image: '/images/dubaii.png', },
   { id: 3, title: 'INDIA LOCAL TOURS', image: '/images/trolly.png', },
   { id: 4, title: 'DUBAI LOCAL TOURS', image: '/images/jeep.png', },
 ];
@@ -343,7 +343,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
           <section className="relative overflow-hidden py-4 bg-white">
             <div className="max-w-[1440px] mx-auto relative z-10 px-6 md:px-14">
               <div className="text-left mb-12">
-                <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight text-center lg:text-left">
+                <h2 className="text-3xl md:text-[38px] font-sans font-black text-slate-900 leading-tight text-center lg:text-left">
                   Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
                 </h2>
               </div>
@@ -359,7 +359,13 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                       {offer.title.split(' ').slice(0, -1).join(' ')}<br />
                       {offer.title.split(' ').slice(-1)}
                     </h3>
-                    <button className="absolute bottom-6 left-6 text-xs border border-white text-white px-[20px] py-[10px] rounded-full hover:bg-white/10 transition-colors">
+                    <button onClick={() => {
+                      if (offer.title.includes('INDIA')) {
+                        navigate('/india-tours');
+                      } else if (offer.title.includes('DUBAI')) {
+                        navigate('/dubai-tours');
+                      }
+                    }} className="absolute bottom-6 left-6 text-xs border border-white bg-white text-[#00A9D7] px-[20px] py-[10px] rounded-full  transition-colors">
                       Book Now
                     </button>
                   </div>
@@ -379,7 +385,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <div className="text-black lg:text-white text-[38px] font-bold text-center lg:mb-12">Amazing Trendings desinations</div>
+              <div className="text-black lg:text-white lg:text-[38px] text-3xl font-bold text-center lg:mb-12">Amazing Trendings desinations</div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14 pt-[30px]">
                 {packagesList.slice(0, 4).map((pkg) => (

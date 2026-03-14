@@ -41,6 +41,28 @@ export const TOURS = [
             "/images/hthree.jpg",
             "/images/hfour.jpg"
         ],
+        overview: "Journey through the land of Maharajas and majestic forts. Our Rajasthan Heritage tour brings you into a world of royal palaces, vibrant bazaars, and golden desert sands, offering a glimpse into the opulent history of India's most colorful state.",
+        highlights: [
+            "Visit the majestic Amer Fort and City Palace in Jaipur",
+            "Witness the sunset over the desert dunes",
+            "Traditional Folk dance and music performance",
+            "Guided tour of Jodhpur's Mehrangarh Fort",
+            "Luxury stay in converted palace hotels"
+        ],
+        inclusions: [
+            "6 nights premium heritage accommodation",
+            "Daily royal breakfast and traditional Rajasthani dinner",
+            "Private chauffeured transportation",
+            "English-speaking local guides at all monuments",
+            "Entry tickets to major palaces and forts"
+        ],
+        exclusions: [
+            "Internal flight to Jaipur/Jodhpur",
+            "Personal tips and gratuities",
+            "Alcoholic beverages during meals",
+            "Personal shopping and souvenirs",
+            "Laundry and other room services"
+        ]
     },
     {
         id: 202, title: 'Mumbai City Lights & Street Food', location: 'Mumbai, India', price: '$120', rating: '4.8', duration: '2 days 1 nights', guest: '2-6 guest', image: '/images/mumbai street food.jpg', tag: 'City',
@@ -51,6 +73,28 @@ export const TOURS = [
             "/images/mumthree.jpg",
             "/images/hfour.jpg"
         ],
+        overview: "Experience the electric energy of India's maximum city. From the colonial landmarks of South Mumbai to the bustling street food trails of Colaba and the iconic Marine Drive sunset, this tour captures the true spirit of Mumbai.",
+        highlights: [
+            "Guided street food crawl through Mumbai's best eateries",
+            "Visit the iconic Gateway of India and Taj Mahal Palace",
+            "Scenic drive along Marine Drive and Bandra-Worli Sea Link",
+            "Explore the historic Victoria Terminus (CST) station",
+            "Sunset views at Juhu Beach"
+        ],
+        inclusions: [
+            "1 night stay in a luxury sea-facing hotel",
+            "Curated street food tasting tour",
+            "Private AC car for city sightseeing",
+            "Local expert guide for market tours",
+            "All toll and parking charges"
+        ],
+        exclusions: [
+            "Lunch and Dinner (beyond street food tour)",
+            "Monument entry fees",
+            "Personal insurance",
+            "Laundry and phone calls",
+            "Anything not mentioned in inclusions"
+        ]
     },
     {
         id: 203, title: 'Dubai Mall & Burj Khalifa Experience', location: 'Dubai, UAE', price: '$199', rating: '5.0', duration: '1 day', guest: '1-10 guest', image: '/images/burij khalifa.avif', tag: 'Luxury',
@@ -61,6 +105,28 @@ export const TOURS = [
             "/images/dmtwo.jpg",
             "/images/hfour.jpg"
         ],
+        overview: "Touch the sky with our exclusive Burj Khalifa experience. Visit the world's tallest building, witness the spectacular Dubai Fountain show, and enjoy world-class shopping and dining at the iconic Dubai Mall.",
+        highlights: [
+            "Access to At the Top level 124 & 125",
+            "VIP view of the Dubai Fountain show",
+            "Guided tour of the Dubai Aquarium & Underwater Zoo",
+            "Luxury shopping experience at Dubai Mall",
+            "Gourmet dining with views of the Burj Khalifa"
+        ],
+        inclusions: [
+            "Entry tickets to Burj Khalifa observation deck",
+            "Tickets to Dubai Aquarium & Underwater Zoo",
+            "Private luxury transfer from hotel",
+            "Gourmet lunch at a Dubai Mall restaurant",
+            "Professional photographer for one souvenir portrait"
+        ],
+        exclusions: [
+            "Personal shopping expenses",
+            "Alcoholic drinks",
+            "Tips for the driver",
+            "Access to Level 148 (Sky level) unless upgraded",
+            "Travel insurance"
+        ]
     },
     {
         id: 204, title: 'Goa Coastal Adventure & Water Sports', location: 'Goa, India', price: '$85', rating: '4.7', duration: '1 day', guest: '2-8 guest', image: '/images/raul-varela-MnDgb8HH-y8-unsplash.jpg', tag: 'Adventure',
@@ -72,18 +138,88 @@ export const TOURS = [
             "/images/goaTwo.jpg",
             "/images/hfour.jpg"
         ],
+        overview: "Get your heart racing with our Goa coastal adventure. Spend a day on Goa's sun-drenched beaches participating in thrilling water sports, exploring hidden coves, and enjoying fresh seafood by the Arabian Sea.",
+        highlights: [
+            "Parasailing with views of the Goan coastline",
+            "Jet ski and banana boat rides at Calangute",
+            "Private boat trip for dolphin spotting",
+            "Authentic Goan shack lunch on the beach",
+            "Sunset beach walk at North Goa"
+        ],
+        inclusions: [
+            "Full day of managed water sports activities",
+            "Goan seafood buffet lunch",
+            "Hotel pickup and drop-off in North Goa",
+            "Professional life jackets and safety gear",
+            "Safety instruction from certified trainers"
+        ],
+        exclusions: [
+            "Personal video/photos during activities",
+            "Additional snacks and drinks",
+            "Alcoholic beverages",
+            "Swimwear and sunscreen",
+            "Gratuities for instructors"
+        ]
     },
 ];
 
 export const PACKAGES = [
-    { id: 1, title: 'Kerala Premium Backwater Package', location: 'Kerala, India', price: '$299', rating: '4.9', duration: '5 days 4 nights', guest: '2-4 guest', image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=800&auto=format&fit=crop' },
-    { id: 2, title: 'Himachal Snow Adventure Tour', location: 'Manali, India', price: '$350', rating: '4.7', duration: '6 days 5 nights', guest: '2-6 guest', image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=800&auto=format&fit=crop' },
-    { id: 3, title: 'Andaman Crystal Waters Getaway', location: 'Andaman, India', price: '$450', rating: '4.8', duration: '4 days 3 nights', guest: '2-4 guest', image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=800&auto=format&fit=crop' },
-    { id: 4, title: 'Goa Sun-Kissed Beach Vacation', location: 'Goa, India', price: '$199', rating: '4.6', duration: '3 days 2 nights', guest: '2-8 guest', image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=800&auto=format&fit=crop' },
-    { id: 5, title: 'Switzerland Alpine Magic Tour', location: 'Interlaken, Switzerland', price: '$899', rating: '4.9', duration: '7 days 6 nights', guest: '2-4 guest', image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=800&auto=format&fit=crop' },
-    { id: 6, title: 'Bali Tropical Paradise Escape', location: 'Ubud, Bali', price: '$499', rating: '4.8', duration: '5 days 4 nights', guest: '2-6 guest', image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=800&auto=format&fit=crop' },
-    { id: 7, title: 'Paris Romantic City Getaway', location: 'Paris, France', price: '$650', rating: '4.7', duration: '4 days 3 nights', guest: '2-4 guest', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800&auto=format&fit=crop' },
-    { id: 8, title: 'Dubai Desert Sands Adventure', location: 'Dubai, UAE', price: '$399', rating: '4.8', duration: '3 days 2 nights', guest: '2-8 guest', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop' },
+    { 
+        id: 1, title: 'Kerala Premium Backwater Package', location: 'Kerala, India', price: '$299', rating: '4.9', duration: '5 days 4 nights', guest: '2-4 guest', image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=800&auto=format&fit=crop',
+        overview: "Experience God's Own Country with our premium backwater package. Stay in a luxury houseboat, explore lush tea plantations in Munnar, and relax by the serene beaches of Marari.",
+        highlights: ["Overnight Houseboat Cruise", "Munnar Tea Garden Tour", "Kathakali Performance", "Spice Plantation Visit", "Kochi Heritage Walk"],
+        inclusions: ["Luxury Accommodation", "All Meals on Houseboat", "Private transfers", "Guide services", "Entry tickets"],
+        exclusions: ["Airfare", "Personal expenses", "Tips", "Insurance", "Optional activities"]
+    },
+    { 
+        id: 2, title: 'Himachal Snow Adventure Tour', location: 'Manali, India', price: '$350', rating: '4.7', duration: '6 days 5 nights', guest: '2-6 guest', image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=800&auto=format&fit=crop',
+        overview: "Discover the snow-capped peaks and adventurous spirit of Himachal. From paragliding in Solang Valley to the tranquility of Old Manali, this tour is perfect for thrill-seekers and nature lovers.",
+        highlights: ["Rohtang Pass excursion", "Paragliding in Solang", "River Rafting in Beas", "Hadimba Temple visit", "Shopping at Mall Road"],
+        inclusions: ["Mountain View Hotels", "Breakfast & Dinner", "Adventure activity guidance", "Private SUV for travel", "Permit fees"],
+        exclusions: ["Flight tickets", "Equipment rental", "Personal snacks", "Tips", "Insurance"]
+    },
+    { 
+        id: 3, title: 'Andaman Crystal Waters Getaway', location: 'Andaman, India', price: '$450', rating: '4.8', duration: '4 days 3 nights', guest: '2-4 guest', image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=800&auto=format&fit=crop',
+        overview: "Relax on the pristine white sands of the Andaman Islands. Enjoy world-class scuba diving, explore historic sites like Cellular Jail, and witness stunning sunsets over the Bay of Bengal.",
+        highlights: ["Scuba Diving at Havelock", "Cellular Jail Light & Sound Show", "Radhanagar Beach sunset", "Glass bottom boat ride", "Coral reef exploration"],
+        inclusions: ["Island resorts stay", "Daily breakfast", "Ferry transfers between islands", "Snorkeling gear", "Private tours"],
+        exclusions: ["Airfare to Port Blair", "Scuba diving costs", "Personal expenses", "Dinner (except cruise)", "Tips"]
+    },
+    { 
+        id: 4, title: 'Goa Sun-Kissed Beach Vacation', location: 'Goa, India', price: '$199', rating: '4.6', duration: '3 days 2 nights', guest: '2-8 guest', image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=800&auto=format&fit=crop',
+        overview: "Immerse yourself in the laid-back vibe of Goa. From North Goa's bustling beaches to the serene churches of Old Goa, experience the perfect coastal holiday.",
+        highlights: ["Baga Beach water sports", "Old Goa Church tour", "Sunset cruise", "Night market visit", "Seafood shack experience"],
+        inclusions: ["Beach-side hotel stay", "Daily breakfast", "Full day city tour", "Shared airport transfers", "Welcome drinks"],
+        exclusions: ["Flights", "Water sports fees", "Alcoholic drinks", "Tips", "Personal shopping"]
+    },
+    { 
+        id: 5, title: 'Switzerland Alpine Magic Tour', location: 'Interlaken, Switzerland', price: '$899', rating: '4.9', duration: '7 days 6 nights', guest: '2-4 guest', image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=800&auto=format&fit=crop',
+        overview: "Discover the breathtaking beauty of the Swiss Alps. Visit iconic peaks, charming villages, and crystal-clear lakes in this ultimate European alpine adventure.",
+        highlights: ["Jungfraujoch Top of Europe", "Mount Titlis cable car", "Scenic Golden Pass rail journey", "Lake Brienz boat trip", "Lucerne city tour"],
+        inclusions: ["Luxury alpine hotels", "Daily Swiss breakfast", "Swiss Travel Pass", "Mountain excursion tickets", "Professional guides"],
+        exclusions: ["International flights", "Ski equipment", "Lunch & Dinner", "Insurance", "Visas"]
+    },
+    { 
+        id: 6, title: 'Bali Tropical Paradise Escape', location: 'Ubud, Bali', price: '$499', rating: '4.8', duration: '5 days 4 nights', guest: '2-6 guest', image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=800&auto=format&fit=crop',
+        overview: "Relax in the heart of Bali's cultural soul. From lush rice terraces to ancient temples and stunning beaches, experience the magic of Ubud and Seminyak.",
+        highlights: ["Tegalalang Rice Terrace tour", "Uluwatu Temple sunset", "Mount Batur sunrise trek", "Monkey Forest visit", "Beach club relaxation"],
+        inclusions: ["Private pool villas", "Daily breakfast", "Private car & driver", "Snorkeling tour", "Temple entrance fees"],
+        exclusions: ["International airfare", "Personal laundry", "Additional meals", "Tips", "Travel insurance"]
+    },
+    { 
+        id: 7, title: 'Paris Romantic City Getaway', location: 'Paris, France', price: '$650', rating: '4.7', duration: '4 days 3 nights', guest: '2-4 guest', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800&auto=format&fit=crop',
+        overview: "Fall in love with the City of Lights. Enjoy romantic walks along the Seine, visit iconic landmarks, and indulge in world-class French cuisine and pastries.",
+        highlights: ["Eiffel Tower top level access", "Louvre Museum guided tour", "Seine River dinner cruise", "Montmartre walking tour", "Palace of Versailles trip"],
+        inclusions: ["Chic Parisian hotel stay", "Daily breakfast", "Paris Museum Pass", "Public transport pass", "Gourmet dinner cruise"],
+        exclusions: ["International flights", "Extra meals", "Shopping", "Tips", "Travel insurance"]
+    },
+    { 
+        id: 8, title: 'Dubai Desert Sands Adventure', location: 'Dubai, UAE', price: '$399', rating: '4.8', duration: '3 days 2 nights', guest: '2-8 guest', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop',
+        overview: "Experience the thrill of the desert and the luxury of the city. From high-speed dune bashing to the top of the Burj Khalifa, Dubai is a world like no other.",
+        highlights: ["Burj Khalifa Level 124", "Luxury Desert Safari with BBQ", "Dubai Fountain show", "Global Village tour", "Old Dubai boat ride"],
+        inclusions: ["Luxury hotel stay", "Daily breakfast", "All tour transfers", "BBQ dinner in desert", "Observation deck tickets"],
+        exclusions: ["International flights", "Adventure sports add-ons", "Tips", "Personal shopping", "Visas"]
+    },
 ];
 
 const BLOGS = [

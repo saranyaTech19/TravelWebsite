@@ -127,7 +127,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
       <section className="relative overflow-hidden py-4 bg-white">
         <div className="max-w-[1440px] mx-auto relative z-10 px-6 md:px-14">
           <div className="text-left mb-12">
-            <h2 className="text-4xl text-center lg:text-left md:text-[38px] font-sans font-black text-slate-900 leading-tight">
+            <h2 className="text-3xl text-center lg:text-left md:text-[38px] font-sans font-black text-slate-900 leading-tight">
               Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
             </h2>
           </div>
@@ -181,7 +181,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
 
         {/* North India Tours Section */}
         <div className="max-w-[1440px] mx-auto pt-16 px-6 md:px-14 lg:mt-40 mt-[20px]">
-          <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight mb-12 pt-[30px]">
+          <h2 className="text-4xl md:text-[38px] text-center lg:text-left font-sans font-black text-slate-900 leading-tight mb-12 pt-[30px]">
             North India <span className="text-[#00A9D7]">Tours</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-[20px]">
@@ -193,7 +193,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
 
         {/* South India Tours Section */}
         <div className="max-w-[1440px] mx-auto py-16 px-6 md:px-14">
-          <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900 leading-tight mb-12">
+          <h2 className="text-4xl md:text-[38px] font-sans text-center lg:text-left font-black text-slate-900 leading-tight mb-12">
             South India <span className="text-[#00A9D7]">Tours</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

@@ -10,6 +10,22 @@ interface FooterProps {
   onNavigate?: (view: any) => void;
 }
 
+const PinterestIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10c-1.12 0-2.19-.184-3.186-.523L8 22l.523-2.814C6.184 17.19 6 16.12 6 15c0-5.523 4.477-10 10-10Z" />
+    <path d="M12 8c2.209 0 4 1.791 4 4s-1.791 4-4 4-4-1.791-4-4" />
+    <path d="M12 16v5" />
+  </svg>
+);
+
 const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
   const addresses = [
     {
@@ -168,9 +184,16 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
               “Travel the world, discover new places, and create unforgettable memories.”
             </p>
             <div className="flex gap-4">
-              {[Facebook, Twitter, Instagram, Linkedin, Youtube].map((Icon, idx) => (
-                <a key={idx} href="#" className="text-[#00A9D7] hover:opacity-70 transition-opacity">
-                  <Icon className="w-5 h-5" />
+              {[
+                { Icon: Facebook, link: 'https://www.facebook.com/people/Global-Connect-World-Travel/61586916384409/' },
+                { Icon: Twitter, link: 'https://x.com/GlobalT6016' },
+                { Icon: Instagram, link: 'https://www.instagram.com/globalconnectworldtravel/' },
+                { Icon: PinterestIcon, link: 'https://www.pinterest.com/globalconnectworldtravel/' },
+                { Icon: Linkedin, link: 'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQH9QK7mS7DLiQAAAZzsG6KAG0eJRHME6v9mCl9BBAniglAvaWXrNTdhu9X9OAgDS4NPc-VtqqT0cHXKBIVoJdGQDGYtIUV_z7EPRt2hyJOJWXWrqtbAtImEIcVU8Rh5BDx8cxU=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Fglobal-connect-world-travel%2F%3FviewAsMember%3Dtrue' },
+                { Icon: Youtube, link: 'https://www.youtube.com/@GlobalConnectWorldTravels' }
+              ].map((item, idx) => (
+                <a key={idx} href={item.link} target={item.link !== '#' ? "_blank" : undefined} rel={item.link !== '#' ? "noopener noreferrer" : undefined} className="text-[#00A9D7] hover:opacity-70 transition-opacity cursor-pointer">
+                  <item.Icon className="w-5 h-5" />
                 </a>
               ))}
             </div>
@@ -217,7 +240,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
           <div className="lg:col-span-5 space-y-6">
             <h4 className="text-[#00A9D7] font-bold text-lg">Contacts us</h4>
             <div className="space-y-4">
-              <a href="mailto:contact@company.com" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
+              <a href="mailto:booking@globalconnectworldtravel.com" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
                 <Mail className="w-10 h-10 text-[#00A9D7]" />
                 santhosh@globalconnectworldtravel.com,
                 booking@globalconnectworldtravel.com
@@ -225,7 +248,10 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
               <a href="tel:+1234567890" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
                 <Phone className="w-5 h-5 text-[#00A9D7]" />
                 +91 89210 95973
-                : +91 62387 19549
+              </a>
+              <a href="tel:+1234567890" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
+                <Phone className="w-5 h-5 text-[#00A9D7]" />
+                +91 62387 19549
               </a>
               <div className="flex items-start gap-3 text-slate-600 text-sm">
                 <MapPin className="w-5 h-5 text-[#00A9D7] mt-1 shrink-0" />
