@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronRight, ArrowRight, ChevronLeft, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { LocationIcon } from './Icons';
-import { supabase } from '../lib/supabaseClient';
+import { packages } from '../lib/apiClient';
 
 const OFFERS = [
   { id: 1, title: 'INDIA TOURS', image: '/images/indiaFrom.png', },
@@ -160,15 +160,10 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
     const fetchDynamicPackages = async () => {
       setIsLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('tour_packages')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
+        const data = await packages.getAll();
 
         // Map image_url to image for compatibility with existing UI
-        const mappedData = (data || []).map(pkg => ({
+        const mappedData = data.map((pkg: any) => ({
           ...pkg,
           image: pkg.image_url, // For compatibility
           description: pkg.overview // For compatibility

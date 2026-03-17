@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CalendarIcon, UsersIcon } from './Icons';
-import { supabase } from '../lib/supabaseClient';
+import { enquiries } from '../lib/apiClient';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -54,36 +54,15 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
     setIsSubmitting(true);
 
     try {
-      // 1. Save to Database
-      const { error: dbError } = await supabase
-        .from('travel_details')
-        .insert([{
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone, // Added default value to satisfy DB constraint
-          travel_date: formData.travelDate,
-          adults: '1 Adult', // Mapping guests to adults field in DB
-          destination: 'General Enquiry' // Default value as field is removed
-        }]);
-
-      if (dbError) throw dbError;
-
-      // 2. Email Notification Call
-      await fetch(
-        "https://vhrqprthzkfqpssksprp.supabase.co/functions/v1/booking-notification",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZocnFwcnRoemtmcXBzc2tzcHJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMDM1ODIsImV4cCI6MjA4NjU3OTU4Mn0.S4DEm2ZiH4AoY-h0dhNCIyb4OoRM04FiKUOI6jglpx0"
-          },
-          body: JSON.stringify({
-            name: formData.fullName,
-            email: formData.email,
-            destination: 'General Enquiry'
-          }),
-        }
-      );
+      // Save to MySQL via API
+      await enquiries.submit({
+        full_name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        travel_date: formData.travelDate,
+        adults: '1 Adult',
+        destination: 'General Enquiry',
+      });
 
       setIsSubmitted(true);
       setFormData({

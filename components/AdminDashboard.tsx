@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { auth, packages as packagesApi, enquiries as enquiriesApi, uploadImage } from '../lib/apiClient';
 import { useAuth } from '../context/AuthContext';
 import { slugify } from '../utils/slugify';
 import {
@@ -60,23 +60,10 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const handleFileUpload = async (file: File) => {
     setIsUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `packages/${fileName}`;
-
-      const { data, error: uploadError } = await supabase.storage
-        .from('package-images')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('package-images')
-        .getPublicUrl(filePath);
-
+      const publicUrl = await uploadImage(file);
       return publicUrl;
     } catch (err: any) {
-      alert('Upload failed. Please ensure "package-images" bucket exists in Supabase Storage and is public.');
+      alert('Upload failed. Please ensure the server is running.');
       console.error(err);
       return null;
     } finally {
@@ -113,12 +100,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const fetchLeads = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('travel_details')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+      const data = await enquiriesApi.getAll();
       setEnquiries(data || []);
     } catch (err: any) {
       console.error('Fetch Error:', err.message);
@@ -131,12 +113,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const fetchPackages = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('tour_packages')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+      const data = await packagesApi.getAll();
       setPackages(data || []);
     } catch (err: any) {
       console.error('Fetch Packages Error:', err.message);
@@ -153,67 +130,13 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
     try {
       if (mode === 'login') {
-        // --- LOGIN FLOW ---
-        const { data, error: signInError } = await supabase.auth.signInWithPassword({
-          email: email.trim(),
-          password: password,
-        });
-
-        if (signInError) throw signInError;
-
-        // Verify if user exists in admins table
-        const { data: adminCheck, error: checkError } = await supabase
-          .from('admins')
-          .select('status')
-          .eq('id', data.user?.id)
-          .single();
-
-        if (checkError || !adminCheck) {
-          await supabase.auth.signOut();
-          throw new Error("Access Denied: You are not registered as an Admin Manager.");
-        }
+        await auth.signInWithPassword(email.trim(), password);
+        // AuthContext will pick up the new token and reload profile
+        window.location.reload();
       } else {
-        // --- SIGNUP FLOW ---
         if (!fullName.trim()) throw new Error("Full name is required for registration.");
-
-        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-          email: email.trim(),
-          password: password,
-        });
-
-        if (signUpError) throw signUpError;
-        if (!signUpData.user) throw new Error("Failed to create account.");
-
-        // Ensure user exists in 'users' table first to satisfy FK constraint in 'admins'
-        // Some setups require a record in public.users before admins can be created.
-        try {
-          await supabase.from('users').upsert([{
-            id: signUpData.user.id,
-            email: email.trim(),
-            full_name: fullName.trim()
-          }], { onConflict: 'id' });
-        } catch (e) {
-          console.warn("Could not upsert to users table, continuing...", e);
-        }
-
-        // FIX: Use .upsert() instead of .insert() to prevent duplicate key errors
-        // if the profile already exists in the admins table.
-        const { error: profileError } = await supabase
-          .from('admins')
-          .upsert([{
-            id: signUpData.user.id,
-            email: email.trim(),
-            full_name: fullName.trim(),
-            role: 'admin',
-            status: 'active'
-          }], { onConflict: 'id' });
-
-        if (profileError) {
-          console.error("Profile Creation Error:", profileError);
-          throw new Error(profileError.message || "Account created but profile setup failed.");
-        }
-
-        // Success - AuthContext will detect the new session
+        await auth.signUp(email.trim(), password, fullName.trim());
+        window.location.reload();
       }
     } catch (err: any) {
       setError(err.message || 'Authentication error.');
@@ -225,8 +148,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const handleDeleteLead = async (id: string) => {
     if (window.confirm('Delete this enquiry permanently?')) {
       try {
-        const { error } = await supabase.from('travel_details').delete().eq('id', id);
-        if (error) throw error;
+        await enquiriesApi.delete(id);
         setEnquiries(prev => prev.filter(e => e.id !== id));
         if (selectedLead?.id === id) setSelectedLead(null);
       } catch (err: any) {
@@ -238,8 +160,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const handleDeletePackage = async (id: string) => {
     if (window.confirm('Delete this package permanently?')) {
       try {
-        const { error } = await supabase.from('tour_packages').delete().eq('id', id);
-        if (error) throw error;
+        await packagesApi.delete(id);
         setPackages(prev => prev.filter(p => p.id !== id));
         if (selectedPackage?.id === id) setSelectedPackage(null);
       } catch (err: any) {
@@ -253,20 +174,11 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     if (!selectedPackage) return;
     setIsLoading(true);
     try {
-      const packageData = { ...selectedPackage };
-      delete packageData.id; // Remove ID for upsert if it's new, though Supabase handles it
-
-      const { data, error } = await supabase
-        .from('tour_packages')
-        .upsert([
-          {
-            ...selectedPackage,
-            updated_at: new Date().toISOString()
-          }
-        ], { onConflict: 'id' })
-        .select();
-
-      if (error) throw error;
+      if (selectedPackage.id) {
+        await packagesApi.update(selectedPackage.id, selectedPackage);
+      } else {
+        await packagesApi.create(selectedPackage);
+      }
 
       alert('Package saved successfully!');
       setIsEditingPackage(false);

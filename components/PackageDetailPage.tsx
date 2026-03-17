@@ -9,7 +9,7 @@ import { popularTours } from './PopularToursSection';
 import { indiaTours } from './IndiaToursSection';
 import { popularDestinations } from './PopularDestinationsSection';
 import { slugify } from '../utils/slugify';
-import { supabase } from '../lib/supabaseClient';
+import { packages, packageEnquiries } from '../lib/apiClient';
 import { PACKAGES as subhomePackages, TOURS as trendingSubhomeTours } from './SubHome';
 
 
@@ -33,28 +33,14 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
         // Build query safely to avoid type mismatch errors
         let data = null;
         
-        if (id && !isNaN(Number(id))) {
-          // If id is a number, try both id and direct slug match
-          const { data: idMatch } = await supabase
-            .from('tour_packages')
-            .select('*')
-            .or(`slug.eq.${id},id.eq.${id}`)
-            .maybeSingle();
-          data = idMatch;
-        } else if (id) {
-          // If id is a string slug
-          // 1. Try direct slug match
-          const { data: slugMatch } = await supabase
-            .from('tour_packages')
-            .select('*')
-            .eq('slug', id)
-            .maybeSingle();
-          data = slugMatch;
-
-          // 2. If not found, try finding by title (slugified)
-          if (!data) {
-            const { data: allTours } = await supabase.from('tour_packages').select('*');
-            data = allTours?.find(t => slugify(t.title) === id || t.slug === id);
+        if (id) {
+          try {
+            // Try fetching by numeric id or slug directly from the API
+            data = await packages.getById(id);
+          } catch {
+            // If not found by id/slug, search all packages
+            const allTours = await packages.getAll();
+            data = allTours.find((t: any) => slugify(t.title) === id || t.slug === id) ?? null;
           }
         }
 
@@ -138,38 +124,14 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
     setError(null);
 
     try {
-      const { error: insertError } = await supabase
-        .from('package_enquiries')
-        .insert([
-          {
-            full_name: formData.full_name,
-            email: formData.email,
-            travel_date: formData.travel_date,
-            phone_number: formData.phone,
-            package_id: formData.package_id,
-            package_name: formData.package_name
-          }
-        ]);
-
-      if (insertError) throw insertError;
-
-
-      await fetch(
-        "https://vhrqprthzkfqpssksprp.supabase.co/functions/v1/booking-notification",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZocnFwcnRoemtmcXBzc2tzcHJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMDM1ODIsImV4cCI6MjA4NjU3OTU4Mn0.S4DEm2ZiH4AoY-h0dhNCIyb4OoRM04FiKUOI6jglpx0"
-          },
-          body: JSON.stringify({
-            name: formData.full_name,
-            email: formData.email,
-            destination: formData.package_name,
-            phone: formData.phone
-          }),
-        }
-      );
+      await packageEnquiries.submit({
+        package_id: formData.package_id,
+        package_title: formData.package_name,
+        name: formData.full_name,
+        email: formData.email,
+        phone: formData.phone,
+        travel_date: formData.travel_date,
+      });
 
       setIsSubmitted(true);
       setFormData({

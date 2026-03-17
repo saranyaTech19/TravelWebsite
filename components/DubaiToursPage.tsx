@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+import { packages } from '../lib/apiClient';
 import { LocationIcon } from './Icons';
 import { Users } from 'lucide-react';
 
@@ -26,12 +26,8 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
     const fetchTours = async () => {
       setIsLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('tour_packages')
-          .select('*')
-          .eq('region', 'Dubai');
-        if (error) throw error;
-        setTours(data || []);
+        const data = await packages.getAll();
+        setTours(data.filter((t: any) => t.region === 'Dubai'));
       } catch (err) {
         console.error('Error fetching Dubai tours:', err);
       } finally {

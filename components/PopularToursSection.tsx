@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+import { packages } from '../lib/apiClient';
 import { LocationIcon } from './Icons';
 
 interface PopularToursSectionProps {
@@ -416,13 +416,8 @@ const PopularToursSection: React.FC<PopularToursSectionProps> = ({ onExplore }) 
     const fetchTours = async () => {
       setIsLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('tour_packages')
-          .select('*')
-          .eq('region', 'Dubai') // Specifically showing Dubai popular tours as per current UI
-          .limit(4);
-        if (error) throw error;
-        setTours(data || []);
+        const data = await packages.getAll();
+        setTours(data.filter((t: any) => t.region === 'Dubai').slice(0, 4));
       } catch (err) {
         console.error('Error fetching popular tours:', err);
       } finally {

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { ArrowUpRightIcon, LocationIcon } from './Icons';
-import { supabase } from '../lib/supabaseClient';
+import { contact } from '../lib/apiClient';
 import { Facebook, Twitter, Instagram, Plane } from 'lucide-react';
 
 const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
@@ -70,17 +70,13 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     if (!validate()) return;
     setIsSubmitting(true);
     try {
-      const { error } = await supabase
-        .from('contact_details')
-        .insert([{
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          message: formData.message
-        }]);
-
-      if (error) throw error
+      await contact.submit({
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+      });
       setIsSent(true);
       setFormData({
         firstName: '',

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { supabase } from '../lib/supabaseClient';
+import { packages } from '../lib/apiClient';
 import {
     Plane, Hotel, Palmtree, Ticket, FileText, Search, MapPin,
     Calendar, Users, ChevronRight, Star, Quote, Smartphone,
@@ -265,15 +265,11 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
         const fetchHomeData = async () => {
             setIsLoading(true);
             try {
-                const { data: toursData } = await supabase
-                    .from('tour_packages')
-                    .select('*')
-                    .eq('is_featured', true);
+                const allPackages = await packages.getAll();
+                const toursData = allPackages.filter((t: any) => t.is_featured);
 
-                if (toursData) {
-                    setDynamicTours(toursData);
-                    setDynamicPackages(toursData); // Use same featured set or refine query
-                }
+                setDynamicTours(toursData);
+                setDynamicPackages(toursData);
             } catch (err) {
                 console.error('Error fetching home data:', err);
             } finally {
