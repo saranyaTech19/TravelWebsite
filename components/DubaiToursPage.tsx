@@ -207,13 +207,13 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                       </div>
-                      {tour.duration}
+                      {tour.duration.match(/(\d+)\s*days?/i) ? `${tour.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : tour.duration.toUpperCase()}
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                       </div>
-                      4-6 guest
+                      {(tour as any).guest || (tour as any).guest_capacity || "4-6 GUESTS"}
                     </div>
                   </div>
 
@@ -267,13 +267,13 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                       </div>
-                      {tour.duration}
+                      {tour.duration.match(/(\d+)\s*days?/i) ? `${tour.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : tour.duration.toUpperCase()}
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                       </div>
-                      4-6 guest
+                      {(tour as any).guest || (tour as any).guest_capacity || "4-6 GUESTS"}
                     </div>
                   </div>
 
@@ -329,13 +329,13 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                       </div>
-                      {tour.duration}
+                      {tour.duration.match(/(\d+)\s*days?/i) ? `${tour.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : tour.duration.toUpperCase()}
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                       </div>
-                      4-6 guest
+                      {(tour as any).guest || (tour as any).guest_capacity || "4-6 GUESTS"}
                     </div>
                   </div>
 

@@ -311,7 +311,13 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                         <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                           <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                         </div>
-                        {pkg.duration}
+                        {pkg.duration.match(/(\d+)\s*days?/i) ? `${pkg.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : pkg.duration.toUpperCase()}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
+                          <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
+                        </div>
+                        {(pkg as any).guest || (pkg as any).guest_capacity || "2-4 GUESTS"}
                       </div>
                     </div>
                     <div className="mt-auto">
@@ -413,7 +419,13 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                           <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                             <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                           </div>
-                          {pkg.duration}
+                          {pkg.duration.match(/(\d+)\s*days?/i) ? `${pkg.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : pkg.duration.toUpperCase()}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
+                            <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
+                          </div>
+                          {(pkg as any).guest || (pkg as any).guest_capacity || "2-4 GUESTS"}
                         </div>
                       </div>
                       <div className="mt-auto flex items-center justify-center">
@@ -454,7 +466,13 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                           <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                             <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                           </div>
-                          {pkg.duration}
+                          {pkg.duration.match(/(\d+)\s*days?/i) ? `${pkg.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : pkg.duration.toUpperCase()}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
+                            <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
+                          </div>
+                          {(pkg as any).guest || (pkg as any).guest_capacity || "2-4 GUESTS"}
                         </div>
                       </div>
                       <div className="mt-auto flex items-center justify-center">

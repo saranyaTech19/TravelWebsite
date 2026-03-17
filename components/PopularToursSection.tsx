@@ -16,6 +16,7 @@ export const popularTours = [
     description: "Experience the thrill of dune bashing, camel riding, and a traditional Bedouin dinner under the stars.",
     rating: "5.00 (528)",
     duration: "6 Hours",
+
     tag: "Adventure",
     category: "Standard",
     gallery: [

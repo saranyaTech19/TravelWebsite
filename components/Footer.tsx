@@ -279,9 +279,9 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
           <p className="text-slate-500 text-sm">Copyright &copy; 2026 All Rights Reserved</p>
           <div className="flex gap-4 text-sm font-medium">
             {/* <span className="text-slate-500">All Rights Reserved |</span> */}
-            <a href="#" className="text-[#00A9D7] hover:underline">Terms and Conditions</a>
+            <a href="#" className="text-slate-500 hover:underline">Terms and Conditions</a>
             <span className="text-slate-300">|</span>
-            <a href="#" className="text-[#00A9D7] hover:underline">Privacy Policy</a>
+            <a href="#" className="text-slate-500 hover:underline">Privacy Policy</a>
           </div>
         </div>
       </div>
