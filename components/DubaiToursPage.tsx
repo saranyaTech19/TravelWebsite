@@ -80,7 +80,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
             </h2>
           </div>
 
-          <div className="flex  flex-col lg:flex-row justify-center gap-12 relative">
+          <div className="flex  flex-col lg:flex-row  gap-12 relative">
             {OFFERS.map((offer) => (
               <div
                 key={offer.id}
