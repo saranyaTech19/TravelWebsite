@@ -54,6 +54,7 @@ function RouteSync() {
 
 const App: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showScroll, setShowScroll] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'home' | 'destinations' | 'packages' | 'about' | 'search' | 'blog' | 'contact' | 'package-detail' | 'blog-detail' | 'admin'>('home');
@@ -122,11 +123,13 @@ const App: React.FC = () => {
     <AuthProvider>
       <RouteSync />
       <div className="min-h-screen bg-brand-bg relative w-full overflow-x-hidden">
-        <Navbar
-          onNavigate={navigateTo}
-          onBookClick={toggleBooking}
-          currentView={currentView as any}
-        />
+        {location.pathname !== '/admin' && (
+          <Navbar
+            onNavigate={navigateTo}
+            onBookClick={toggleBooking}
+            currentView={currentView as any}
+          />
+        )}
 
         <main className="w-full">
           <Routes>
@@ -134,16 +137,6 @@ const App: React.FC = () => {
               path="/"
               element={
                 <>
-                  {/* <Hero onContactClick={toggleBooking} onSearch={handleSearch} />
-                  <AboutSection onExplore={() => navigate("/about")} />
-                  <DestinationsSection onExplore={() => navigate("/destinations")} />
-                  <PopularToursSection onExplore={handlePackageClick} />
-                  <IndiaToursSection onExplore={handlePackageClick} />
-                  <PopularDestinationsSection
-                    onExplore={handlePackageClick}
-                    onViewAll={() => navigate("/destinations")}
-                  />
-                  <GallerySection /> */}
                   <SubHome 
                     onExplore={handlePackageClick} 
                     onBookClick={toggleBooking}
@@ -218,7 +211,7 @@ const App: React.FC = () => {
 
             <Route
               path="/admin"
-              element={<AdminDashboard />}
+              element={<AdminDashboard onBack={() => navigate("/")} />}
             />
             <Route
               path="/subhome"
@@ -228,7 +221,9 @@ const App: React.FC = () => {
           </Routes>
         </main>
 
-        <Footer onContactClick={toggleBooking} onNavigate={navigateTo} />
+        {location.pathname !== '/admin' && (
+          <Footer onContactClick={toggleBooking} onNavigate={navigateTo} />
+        )}
         <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
 
 

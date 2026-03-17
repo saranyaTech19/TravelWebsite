@@ -13,20 +13,6 @@ import { supabase } from '../lib/supabaseClient';
 import { PACKAGES as subhomePackages, TOURS as trendingSubhomeTours } from './SubHome';
 
 
-// Combine all possible tour data sources once outside the component
-const allPackages = [
-  ...listData,
-  ...popularTours,
-  ...indiaTours,
-  ...popularDestinations,
-  ...subhomePackages,
-  ...trendingSubhomeTours
-].map(pkg => ({
-  ...pkg,
-  id: pkg.id.toString(),
-  slug: slugify(pkg.title)
-}));
-
 interface PackageDetailPageProps {
   onBookClick?: () => void;
 }
@@ -35,14 +21,65 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [packageData, setPackageData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const packageData = allPackages.find((pkg: any) => pkg.id === id || pkg.slug === id) as any;
+  useEffect(() => {
+    const fetchPackageData = async () => {
+      setIsLoading(true);
+      try {
+        // Build query safely to avoid type mismatch errors
+        let data = null;
+        
+        if (id && !isNaN(Number(id))) {
+          // If id is a number, try both id and direct slug match
+          const { data: idMatch } = await supabase
+            .from('tour_packages')
+            .select('*')
+            .or(`slug.eq.${id},id.eq.${id}`)
+            .maybeSingle();
+          data = idMatch;
+        } else if (id) {
+          // If id is a string slug
+          // 1. Try direct slug match
+          const { data: slugMatch } = await supabase
+            .from('tour_packages')
+            .select('*')
+            .eq('slug', id)
+            .maybeSingle();
+          data = slugMatch;
 
-  // Unique images list - memoized to prevent unnecessary re-renders
+          // 2. If not found, try finding by title (slugified)
+          if (!data) {
+            const { data: allTours } = await supabase.from('tour_packages').select('*');
+            data = allTours?.find(t => slugify(t.title) === id || t.slug === id);
+          }
+        }
+
+        if (data) {
+          setPackageData(data);
+        } else {
+          // Check static data if not found in dynamic (for gradual rollout)
+          const staticMatch = [
+            ...listData, ...popularTours, ...indiaTours, ...popularDestinations, ...subhomePackages, ...trendingSubhomeTours
+          ].find(p => p.id?.toString() === id || slugify(p.title) === id);
+          
+          if (staticMatch) setPackageData(staticMatch);
+        }
+      } catch (err) {
+        console.error('Error fetching package:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPackageData();
+  }, [id]);
+
   const allImages = React.useMemo(() => {
-    return Array.from(new Set([packageData?.image, ...(packageData?.gallery || [])])).filter(Boolean);
+    if (!packageData) return [];
+    return Array.from(new Set([packageData.image_url || packageData.image, ...(packageData.gallery || [])])).filter(Boolean);
   }, [packageData]);
 
   const [selectedImage, setSelectedImage] = useState('');
@@ -50,12 +87,16 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
   const [openDay, setOpenDay] = useState(0);
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Initialize selected image when package data is loaded
   useEffect(() => {
-    if (packageData?.image) {
-      setSelectedImage(packageData.image);
+    if (packageData) {
+      setSelectedImage(packageData.image_url || packageData.image);
+      setFormData(prev => ({
+        ...prev,
+        package_id: packageData.id?.toString() || '',
+        package_name: packageData.title || ''
+      }));
     }
-  }, [packageData?.id]); // Only reset when the package itself changes
+  }, [packageData?.id]);
 
   const handleImageChange = (newImage: string, index: number) => {
     const currentIndex = allImages.indexOf(selectedImage);
@@ -78,8 +119,12 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
 
 
 
+  if (isLoading) {
+    return <div className="p-20 text-center py-40 flex flex-col items-center"><div className="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mb-4"></div><p className="font-serif italic text-brand-dark/40">Discovering your journey...</p></div>;
+  }
+
   if (!packageData) {
-    return <div className="p-20 text-center">Package Not Found</div>;
+    return <div className="p-20 text-center py-40"><h2 className="text-4xl font-serif font-bold text-brand-dark mb-4">Package Not Found</h2><Link to="/" className="text-brand-gold font-bold underline">Return Home</Link></div>;
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -346,7 +391,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                           <div className="space-y-3">
                             <h3 className="text-xl font-black text-slate-900 group-hover:text-[#00A9D7] transition-colors line-clamp-1">Day {i + 1}: {item.title}</h3>
                             <p className="text-slate-600 text-base font-bold opacity-80 leading-relaxed max-w-2xl">
-                              {item.description || "Explore the local attractions and enjoy the scenic beauty of the region."}
+                              {item.detail || item.description || "Explore the local attractions and enjoy the scenic beauty of the region."}
                             </p>
                           </div>
                         </div>

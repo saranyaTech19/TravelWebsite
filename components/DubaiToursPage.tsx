@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { popularTours } from './PopularToursSection';
+import { supabase } from '../lib/supabaseClient';
 import { LocationIcon } from './Icons';
 import { Users } from 'lucide-react';
 
@@ -19,8 +19,38 @@ const OFFERS = [
 
 const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBookClick }) => {
   const navigate = useNavigate();
-  const standardTours = popularTours.filter(tour => tour.category === 'Standard');
-  const localTours = popularTours.filter(tour => tour.category === 'Local');
+  const [tours, setTours] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('tour_packages')
+          .select('*')
+          .eq('region', 'Dubai');
+        if (error) throw error;
+        setTours(data || []);
+      } catch (err) {
+        console.error('Error fetching Dubai tours:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTours();
+  }, []);
+
+  const standardTours = tours.filter(tour => {
+    const cat = tour.category?.toLowerCase() || '';
+    // Only show explicitly international trips from Dubai
+    return cat === 'international trips from dubai';
+  });
+  const localTours = tours.filter(tour => {
+    const cat = tour.category?.toLowerCase() || '';
+    // Show local tours OR standard Dubai tours in the local section
+    return cat === 'local' || cat === 'dubai local tours' || cat === 'dubai local toures' || cat === 'standard' || cat === '';
+  });
 
   return (
     <div className="min-h-screen bg-brand-bg">
@@ -177,7 +207,11 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
           <div className="lg:text-white text-black lg:text-[38px] text-3xl font-bold text-center mb-12">International Trips from Dubai</div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
-            {popularTours.slice(0, 4).map((tour) => (
+            {isLoading ? (
+               <div className="col-span-4 py-20 text-center"><div className="w-8 h-8 border-4 border-[#00A9D7] border-t-transparent rounded-full animate-spin mx-auto"></div></div>
+            ) : standardTours.length === 0 ? (
+               <div className="col-span-4 py-20 text-center font-bold text-slate-400">No international tours found.</div>
+            ) : standardTours.slice(0, 4).map((tour) => (
               <div
                 key={tour.id}
                 onClick={() => onExplore(tour)}
@@ -187,12 +221,10 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                 <div className="relative p-3 h-[200px]">
                   <div className="w-full h-full rounded-[24px] overflow-hidden relative">
                     <img
-                      src={tour.image}
+                      src={tour.image_url || tour.image}
                       alt={tour.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-
-
                   </div>
                 </div>
 
@@ -213,7 +245,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                       </div>
-                      4-6 guest
+                      {tour.guest_capacity || '4-6 guest'}
                     </div>
                   </div>
 
@@ -247,7 +279,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                 <div className=" p-3 h-[200px] ">
                   <div className="w-full h-full rounded-[24px] overflow-hidden">
                     <img
-                      src={tour.image}
+                      src={tour.image_url || tour.image}
                       alt={tour.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
@@ -309,7 +341,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                 <div className="relative p-3 h-[200px]">
                   <div className="w-full h-full rounded-[24px] overflow-hidden relative">
                     <img
-                      src={tour.image}
+                      src={tour.image_url || tour.image}
                       alt={tour.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />

@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { supabase } from '../lib/supabaseClient';
 import {
     Plane, Hotel, Palmtree, Ticket, FileText, Search, MapPin,
     Calendar, Users, ChevronRight, Star, Quote, Smartphone,
@@ -249,25 +250,54 @@ const TRENDING_DESTINATIONS = [
 
 interface SubHomeProps {
     onExplore: (tour: any) => void;
-    onBookClick?: () => void;
+    onBookClick: () => void;
 }
 
 const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('flights');
     const [searchQuery, setSearchQuery] = useState('');
-    const [pkgIndex, setPkgIndex] = useState(0);
-    const packagesPerPage = 4;
+    const [activeTab, setActiveTab] = useState('holidays');
+    const [dynamicTours, setDynamicTours] = useState<any[]>([]);
+    const [dynamicPackages, setDynamicPackages] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const filteredTours = TOURS.filter(tour =>
+    useEffect(() => {
+        const fetchHomeData = async () => {
+            setIsLoading(true);
+            try {
+                const { data: toursData } = await supabase
+                    .from('tour_packages')
+                    .select('*')
+                    .eq('is_featured', true);
+
+                if (toursData) {
+                    setDynamicTours(toursData);
+                    setDynamicPackages(toursData); // Use same featured set or refine query
+                }
+            } catch (err) {
+                console.error('Error fetching home data:', err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchHomeData();
+    }, []);
+
+    const displayTours = dynamicTours.length > 0 ? dynamicTours : TOURS;
+    const displayPackages = dynamicPackages.length > 0 ? dynamicPackages : PACKAGES;
+
+    const filteredTours = displayTours.filter(tour =>
         tour.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         tour.location.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const filteredPackages = PACKAGES.filter(pkg =>
+    const filteredPackages = displayPackages.filter(pkg =>
         pkg.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         pkg.location.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const packagesPerPage = 4;
+    const [pkgIndex, setPkgIndex] = useState(0);
 
     const handleNextPkg = () => {
         setPkgIndex((prev) => (prev + packagesPerPage >= filteredPackages.length ? 0 : prev + packagesPerPage));
@@ -464,7 +494,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative mt-[80px]">
-                            {TOURS.map((tour) => (
+                            {displayTours.map((tour: any) => (
                                 <div
                                     key={tour.id}
                                     onClick={() => onExplore(tour)}
@@ -473,7 +503,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                     {/* Image Container */}
                                     <div className="relative p-3 h-[160px]">
                                         <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                                            <img src={tour.image} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                            <img src={tour.image_url || tour.image} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 
 
                                         </div>
@@ -496,7 +526,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                                 <div className="w-2 h-2 rounded-full bg-[#35BCE2]/20 flex items-center justify-center">
                                                     <Users className="w-3.5 h-3.5 text-[#35BCE2]" strokeWidth={3} />
                                                 </div>
-                                                {tour.guest}
+                                                 {tour.guest_capacity || tour.guest}
                                             </div>
                                         </div>
 
@@ -556,7 +586,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
                             {filteredPackages.length > 0 ? (
-                                filteredPackages.slice(pkgIndex, pkgIndex + packagesPerPage).map((pkg) => (
+                                filteredPackages.slice(pkgIndex, pkgIndex + packagesPerPage).map((pkg: any) => (
                                     <div
                                         key={pkg.id}
                                         onClick={() => onExplore(pkg)}
@@ -564,7 +594,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                     >
                                         <div className="relative p-3 h-[200px]">
                                             <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                                                <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                                <img src={pkg.image_url || pkg.image} alt={pkg.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 
                                             </div>
                                         </div>
@@ -584,7 +614,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                                     <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                                                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                                                     </div>
-                                                    {pkg.guest}
+                                                     {pkg.guest_capacity || pkg.guest}
                                                 </div>
                                             </div>
                                             <div className="mt-auto flex items-center justify-center">

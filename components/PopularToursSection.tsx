@@ -1,6 +1,6 @@
-import React from 'react';
-import { tours } from './FactsSection';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
 import { LocationIcon } from './Icons';
 
 interface PopularToursSectionProps {
@@ -357,7 +357,7 @@ const PopularTourCard: React.FC<{ tour: any; onExplore?: (tour: any) => void }> 
       <div className="p-5 pb-0">
         <div className="aspect-[16/11] rounded-[2rem] overflow-hidden relative">
           <img
-            src={tour.image}
+            src={tour.image_url || tour.image}
             alt={tour.title}
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
             onError={(e) => {
@@ -408,10 +408,34 @@ const PopularTourCard: React.FC<{ tour: any; onExplore?: (tour: any) => void }> 
 
 const PopularToursSection: React.FC<PopularToursSectionProps> = ({ onExplore }) => {
   const navigate = useNavigate();
+  const [tours, setTours] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('tour_packages')
+          .select('*')
+          .eq('region', 'Dubai') // Specifically showing Dubai popular tours as per current UI
+          .limit(4);
+        if (error) throw error;
+        setTours(data || []);
+      } catch (err) {
+        console.error('Error fetching popular tours:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTours();
+  }, []);
+
+  const displayTours = tours.length > 0 ? tours : popularTours.slice(0, 4);
 
   return (
     <section className="global-page-container max-w-screen-2xl mx-auto bg-brand-bg py-24">
-      {/* Header Area */}
+      {/* ... (Header Area unchanged) */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-10">
         <div className="max-w-2xl">
           <p className="font-cursive text-brand-gold text-3xl md:text-4xl mb-4">
@@ -438,7 +462,7 @@ const PopularToursSection: React.FC<PopularToursSectionProps> = ({ onExplore }) 
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
-        {popularTours.slice(0, 4).map((tour) => (
+        {displayTours.map((tour) => (
           <PopularTourCard key={tour.id} tour={tour} onExplore={onExplore} />
         ))}
       </div>
