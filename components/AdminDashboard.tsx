@@ -500,7 +500,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         </td>
                         <td className="px-8 py-5 text-sm font-bold text-slate-700">{e.destination}</td>
                         <td className="px-8 py-5 text-right">
-                          <button onClick={(ev) => { ev.stopPropagation(); handleDeleteLead(e.id); }} className="p-2 text-slate-300 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100">
+                          <button onClick={(ev) => { ev.stopPropagation(); handleDeleteLead(e.id); }} className="p-2 text-slate-300 hover:text-red-500 transition-all  group-hover:opacity-100">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </td>
@@ -537,8 +537,11 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       <table className="w-full text-left">
                         <thead>
                           <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[11px] font-black uppercase tracking-widest">
-                            <th className="px-8 py-5">Details</th>
-                            <th className="px-8 py-5">Region</th>
+                            <th className="px-8 py-5">Package Details</th>
+                            <th className="px-6 py-5">Region</th>
+                            <th className="px-6 py-5">Category</th>
+                            <th className="px-6 py-5">Duration</th>
+                            <th className="px-6 py-5">Guests</th>
                             <th className="px-8 py-5 text-right">Actions</th>
                           </tr>
                         </thead>
@@ -547,22 +550,44 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             <tr key={p.id} className="hover:bg-slate-50 transition-colors cursor-pointer group" onClick={() => { setSelectedPackage(p); setIsEditingPackage(true); }}>
                               <td className="px-8 py-6">
                                 <div className="flex items-center gap-4">
-                                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 border border-slate-200">
-                                    <img src={p.image_url} alt="" className="w-full h-full object-cover" />
+                                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm shrink-0">
+                                    <img src={p.image_url} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                                   </div>
                                   <div>
-                                    <p className="text-sm font-black text-slate-900 leading-none">{p.title}</p>
-                                    <p className="text-[11px] text-slate-400 mt-1.5 font-bold uppercase tracking-widest">{p.slug}</p>
+                                    <p className="text-sm font-black text-slate-900 leading-tight mb-1">{p.title}</p>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{p.slug}</p>
                                   </div>
                                 </div>
                               </td>
-                              <td className="px-8 py-6">
-                                <span className="text-[11px] font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">{p.region}</span>
+                              <td className="px-6 py-6 font-bold text-xs text-slate-600">
+                                <span className="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">{p.region}</span>
+                              </td>
+                              <td className="px-6 py-6">
+                                <span className="text-xs font-bold text-slate-500">{p.category}</span>
+                              </td>
+                              <td className="px-6 py-6">
+                                <span className="text-xs font-bold text-slate-500">{p.duration}</span>
+                              </td>
+                              <td className="px-6 py-6 text-xs font-bold text-slate-500">
+                                {p.guest_capacity}
                               </td>
                               <td className="px-8 py-6 text-right">
-                                <button onClick={(ev) => { ev.stopPropagation(); handleDeletePackage(p.id!); }} className="p-2 text-slate-300 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100">
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
+                                <div className="flex items-center justify-end gap-2">
+                                  <button
+                                    onClick={(ev) => { ev.stopPropagation(); setSelectedPackage(p); setIsEditingPackage(true); }}
+                                    className="p-2.5 bg-slate-100 text-slate-400 hover:bg-indigo-600 hover:text-white rounded-lg transition-all shadow-sm"
+                                    title="Edit Package"
+                                  >
+                                    <RefreshCcw className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={(ev) => { ev.stopPropagation(); handleDeletePackage(p.id!); }}
+                                    className="p-2.5 bg-slate-100 text-slate-400 hover:bg-red-500 hover:text-white rounded-lg transition-all shadow-sm"
+                                    title="Delete Package"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -582,13 +607,24 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             <span className="text-slate-400 ml-3 text-sm font-bold uppercase tracking-widest">/ Phase {formStep} of 5</span>
                           </h2>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => setIsEditingPackage(false)}
-                          className="bg-[#4F46E5] text-white px-8 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-indigo-100 hover:bg-[#4338CA] transition-all"
-                        >
-                          Manage Packages
-                        </button>
+                        <div className="flex items-center gap-3">
+                          {selectedPackage.id && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeletePackage(selectedPackage.id!)}
+                              className="bg-red-50 text-red-600 px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all border border-red-100 flex items-center gap-2"
+                            >
+                              <Trash2 className="w-4 h-4" /> Delete Package
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => setIsEditingPackage(false)}
+                            className="bg-[#4F46E5] text-white px-8 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-indigo-100 hover:bg-[#4338CA] transition-all"
+                          >
+                            Manage Packages
+                          </button>
+                        </div>
                       </div>
                       {/* Visual Step Progress */}
                       <div className="flex gap-2">
@@ -605,37 +641,37 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           <div>
                             <h3 className="text-sm font-black text-slate-500 uppercase tracking-widest border-b pb-4 mb-8">Phase 1: Basic Identity & Region</h3>
                             <div className="grid grid-cols-2 gap-8">
-                              <div className="space-y-1.5">
-                                <label className="text-[11px] font-black text-slate-500 uppercase">Package Name *</label>
-                                <input value={selectedPackage.title} onChange={e => setSelectedPackage({ ...selectedPackage, title: e.target.value })} className="w-full bg-[#F3F4F6] border border-transparent focus:bg-white focus:border-indigo-500 rounded-lg px-4 py-3 text-sm font-bold outline-none transition-all" placeholder="e.g. Hidden Wonders of Leh" required />
+                              <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Package Title (Public Display)</label>
+                                <input value={selectedPackage.title} onChange={e => setSelectedPackage({ ...selectedPackage, title: e.target.value })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all" placeholder="e.g. Luxury Maldives Escape" required />
                               </div>
-                              <div className="space-y-1.5">
-                                <label className="text-[11px] font-black text-slate-500 uppercase">URL Slug (System Unique)</label>
-                                <input value={selectedPackage.slug} onChange={e => setSelectedPackage({ ...selectedPackage, slug: e.target.value })} className="w-full bg-[#F3F4F6] border border-transparent focus:bg-white focus:border-indigo-500 rounded-lg px-4 py-3 text-sm font-bold outline-none transition-all" placeholder="e.g. leh-wonders-tour" required />
+                              <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">URL Slug (System Reference)</label>
+                                <input value={selectedPackage.slug} onChange={e => setSelectedPackage({ ...selectedPackage, slug: e.target.value })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all" placeholder="e.g. maldives-luxury-one" required />
                               </div>
                             </div>
                           </div>
 
                           <div className="grid grid-cols-3 gap-8">
-                            <div className="space-y-1.5">
-                              <label className="text-[11px] font-black text-slate-500 uppercase">Operational Region</label>
-                              <select value={selectedPackage.region} onChange={e => setSelectedPackage({ ...selectedPackage, region: e.target.value, category: getCategoryOptions(e.target.value)[0] })} className="w-full bg-[#F3F4F6] border border-transparent focus:bg-white focus:border-indigo-500 rounded-lg px-4 py-3 text-sm font-bold outline-none transition-all">
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Operational Region</label>
+                              <select value={selectedPackage.region} onChange={e => setSelectedPackage({ ...selectedPackage, region: e.target.value, category: getCategoryOptions(e.target.value)[0] })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all">
                                 <option value="India">India</option>
                                 <option value="Dubai">Dubai</option>
                                 <option value="International">International</option>
                               </select>
                             </div>
-                            <div className="space-y-1.5">
-                              <label className="text-[11px] font-black text-slate-500 uppercase">Trip Category</label>
-                              <select value={selectedPackage.category} onChange={e => setSelectedPackage({ ...selectedPackage, category: e.target.value })} className="w-full bg-[#F3F4F6] border border-transparent focus:bg-white focus:border-indigo-500 rounded-lg px-4 py-3 text-sm font-bold outline-none transition-all">
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Trip Category</label>
+                              <select value={selectedPackage.category} onChange={e => setSelectedPackage({ ...selectedPackage, category: e.target.value })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all">
                                 {getCategoryOptions(selectedPackage.region).map(opt => (
                                   <option key={opt} value={opt}>{opt}</option>
                                 ))}
                               </select>
                             </div>
-                            <div className="space-y-1.5">
-                              <label className="text-[11px] font-black text-slate-500 uppercase">Package Priority</label>
-                              <select value={selectedPackage.is_featured ? 'yes' : 'no'} onChange={e => setSelectedPackage({ ...selectedPackage, is_featured: e.target.value === 'yes' })} className="w-full bg-[#F3F4F6] border border-transparent focus:bg-white focus:border-indigo-500 rounded-lg px-4 py-3 text-sm font-bold outline-none transition-all">
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Package Priority</label>
+                              <select value={selectedPackage.is_featured ? 'yes' : 'no'} onChange={e => setSelectedPackage({ ...selectedPackage, is_featured: e.target.value === 'yes' })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all">
                                 <option value="no">Standard Visibility</option>
                                 <option value="yes">Feature on Home Page</option>
                               </select>
@@ -643,17 +679,17 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           </div>
 
                           <div className="grid grid-cols-3 gap-8 pt-4">
-                            <div className="space-y-1.5">
-                              <label className="text-[11px] font-black text-slate-500 uppercase">Duration</label>
-                              <input value={selectedPackage.duration} onChange={e => setSelectedPackage({ ...selectedPackage, duration: e.target.value })} className="w-full bg-[#F3F4F6] border border-transparent focus:bg-white focus:border-indigo-500 rounded-lg px-4 py-3 text-sm font-bold outline-none transition-all" placeholder="5 Days 4 Nights" />
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Duration</label>
+                              <input value={selectedPackage.duration} onChange={e => setSelectedPackage({ ...selectedPackage, duration: e.target.value })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all" placeholder="e.g. 5 Days 4 Nights" />
                             </div>
-                            <div className="space-y-1.5">
-                              <label className="text-[11px] font-black text-slate-500 uppercase">Rating Score</label>
-                              <input value={selectedPackage.rating} onChange={e => setSelectedPackage({ ...selectedPackage, rating: e.target.value })} className="w-full bg-[#F3F4F6] border border-transparent focus:bg-white focus:border-indigo-500 rounded-lg px-4 py-3 text-sm font-bold outline-none transition-all" placeholder="4.9 (240)" />
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Rating Score</label>
+                              <input value={selectedPackage.rating} onChange={e => setSelectedPackage({ ...selectedPackage, rating: e.target.value })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all" placeholder="e.g. 4.9 (240)" />
                             </div>
-                            <div className="space-y-1.5">
-                              <label className="text-[11px] font-black text-slate-500 uppercase">Guest Capacity</label>
-                              <input value={selectedPackage.guest_capacity} onChange={e => setSelectedPackage({ ...selectedPackage, guest_capacity: e.target.value })} className="w-full bg-[#F3F4F6] border border-transparent focus:bg-white focus:border-indigo-500 rounded-lg px-4 py-3 text-sm font-bold outline-none transition-all" placeholder="4-6 guest" />
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Guest Capacity</label>
+                              <input value={selectedPackage.guest_capacity} onChange={e => setSelectedPackage({ ...selectedPackage, guest_capacity: e.target.value })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all" placeholder="e.g. 4-6 guest" />
                             </div>
                           </div>
 

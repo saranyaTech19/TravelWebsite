@@ -1,13 +1,10 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TourCard } from './FactsSection';
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronRight, ArrowRight, ChevronLeft, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { indiaTours } from './IndiaToursSection';
-import { popularTours } from './PopularToursSection';
-import { useRef } from 'react';
 import { LocationIcon } from './Icons';
+import { supabase } from '../lib/supabaseClient';
 
 const OFFERS = [
   { id: 1, title: 'INDIA TOURS', image: '/images/indiaFrom.png', },
@@ -136,10 +133,8 @@ const EXPLORE_BY_THEME = [
   }
 ];
 
-const packagesList = [
-  ...indiaTours.slice(0, 4),
-  ...popularTours.slice(0, 4)
-];
+// Static types for fallback or themes (keeping definitions but will use dynamic list for main grid)
+const themes = EXPLORE_BY_THEME;
 
 interface PackagesPageProps {
   onBack: () => void;
@@ -154,16 +149,47 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
   const [activeDestinationSouth, setActiveDestinationSouth] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isPausedSouth, setIsPausedSouth] = useState(false);
+  const [packagesList, setPackagesList] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Extract search query from URL
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get('search')?.toLowerCase() || '';
 
+  useEffect(() => {
+    const fetchDynamicPackages = async () => {
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('tour_packages')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        
+        // Map image_url to image for compatibility with existing UI
+        const mappedData = (data || []).map(pkg => ({
+          ...pkg,
+          image: pkg.image_url, // For compatibility
+          description: pkg.overview // For compatibility
+        }));
+        
+        setPackagesList(mappedData);
+      } catch (err) {
+        console.error('Error fetching packages:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDynamicPackages();
+  }, []);
+
   // Filter packages based on search query
   const filteredPackages = packagesList.filter(pkg =>
-    pkg.title.toLowerCase().includes(searchQuery) ||
-    pkg.location.toLowerCase().includes(searchQuery) ||
-    pkg.description.toLowerCase().includes(searchQuery)
+    (pkg.title || '').toLowerCase().includes(searchQuery) ||
+    (pkg.location || '').toLowerCase().includes(searchQuery) ||
+    (pkg.description || '').toLowerCase().includes(searchQuery)
   );
 
 
@@ -311,11 +337,17 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                         <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                           <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                         </div>
-                        {pkg.duration}
+                        {pkg.duration.match(/(\d+)\s*days?/i) ? `${pkg.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : pkg.duration.toUpperCase()}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
+                          <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
+                        </div>
+                        {(pkg as any).guest_capacity || (pkg as any).guest || "2-4 GUESTS"}
                       </div>
                     </div>
-                    <div className="mt-auto">
-                      <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all">
+                    <div className="mt-auto flex items-center justify-center">
+                      <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
                         Book Now
                       </button>
                     </div>
@@ -388,42 +420,58 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
               <div className="text-black lg:text-white lg:text-[38px] text-3xl font-bold text-center lg:mb-12">Amazing Trendings desinations</div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14 pt-[30px]">
-                {packagesList.slice(0, 4).map((pkg) => (
-                  <div
-                    key={pkg.id}
-                    onClick={() => handleBookNow(pkg)}
-                    className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-2xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
-                  >
-                    <div className="relative p-3 h-[200px]">
-                      <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                        <img
-                          src={pkg.image}
-                          alt={pkg.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-
-                      </div>
-                    </div>
-                    <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                      <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
-                        {pkg.title}
-                      </h3>
-                      <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                            <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                          </div>
-                          {pkg.duration}
+                {isLoading ? (
+                  <div className="col-span-full flex flex-col items-center justify-center py-20 bg-white/50 backdrop-blur-sm rounded-[32px] shadow-xl border border-white/20">
+                    <div className="w-12 h-12 border-4 border-[#00A9D7] border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <p className="text-slate-600 font-bold uppercase tracking-widest text-sm">Loading Amazing Packages...</p>
+                  </div>
+                ) : packagesList.length > 0 ? (
+                  packagesList.slice(0, 4).map((pkg) => (
+                    <div
+                      key={pkg.id}
+                      onClick={() => handleBookNow(pkg)}
+                      className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-2xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                    >
+                      <div className="relative p-3 h-[200px]">
+                        <div className="w-full h-full rounded-[24px] overflow-hidden relative">
+                          <img
+                            src={pkg.image}
+                            alt={pkg.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
                         </div>
                       </div>
-                      <div className="mt-auto flex items-center justify-center">
-                        <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
-                          Book Now
-                        </button>
+                      <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
+                        <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                          {pkg.title}
+                        </h3>
+                        <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
+                              <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
+                            </div>
+                            {pkg.duration.match(/(\d+)\s*days?/i) ? `${pkg.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : pkg.duration.toUpperCase()}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
+                              <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
+                            </div>
+                            {(pkg as any).guest_capacity || (pkg as any).guest || "2-4 GUESTS"}
+                          </div>
+                        </div>
+                        <div className="mt-auto flex items-center justify-center">
+                          <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                            Book Now
+                          </button>
+                        </div>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-20 bg-white/80 backdrop-blur-sm rounded-[32px] shadow-xl border border-white/20">
+                    <p className="text-slate-600 font-black text-xl uppercase tracking-widest">No Trendings destinations found</p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
@@ -442,7 +490,6 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                           alt={pkg.title}
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-
                       </div>
                     </div>
                     <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
@@ -454,7 +501,13 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                           <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                             <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                           </div>
-                          {pkg.duration}
+                          {pkg.duration.match(/(\d+)\s*days?/i) ? `${pkg.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : pkg.duration.toUpperCase()}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
+                            <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
+                          </div>
+                          {(pkg as any).guest_capacity || (pkg as any).guest || "2-4 GUESTS"}
                         </div>
                       </div>
                       <div className="mt-auto flex items-center justify-center">
@@ -468,6 +521,8 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
               </div>
             </div>
           </div>
+
+
         </>
       )}
     </div>
