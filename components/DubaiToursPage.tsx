@@ -110,7 +110,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
             </h2>
           </div>
 
-          <div className="flex  flex-col lg:flex-row justify-center gap-12 relative">
+          <div className="flex  flex-col lg:flex-row  gap-12 relative">
             {OFFERS.map((offer) => (
               <div
                 key={offer.id}
@@ -208,9 +208,9 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
             {isLoading ? (
-               <div className="col-span-4 py-20 text-center"><div className="w-8 h-8 border-4 border-[#00A9D7] border-t-transparent rounded-full animate-spin mx-auto"></div></div>
+              <div className="col-span-4 py-20 text-center"><div className="w-8 h-8 border-4 border-[#00A9D7] border-t-transparent rounded-full animate-spin mx-auto"></div></div>
             ) : standardTours.length === 0 ? (
-               <div className="col-span-4 py-20 text-center font-bold text-slate-400">No international tours found.</div>
+              <div className="col-span-4 py-20 text-center font-bold text-slate-400">No international tours found.</div>
             ) : standardTours.slice(0, 4).map((tour) => (
               <div
                 key={tour.id}
@@ -239,7 +239,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                       </div>
-                      {tour.duration}
+                      {tour.duration.match(/(\d+)\s*days?/i) ? `${tour.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : tour.duration.toUpperCase()}
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
@@ -299,13 +299,13 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                       </div>
-                      {tour.duration}
+                      {tour.duration.match(/(\d+)\s*days?/i) ? `${tour.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : tour.duration.toUpperCase()}
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                       </div>
-                      4-6 guest
+                      {(tour as any).guest || (tour as any).guest_capacity || "4-6 GUESTS"}
                     </div>
                   </div>
 
@@ -361,13 +361,13 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
                       </div>
-                      {tour.duration}
+                      {tour.duration.match(/(\d+)\s*days?/i) ? `${tour.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : tour.duration.toUpperCase()}
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                       </div>
-                      4-6 guest
+                      {(tour as any).guest || (tour as any).guest_capacity || "4-6 GUESTS"}
                     </div>
                   </div>
 

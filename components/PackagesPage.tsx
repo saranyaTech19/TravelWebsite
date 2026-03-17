@@ -166,14 +166,14 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
           .order('created_at', { ascending: false });
 
         if (error) throw error;
-        
+
         // Map image_url to image for compatibility with existing UI
         const mappedData = (data || []).map(pkg => ({
           ...pkg,
           image: pkg.image_url, // For compatibility
           description: pkg.overview // For compatibility
         }));
-        
+
         setPackagesList(mappedData);
       } catch (err) {
         console.error('Error fetching packages:', err);

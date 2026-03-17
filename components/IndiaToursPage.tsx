@@ -53,10 +53,10 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
     const cat = tour.category?.toLowerCase() || '';
     const title = tour.title?.toLowerCase() || '';
     const loc = tour.location?.toLowerCase() || '';
-    
+
     // Explicit North India tours
     if (cat === 'north' || cat === 'north india tours') return true;
-    
+
     // Fallback for uncategorized India tours (but EXCLUDE 'standard' which goes to International)
     if (cat === '') {
       const northKeywords = ['delhi', 'leh', 'ladakh', 'rajasthan', 'himachal', 'manali', 'agra', 'kashmir', 'jaipur', 'north'];
@@ -138,7 +138,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
             </h2>
           </div>
 
-          <div className="flex flex-col lg:flex-row  justify-center gap-12 relative">
+          <div className="flex flex-col lg:flex-row   gap-12 relative">
             {OFFERS.map((offer) => (
               <div
                 key={offer.id}
@@ -180,7 +180,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
             {internationalTours.length === 0 ? (
-               <div className="col-span-4 py-10 text-center font-bold text-slate-400/50">No international trips currently featured.</div>
+              <div className="col-span-4 py-10 text-center font-bold text-slate-400/50">No international trips currently featured.</div>
             ) : internationalTours.slice(0, 4).map((tour) => (
               <div
                 key={tour.id}

@@ -352,7 +352,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
             {/* 1. HERO SECTION (BANNER) */}
             <section
-                className="relative w-full lg:h-[760px] h-[500px] bg-[#00A9D7] lg:bg-white  bg-cover bg-center overflow-hidden flex items-center justify-center   lg:bg-[url('/images/homeBg.png')] lg:bg-contain lg:bg-no-repeat lg:bg-center "
+                className="relative w-full lg:h-[760px] h-[500px]  lg:bg-white  bg-cover bg-center overflow-hidden flex items-center justify-center bg-[url('/images/backgrond.png')]   lg:bg-[url('/images/homeBg.png')] lg:bg-contain lg:bg-no-repeat lg:bg-center "
             // style={{
             //     backgroundImage: "url('/images/homeBg.png')",
             //     backgroundSize: "contain",
