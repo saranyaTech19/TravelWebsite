@@ -170,7 +170,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
         if (checkError || !adminCheck) {
           await supabase.auth.signOut();
-          throw new Error("Access Denied: You are not registered as an administrator.");
+          throw new Error("Access Denied: You are not registered as an Admin Manager.");
         }
       } else {
         // --- SIGNUP FLOW ---
@@ -293,7 +293,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <div className="bg-white p-10 md:p-14 rounded-[3.5rem] shadow-2xl border border-brand-dark/5 w-full max-w-lg animate-fade-in-up">
           <div className="text-center mb-10">
             <p className="font-cursive text-brand-gold text-3xl mb-1">Global Connect</p>
-            <h1 className="text-3xl font-serif font-bold text-brand-dark">Admin Access</h1>
+            <h1 className="text-3xl font-serif font-bold text-brand-dark">Admin Manager Access</h1>
             <p className="text-brand-dark/40 text-[9px] font-bold uppercase tracking-[0.2em] mt-2">Authorized Personnel Only</p>
           </div>
 
@@ -343,7 +343,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             )}
 
             <button type="submit" disabled={isLoading} className="w-full bg-brand-dark text-white py-5 rounded-2xl font-bold text-[11px] uppercase tracking-widest hover:bg-brand-gold transition-colors shadow-xl disabled:opacity-50 group mt-2">
-              {isLoading ? 'Processing...' : mode === 'login' ? 'Authorize Access' : 'Create Admin Account'}
+              {isLoading ? 'Processing...' : mode === 'login' ? 'Authorize Access' : 'Create Admin Manager Account'}
             </button>
           </form>
 
@@ -464,10 +464,10 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <div className="flex items-center gap-3 border-l border-slate-200 pl-8">
               <div className="text-right">
                 <p className="text-sm font-bold text-slate-900 leading-none">{profile.full_name}</p>
-                <p className="text-[10px] text-slate-400 mt-1 uppercase font-black">Admin Manager</p>
+                <p className="text-[10px] text-[#00A9D7] mt-1 uppercase font-black">Admin Manager</p>
               </div>
-              <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center font-bold text-slate-400">
-                {profile.full_name?.charAt(0)}
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden border border-slate-200">
+                <img src="/images/Favicon.png" alt="Admin" className="w-8 h-8 object-contain" />
               </div>
             </div>
           </div>
