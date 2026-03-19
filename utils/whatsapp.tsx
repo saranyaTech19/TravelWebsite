@@ -1,4 +1,4 @@
-export const WHATSAPP_NUMBER = "971567019408";
+export const WHATSAPP_NUMBER = " +971589520398";
 
 export const getWhatsAppLink = (message: string) => {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);

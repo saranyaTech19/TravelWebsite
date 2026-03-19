@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { packages } from '../lib/apiClient';
+import { packages, trendingDestinations as trendingDestinationsApi } from '../lib/apiClient';
+import { getWhatsAppLink } from '../utils/whatsapp';
 import {
     Plane, Hotel, Palmtree, Ticket, FileText, Search, MapPin,
     Calendar, Users, ChevronRight, Star, Quote, Smartphone,
@@ -260,18 +261,27 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     const [dynamicTours, setDynamicTours] = useState<any[]>([]);
     const [dynamicPackages, setDynamicPackages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [trendingImages, setTrendingImages] = useState<{ id: number; name: string; image_url: string }[]>([]);
 
     useEffect(() => {
         const fetchHomeData = async () => {
             setIsLoading(true);
             try {
-                const allPackages = await packages.getAll();
+                const [allPackages, trendingData] = await Promise.all([
+                    packages.getAll(),
+                    trendingDestinationsApi.getAll(),
+                ]);
                 const toursData = allPackages.filter((t: any) => t.is_featured);
-
                 setDynamicTours(toursData);
                 setDynamicPackages(toursData);
+                if (trendingData && trendingData.length > 0) {
+                    setTrendingImages(trendingData);
+                } else {
+                    // setTrendingImages(TRENDING_DESTINATIONS.map((d) => ({ id: d.id, image_url: d.image })));
+                }
             } catch (err) {
                 console.error('Error fetching home data:', err);
+                // setTrendingImages(TRENDING_DESTINATIONS.map((d) => ({ id: d.id, image_url: d.image })));
             } finally {
                 setIsLoading(false);
             }
@@ -363,16 +373,24 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                             Book Your Next <br /> Adventure Today
                         </h2>
 
-                        <div className="flex gap-4 animate-fade-in-up delay-200 justify-center lg:justify-start">
+                        <div className="flex flex-column gap-4 animate-fade-in-up delay-200 justify-center lg:justify-start">
                             {/* <button className="px-8 py-3 rounded-full border border-white/40 text-white font-bold text-sm flex items-center gap-2 hover:bg-white/20 transition-all group backdrop-blur-md">
                                 Tour Guide <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                             </button> */}
                             <button
                                 onClick={onBookClick}
-                                className="px-8 py-3 rounded-full border border-white/40 text-white font-bold text-sm hover:bg-white/20 transition-all backdrop-blur-md"
+                                className="lg:px-8 px-4 py-3 rounded-full border border-white/40 text-white font-bold text-sm hover:bg-white/20 transition-all backdrop-blur-md"
                             >
                                 Book Now
                             </button>
+                            <a
+                                href={getWhatsAppLink('Hi! I would like to enquire about your travel packages.')}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-8 py-3 rounded-full border border-white/40 text-white font-bold text-sm flex items-center gap-2 hover:bg-white/20 transition-all group backdrop-blur-md"
+                            >
+                                Whatsapp Now
+                            </a>
                         </div>
 
                         {/* Premium Redesigned Search Bar - Single Location Input */}
@@ -712,16 +730,23 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                 },
                             }}
                         >
-                            {[...TRENDING_DESTINATIONS, ...TRENDING_DESTINATIONS, ...TRENDING_DESTINATIONS].map((dest, idx) => (
+                            {[...trendingImages, ...trendingImages, ...trendingImages].map((dest, idx) => (
                                 <div
                                     key={`${dest.id}-${idx}`}
-                                    className="flex-shrink-0 w-[180px] h-[150px] rounded-[20px] overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-500"
+                                    className="flex-shrink-0 w-[180px] flex flex-col gap-2 hover:scale-105 transition-transform duration-500"
                                 >
-                                    <img
-                                        src={dest.image}
-                                        alt="Trending Destination"
-                                        className="w-full h-full object-cover"
-                                    />
+                                    {dest.name && (
+                                        <p className="text-white text-sm font-bold text-center truncate px-1 drop-shadow-md">
+                                            {dest.name}
+                                        </p>
+                                    )}
+                                    <div className="w-full h-[150px] rounded-[20px] overflow-hidden shadow-2xl">
+                                        <img
+                                            src={dest.image_url}
+                                            alt={dest.name || 'Trending Destination'}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
                                 </div>
                             ))}
                         </motion.div>

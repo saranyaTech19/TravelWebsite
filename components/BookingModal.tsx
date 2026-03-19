@@ -124,7 +124,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Enquiry Date</label>
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Preferred Travel Date</label>
                     <div className="relative">
                       <input name="travelDate" value={formData.travelDate} onChange={handleChange} type="date" className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none appearance-none font-medium text-sm" />
                       <CalendarIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-brand-dark/20 pointer-events-none" />
