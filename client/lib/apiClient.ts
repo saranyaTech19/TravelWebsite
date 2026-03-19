@@ -3,7 +3,7 @@
 // All calls go to our Node.js/Express backend at localhost:4000
 // ============================================================
 
-const API_BASE = 'http://localhost:4000/api';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000/api';
 
 // ---------- Token helpers ----------
 export const getToken = (): string | null => localStorage.getItem('auth_token');
