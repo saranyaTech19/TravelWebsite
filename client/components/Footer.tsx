@@ -176,7 +176,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
           {/* Column 1: Brand */}
           <div className="lg:col-span-3 space-y-6">
             <img
-              src="https://globalconnectworldtravel.com/img/logo.png"
+              src="/images/logo.png"
               alt="Global Connect"
               className="h-16 md:h-20 w-auto object-contai"
             />

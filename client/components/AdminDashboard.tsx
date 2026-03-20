@@ -7,7 +7,7 @@ import {
   LayoutDashboard, ShoppingCart, Users, Package, FileText,
   Settings, RefreshCcw, Bell, LogOut, ChevronRight, MapPin,
   Calendar, Star, CheckCircle2, Image as ImageIcon, Trash2, Save,
-  Upload, X, Plus, Mail, MessageSquare
+  Upload, X, Plus, Mail, MessageSquare, Eye, EyeOff
 } from 'lucide-react';
 
 interface EnquieryEntry {
@@ -118,6 +118,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -351,7 +352,12 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
             <div className="space-y-1">
               <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Password</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full bg-[#FFF8F1] rounded-2xl px-6 py-4 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm" required />
+              <div className="relative">
+                <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full bg-[#FFF8F1] rounded-2xl px-6 py-4 pr-12 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm" required />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E95A5] hover:text-brand-dark transition-colors">
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             {error && (
@@ -1408,7 +1414,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 />
                 <button
                   onClick={() => trendingInputRef.current?.click()}
-                  disabled={isTrendingUploading || !trendingNewName.trim()}
+                  disabled={isTrendingUploading}
                   className="bg-[#4F46E5] text-white px-8 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-indigo-200 hover:bg-[#4338CA] transition-all flex items-center gap-2 disabled:opacity-60 whitespace-nowrap"
                 >
                   <Upload className="w-4 h-4" />

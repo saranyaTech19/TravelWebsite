@@ -138,7 +138,7 @@ const Navbar: React.FC<NavbarProps> = ({ onBookClick, onNavigate }) => {
           {/* Logo */}
           <Link to="/" className="shrink-0">
             <img
-              src="https://globalconnectworldtravel.com/img/logo.png"
+              src="/images/logo.png"
               alt="Global Connect"
               className="h-20 w-auto object-contain"
             />
