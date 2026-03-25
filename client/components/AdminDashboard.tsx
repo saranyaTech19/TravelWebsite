@@ -419,7 +419,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <Package className="text-brand-dark w-6 h-6" />
           </div> */}
           <img
-            src="https://globalconnectworldtravel.com/img/logo.png"
+            src="/images/logo.png"
             alt="Global Connect"
             className="h-16 md:h-20 w-auto object-contai"
           />
@@ -573,7 +573,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   else if (view === 'package-enquiries') fetchPackageEnquiries();
                   else if (view === 'contact') fetchContactMessages();
                   else if (view === 'trending') fetchTrendingDestinations();
-                else if (view === 'dream') fetchDreamDestinations();
+                  else if (view === 'dream') fetchDreamDestinations();
                 }}
                 className="ml-auto bg-white text-red-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest border border-red-100 hover:bg-red-50 transition-all"
               >
@@ -1526,111 +1526,111 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               </div>
             ) : (
               <>
-              <input
-                ref={trendingEditInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={async (e) => {
-                  const file = e.target.files?.[0];
-                  if (!file || editingTrendingId === null) return;
-                  setIsTrendingEditUploading(true);
-                  try {
-                    const url = await handleFileUpload(file);
-                    if (url) {
-                      const updated = await trendingApi.update(editingTrendingId, { name: editTrendingName, image_url: url });
-                      setTrendingDestinationsList(prev => prev.map(d => d.id === editingTrendingId ? { ...d, ...updated } : d));
+                <input
+                  ref={trendingEditInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file || editingTrendingId === null) return;
+                    setIsTrendingEditUploading(true);
+                    try {
+                      const url = await handleFileUpload(file);
+                      if (url) {
+                        const updated = await trendingApi.update(editingTrendingId, { name: editTrendingName, image_url: url });
+                        setTrendingDestinationsList(prev => prev.map(d => d.id === editingTrendingId ? { ...d, ...updated } : d));
+                      }
+                    } catch (err: any) {
+                      alert('Upload failed: ' + err.message);
+                    } finally {
+                      setIsTrendingEditUploading(false);
+                      e.target.value = '';
                     }
-                  } catch (err: any) {
-                    alert('Upload failed: ' + err.message);
-                  } finally {
-                    setIsTrendingEditUploading(false);
-                    e.target.value = '';
-                  }
-                }}
-              />
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {trendingDestinationsList.map((dest) => (
-                  <div key={dest.id} className="flex flex-col gap-2">
-                    {editingTrendingId === dest.id ? (
-                      <div className="flex flex-col gap-2 bg-white border border-indigo-200 rounded-2xl p-3 shadow-sm">
-                        <div
-                          className="relative rounded-xl overflow-hidden aspect-[6/5] bg-slate-100 cursor-pointer group"
-                          onClick={() => trendingEditInputRef.current?.click()}
-                        >
-                          <img src={dest.image_url} alt={dest.name} className="w-full h-full object-cover" />
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            {isTrendingEditUploading ? (
-                              <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            ) : (
-                              <Upload className="w-5 h-5 text-white" />
-                            )}
+                  }}
+                />
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                  {trendingDestinationsList.map((dest) => (
+                    <div key={dest.id} className="flex flex-col gap-2">
+                      {editingTrendingId === dest.id ? (
+                        <div className="flex flex-col gap-2 bg-white border border-indigo-200 rounded-2xl p-3 shadow-sm">
+                          <div
+                            className="relative rounded-xl overflow-hidden aspect-[6/5] bg-slate-100 cursor-pointer group"
+                            onClick={() => trendingEditInputRef.current?.click()}
+                          >
+                            <img src={dest.image_url} alt={dest.name} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              {isTrendingEditUploading ? (
+                                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <Upload className="w-5 h-5 text-white" />
+                              )}
+                            </div>
                           </div>
-                        </div>
-                        <input
-                          value={editTrendingName}
-                          onChange={e => setEditTrendingName(e.target.value)}
-                          className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                          placeholder="Place name"
-                        />
-                        <div className="flex gap-2">
-                          <button
-                            onClick={async () => {
-                              try {
-                                const updated = await trendingApi.update(dest.id, { name: editTrendingName, image_url: dest.image_url });
-                                setTrendingDestinationsList(prev => prev.map(d => d.id === dest.id ? { ...d, ...updated } : d));
-                                setEditingTrendingId(null);
-                              } catch (err: any) {
-                                alert('Save failed: ' + err.message);
-                              }
-                            }}
-                            className="flex-1 bg-indigo-600 text-white text-xs font-bold py-1.5 rounded-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-1"
-                          >
-                            <Save className="w-3 h-3" /> Save
-                          </button>
-                          <button
-                            onClick={() => setEditingTrendingId(null)}
-                            className="flex-1 bg-slate-100 text-slate-600 text-xs font-bold py-1.5 rounded-lg hover:bg-slate-200 transition-all flex items-center justify-center gap-1"
-                          >
-                            <X className="w-3 h-3" /> Cancel
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col gap-1">
-                        <div className="relative group rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-[6/5] bg-slate-100">
-                          <img src={dest.image_url} alt={dest.name || 'Trending'} className="w-full h-full object-cover" />
-                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button
-                              onClick={() => { setEditingTrendingId(dest.id); setEditTrendingName(dest.name || ''); }}
-                              className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-700 transition-all"
-                            >
-                              <Pencil className="w-3.5 h-3.5" />
-                            </button>
+                          <input
+                            value={editTrendingName}
+                            onChange={e => setEditTrendingName(e.target.value)}
+                            className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                            placeholder="Place name"
+                          />
+                          <div className="flex gap-2">
                             <button
                               onClick={async () => {
-                                if (!window.confirm('Delete this image?')) return;
                                 try {
-                                  await trendingApi.delete(dest.id);
-                                  setTrendingDestinationsList(prev => prev.filter(d => d.id !== dest.id));
+                                  const updated = await trendingApi.update(dest.id, { name: editTrendingName, image_url: dest.image_url });
+                                  setTrendingDestinationsList(prev => prev.map(d => d.id === dest.id ? { ...d, ...updated } : d));
+                                  setEditingTrendingId(null);
                                 } catch (err: any) {
-                                  alert('Delete failed: ' + err.message);
+                                  alert('Save failed: ' + err.message);
                                 }
                               }}
-                              className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-all"
+                              className="flex-1 bg-indigo-600 text-white text-xs font-bold py-1.5 rounded-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-1"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              <Save className="w-3 h-3" /> Save
+                            </button>
+                            <button
+                              onClick={() => setEditingTrendingId(null)}
+                              className="flex-1 bg-slate-100 text-slate-600 text-xs font-bold py-1.5 rounded-lg hover:bg-slate-200 transition-all flex items-center justify-center gap-1"
+                            >
+                              <X className="w-3 h-3" /> Cancel
                             </button>
                           </div>
                         </div>
-                        {dest.name && (
-                          <p className="text-xs font-bold text-slate-600 text-center truncate px-1">{dest.name}</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                      ) : (
+                        <div className="flex flex-col gap-1">
+                          <div className="relative group rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-[6/5] bg-slate-100">
+                            <img src={dest.image_url} alt={dest.name || 'Trending'} className="w-full h-full object-cover" />
+                            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button
+                                onClick={() => { setEditingTrendingId(dest.id); setEditTrendingName(dest.name || ''); }}
+                                className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-700 transition-all"
+                              >
+                                <Pencil className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={async () => {
+                                  if (!window.confirm('Delete this image?')) return;
+                                  try {
+                                    await trendingApi.delete(dest.id);
+                                    setTrendingDestinationsList(prev => prev.filter(d => d.id !== dest.id));
+                                  } catch (err: any) {
+                                    alert('Delete failed: ' + err.message);
+                                  }
+                                }}
+                                className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-all"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                          {dest.name && (
+                            <p className="text-xs font-bold text-slate-600 text-center truncate px-1">{dest.name}</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </>
             )}
           </div>
