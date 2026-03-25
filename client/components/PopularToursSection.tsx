@@ -402,6 +402,15 @@ const PopularTourCard: React.FC<{ tour: any; onExplore?: (tour: any) => void }> 
             </div>
           </div>
         </div>
+
+        <div className="flex items-center justify-between mt-6">
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+            <span className="text-xl font-black text-[#00A9D7]">
+              {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

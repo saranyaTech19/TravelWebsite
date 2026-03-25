@@ -33,6 +33,22 @@ router.post('/', verifyToken, async (req, res) => {
   }
 });
 
+// PUT /api/trending-destinations/:id  — admin only
+router.put('/:id', verifyToken, async (req, res) => {
+  const { id } = req.params;
+  const { name, image_url, sort_order } = req.body;
+  try {
+    await db.query(
+      'UPDATE trending_destinations SET name = ?, image_url = ?, sort_order = ? WHERE id = ?',
+      [name, image_url, sort_order ?? 0, id]
+    );
+    res.json({ id: Number(id), name, image_url, sort_order: sort_order ?? 0 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to update trending destination.' });
+  }
+});
+
 // DELETE /api/trending-destinations/:id  — admin only
 router.delete('/:id', verifyToken, async (req, res) => {
   const { id } = req.params;

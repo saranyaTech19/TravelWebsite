@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS tour_packages (
   duration VARCHAR(100),
   guest_capacity VARCHAR(100),
   tag VARCHAR(100),
+  price VARCHAR(100) DEFAULT '',
   is_featured TINYINT(1) DEFAULT 0,
   overview TEXT,
   highlights JSON,
@@ -64,10 +65,13 @@ CREATE TABLE IF NOT EXISTS travel_details (
   full_name VARCHAR(255),
   email VARCHAR(255),
   phone VARCHAR(50),
+  travel_origin VARCHAR(255),
   destination VARCHAR(255),
   travel_date DATE,
   adults VARCHAR(50),
   children VARCHAR(50),
+  tentative_budget VARCHAR(100),
+  specific_requirements TEXT,
   message TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -112,5 +116,25 @@ CREATE TABLE IF NOT EXISTS trending_destinations (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- ============================================================
+-- Table: dream_destinations  (Dream Destination cards on home page)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS dream_destinations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  image_url TEXT NOT NULL,
+  link VARCHAR(255) DEFAULT '',
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Run this if the table already exists:
 -- ALTER TABLE trending_destinations ADD COLUMN name VARCHAR(255) DEFAULT '' AFTER id;
+
+-- Run this if tour_packages table already exists (to add price column):
+-- ALTER TABLE tour_packages ADD COLUMN price VARCHAR(100) DEFAULT '' AFTER tag;
+
+-- Run these if travel_details table already exists (to add new columns):
+-- ALTER TABLE travel_details ADD COLUMN travel_origin VARCHAR(255) AFTER phone;
+-- ALTER TABLE travel_details ADD COLUMN tentative_budget VARCHAR(100) AFTER children;
+-- ALTER TABLE travel_details ADD COLUMN specific_requirements TEXT AFTER tentative_budget;

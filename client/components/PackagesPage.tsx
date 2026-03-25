@@ -253,7 +253,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
     <div className="min-h-screen bg-brand-bg">
       {/* Hero Header */}
       <section className=" w-full flex items-center overflow-hidden bg-white px-6 md:px-14 ">
-        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 pt-20">
+        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 ">
           {/* Left Content */}
           <div className="flex flex-col justify-center">
             <div className="flex flex-col gap-5 justify-center items-center lg:items-start">
@@ -327,7 +327,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                     <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
                       {pkg.title}
                     </h3>
-                    <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
+                    <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                           <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
@@ -339,6 +339,14 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                           <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                         </div>
                         {(pkg as any).guest_capacity || (pkg as any).guest || "2-4 GUESTS"}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+                        <span className="text-xl font-black text-[#00A9D7]">
+                          {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `$${pkg.price}`) : '$0'}
+                        </span>
                       </div>
                     </div>
                     <div className="mt-auto flex items-center justify-center">
@@ -437,10 +445,10 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                         </div>
                       </div>
                       <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                        <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                        <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-2 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
                           {pkg.title}
                         </h3>
-                        <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
+                        <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                               <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
@@ -454,6 +462,15 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                             {(pkg as any).guest_capacity || (pkg as any).guest || "2-4 GUESTS"}
                           </div>
                         </div>
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+                            <span className="text-xl font-black text-[#00A9D7]">
+                              {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `$${pkg.price}`) : '$0'}
+                            </span>
+                          </div>
+                        </div>
+
                         <div className="mt-auto flex items-center justify-center">
                           <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
                             Book Now
@@ -470,7 +487,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
               </div>
             </div>
 
-            <div className="max-w-[1440px] mx-auto lg:py-16 px-6 md:px-14 lg:mt-[200px]">
+            <div className="max-w-[1440px] mx-auto lg:py-16 px-6 md:px-14 lg:mt-[250px]">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {packagesList.slice(4, 8).map((pkg) => (
                   <div
@@ -491,7 +508,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                       <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
                         {pkg.title}
                       </h3>
-                      <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
+                      <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                             <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
@@ -503,6 +520,14 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                             <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                           </div>
                           {(pkg as any).guest_capacity || (pkg as any).guest || "2-4 GUESTS"}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex flex-col">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+                          <span className="text-xl font-black text-[#00A9D7]">
+                            {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `$${pkg.price}`) : '$0'}
+                          </span>
                         </div>
                       </div>
                       <div className="mt-auto flex items-center justify-center">

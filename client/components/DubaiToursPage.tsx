@@ -55,7 +55,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
         {/* DUBAI Background Watermark */}
 
 
-        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 pt-20">
+        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 ">
           {/* Left Content */}
           <div className="flex flex-col justify-center">
             <div className="flex flex-col gap-5 justify-center items-center lg:items-start">
@@ -230,7 +230,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                     {tour.title}
                   </h3>
 
-                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
+                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
@@ -242,6 +242,15 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                       </div>
                       {tour.guest_capacity || '4-6 guest'}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+                      <span className="text-xl font-black text-[#00A9D7]">
+                        {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
+                      </span>
                     </div>
                   </div>
 
@@ -262,7 +271,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
         </div>
 
         {/* Dubai Tour Section */}
-        <div className="max-w-[1440px] mx-auto py-16 px-6 md:px-14 lg:mt-[180px]">
+        <div className="max-w-[1440px] mx-auto pb-16 pt-[200px] px-6 md:px-14 lg:mt-[105px]">
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {standardTours.slice(4).map((tour) => (
@@ -290,7 +299,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                     {tour.title}
                   </h3>
 
-                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
+                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
@@ -302,6 +311,15 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                       </div>
                       {(tour as any).guest || (tour as any).guest_capacity || "4-6 GUESTS"}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between ">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+                      <span className="text-xl font-black text-[#00A9D7]">
+                        {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
+                      </span>
                     </div>
                   </div>
 
@@ -352,7 +370,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                     {tour.title}
                   </h3>
 
-                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
+                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-2 uppercase tracking-wide">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
@@ -364,6 +382,15 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                         <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                       </div>
                       {(tour as any).guest || (tour as any).guest_capacity || "4-6 GUESTS"}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+                      <span className="text-xl font-black text-[#00A9D7]">
+                        {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
+                      </span>
                     </div>
                   </div>
 

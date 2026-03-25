@@ -12,7 +12,12 @@ interface FormData {
   email: string;
   travelDate: string;
   phone: string;
-
+  travelOrigin: string;
+  destination: string;
+  adults: string;
+  children: string;
+  tentativeBudget: string;
+  specificRequirements: string;
 }
 
 interface FormErrors {
@@ -25,6 +30,12 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
     email: '',
     travelDate: '',
     phone: '',
+    travelOrigin: '',
+    destination: '',
+    adults: '',
+    children: '',
+    tentativeBudget: '',
+    specificRequirements: '',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -59,14 +70,20 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
         full_name: formData.fullName,
         email: formData.email,
         phone: formData.phone,
+        travel_origin: formData.travelOrigin,
+        destination: formData.destination || 'General Enquiry',
         travel_date: formData.travelDate,
-        adults: '1 Adult',
-        destination: 'General Enquiry',
+        adults: formData.adults,
+        children: formData.children,
+        tentative_budget: formData.tentativeBudget,
+        specific_requirements: formData.specificRequirements,
       });
 
       setIsSubmitted(true);
       setFormData({
         fullName: '', email: '', travelDate: '', phone: '',
+        travelOrigin: '', destination: '', adults: '', children: '',
+        tentativeBudget: '', specificRequirements: '',
       });
     } catch (err: any) {
       console.error('Submission Error:', err.message);
@@ -92,7 +109,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 overflow-y-auto py-4 no-scrollbar">
       <div className="fixed inset-0 bg-brand-dark/40 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative bg-white w-full max-w-[600px] rounded-[3rem] shadow-2xl animate-fade-in-up flex flex-col shrink-0">
+      <div className="relative bg-white w-full max-w-[600px] max-h-[90vh] rounded-[3rem] shadow-2xl animate-fade-in-up flex flex-col shrink-0 overflow-y-auto no-scrollbar">
         <button onClick={onClose} className="absolute top-8 right-8 text-brand-dark/20 hover:text-brand-dark transition-colors z-20">✕</button>
 
         <div className="p-6 md:p-8 h-full flex flex-col justify-center">
@@ -112,7 +129,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                <div className="grid grid-cols-3 gap-x-4 gap-y-3">
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Full Name</label>
                     <input name="fullName" value={formData.fullName} onChange={handleChange} placeholder="name" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.fullName ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
@@ -144,6 +161,36 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
                       className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.phone ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`}
                     />
                   </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Travel Origin</label>
+                    <input name="travelOrigin" value={formData.travelOrigin} onChange={handleChange} placeholder="e.g. Dubai" className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm" />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Destination</label>
+                    <input name="destination" value={formData.destination} onChange={handleChange} placeholder="e.g. Maldives" className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm" />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">No. of Adults</label>
+                    <input name="adults" value={formData.adults} onChange={handleChange} type="number" min="1" placeholder="e.g. 2" className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm" />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">No. of Children</label>
+                    <input name="children" value={formData.children} onChange={handleChange} type="number" min="0" placeholder="e.g. 1" className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm" />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Tentative Budget</label>
+                    <input name="tentativeBudget" value={formData.tentativeBudget} onChange={handleChange} placeholder="e.g. $2000" className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm" />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Any Specific Requirements</label>
+                  <textarea name="specificRequirements" value={formData.specificRequirements} onChange={handleChange} rows={3} placeholder="e.g. Vegetarian meals, wheelchair access..." className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm resize-none" />
                 </div>
 
                 <div className="pt-1">

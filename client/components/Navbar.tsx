@@ -133,7 +133,7 @@ const Navbar: React.FC<NavbarProps> = ({ onBookClick, onNavigate }) => {
         </nav>
       </div> */}
 
-      <header className="fixed top-0 left-0 right-0 z-[70] bg-white  shadow-sm">
+      <header className="  relative z-[1111] top-0 left-0 right-0 z-[70] bg-white  shadow-sm">
         <div className="max-w-[1440px] mx-auto flex items-center px-6 h-28">
           {/* Logo */}
           <Link to="/" className="shrink-0">

@@ -307,6 +307,15 @@ const HolidaysPage: React.FC<HolidaysPageProps> = ({ onBack, onExplore, onBookCl
                                         </div>
                                     </div>
 
+                                    <div className="flex items-center justify-between mb-6">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+                                            <span className="text-xl font-black text-[#00A9D7]">
+                                                {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `₹${pkg.price}`) : '₹0'}
+                                            </span>
+                                        </div>
+                                    </div>
+
                                     <div className="mt-auto flex items-center justify-center">
                                         <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
                                             Book Now
@@ -358,6 +367,15 @@ const HolidaysPage: React.FC<HolidaysPageProps> = ({ onBack, onExplore, onBookCl
                                                 <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
                                             </div>
                                             4-6 guest
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between mb-6">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+                                            <span className="text-xl font-black text-[#00A9D7]">
+                                                {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `₹${pkg.price}`) : '₹0'}
+                                            </span>
                                         </div>
                                     </div>
 

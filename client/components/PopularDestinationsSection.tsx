@@ -128,6 +128,15 @@ export const DestinationCard: React.FC<DestinationCardProps> = ({ destination, o
             </div>
           </div>
         </div>
+
+        <div className="flex items-center justify-between mt-6">
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+            <span className="text-xl font-black text-brand-gold">
+              {destination.price ? (destination.price.toString().startsWith('$') || destination.price.toString().startsWith('₹') ? destination.price : `₹${destination.price}`) : '₹17,300'}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

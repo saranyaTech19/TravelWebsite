@@ -57,12 +57,12 @@ router.post('/', verifyToken, async (req, res) => {
 
     const [result] = await db.query(
       `INSERT INTO tour_packages
-        (title, slug, location, region, category, image_url, rating, duration, guest_capacity, tag, is_featured, overview, highlights, inclusions, exclusions, gallery, itinerary)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (title, slug, location, region, category, image_url, rating, duration, guest_capacity, tag, price, is_featured, overview, highlights, inclusions, exclusions, gallery, itinerary)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         pkg.title, pkg.slug, pkg.location, pkg.region, pkg.category,
         pkg.image_url, pkg.rating, pkg.duration, pkg.guest_capacity,
-        pkg.tag, pkg.is_featured ? 1 : 0, pkg.overview,
+        pkg.tag, pkg.price || '', pkg.is_featured ? 1 : 0, pkg.overview,
         pkg.highlights, pkg.inclusions, pkg.exclusions, pkg.gallery, pkg.itinerary
       ]
     );
@@ -88,13 +88,13 @@ router.put('/:id', verifyToken, async (req, res) => {
     await db.query(
       `UPDATE tour_packages SET
         title=?, slug=?, location=?, region=?, category=?, image_url=?, rating=?,
-        duration=?, guest_capacity=?, tag=?, is_featured=?, overview=?,
+        duration=?, guest_capacity=?, tag=?, price=?, is_featured=?, overview=?,
         highlights=?, inclusions=?, exclusions=?, gallery=?, itinerary=?, updated_at=NOW()
        WHERE id=?`,
       [
         pkg.title, pkg.slug, pkg.location, pkg.region, pkg.category,
         pkg.image_url, pkg.rating, pkg.duration, pkg.guest_capacity,
-        pkg.tag, pkg.is_featured ? 1 : 0, pkg.overview,
+        pkg.tag, pkg.price || '', pkg.is_featured ? 1 : 0, pkg.overview,
         pkg.highlights, pkg.inclusions, pkg.exclusions, pkg.gallery, pkg.itinerary,
         id
       ]

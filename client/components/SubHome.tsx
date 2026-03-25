@@ -1,12 +1,12 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { packages, trendingDestinations as trendingDestinationsApi } from '../lib/apiClient';
+import { packages, trendingDestinations as trendingDestinationsApi, dreamDestinations as dreamDestinationsApi } from '../lib/apiClient';
 import { getWhatsAppLink } from '../utils/whatsapp';
 import {
     Plane, Hotel, Palmtree, Ticket, FileText, Search, MapPin,
-    Calendar, Users, ChevronRight, Star, Quote, Smartphone,
+    Calendar, Users, ChevronRight, ChevronLeft, Star,
     Instagram, Facebook, Twitter, Linkedin, Mail, Phone,
     PlaneTakeoff, ShieldCheck, Headphones, ArrowUpRight, MoveRight
 } from 'lucide-react';
@@ -249,6 +249,49 @@ const TRENDING_DESTINATIONS = [
     { id: 6, image: '/images/safari.jpg' },
 ];
 
+const TESTIMONIALS = [
+    {
+        id: 1,
+        name: 'Priya Sharma',
+        location: 'Mumbai, India',
+        trip: 'Kerala Backwater Package',
+        avatar: 'PS',
+        avatarColor: '#00A9D7',
+        rating: 5,
+        review: 'Absolutely breathtaking experience! The houseboat stay in Kerala was a dream come true. Everything was perfectly planned — from the transfers to the local food. GCWT made our anniversary trip truly unforgettable.',
+    },
+    {
+        id: 2,
+        name: 'Ahmed Al Farsi',
+        location: 'Dubai, UAE',
+        trip: 'Rajasthan Heritage Tour',
+        avatar: 'AA',
+        avatarColor: '#F97316',
+        rating: 5,
+        review: 'The Rajasthan heritage tour was beyond our expectations. The palace hotels were stunning, and the guided fort tours were incredibly detailed. Our family of 5 felt completely taken care of throughout the journey.',
+    },
+    {
+        id: 3,
+        name: 'Sarah Thompson',
+        location: 'London, UK',
+        trip: 'Goa Coastal Adventure',
+        avatar: 'ST',
+        avatarColor: '#8B5CF6',
+        rating: 5,
+        review: "What a trip! The water sports in Goa were thrilling, and the beach shack lunch was the best seafood I've ever had. The team was so responsive and professional. Already planning my next trip with GCWT!",
+    },
+    {
+        id: 4,
+        name: 'Rahul Mehta',
+        location: 'Bangalore, India',
+        trip: 'Dubai Desert Safari',
+        avatar: 'RM',
+        avatarColor: '#10B981',
+        rating: 5,
+        review: 'The Dubai desert safari exceeded all expectations. Dune bashing, camel rides, and a stunning BBQ dinner under the stars — it was pure magic. Seamless booking process and top-notch guides. Highly recommend!',
+    },
+];
+
 interface SubHomeProps {
     onExplore: (tour: any) => void;
     onBookClick: () => void;
@@ -262,22 +305,78 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     const [dynamicPackages, setDynamicPackages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [trendingImages, setTrendingImages] = useState<{ id: number; name: string; image_url: string }[]>([]);
+    const [dreamOffers, setDreamOffers] = useState<{ id: number; title: string; image_url: string; link: string }[]>([]);
+    const dreamRef = React.useRef<HTMLDivElement>(null);
+
+    const dreamList = dreamOffers.length > 0
+        ? dreamOffers.map(d => ({ id: d.id, title: d.title, image: d.image_url, link: d.link }))
+        : OFFERS.map(o => ({ id: o.id, title: o.title, image: o.image, link: '' }));
+
+    const loopedDreamList = [...dreamList, ...dreamList];
+    const [dreamIndex, setDreamIndex] = useState(0);
+    const [dreamTransition, setDreamTransition] = useState(true);
+
+    const handleNextDream = () => {
+        setDreamIndex(prev => prev + 1);
+    };
+
+    const handlePrevDream = () => {
+        if (dreamIndex === 0) {
+            setDreamTransition(false);
+            setDreamIndex(dreamList.length);
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setDreamTransition(true);
+                    setDreamIndex(dreamList.length - 1);
+                });
+            });
+        } else {
+            setDreamIndex(prev => prev - 1);
+        }
+    };
+
+    useEffect(() => {
+        if (dreamList.length <= 4) return;
+        const timer = setInterval(() => {
+            setDreamIndex(prev => prev + 1);
+        }, 3000);
+        return () => clearInterval(timer);
+    }, [dreamList.length]);
+
+    useEffect(() => {
+        if (dreamIndex === dreamList.length) {
+            const timeout = setTimeout(() => {
+                setDreamTransition(false);
+                setDreamIndex(0);
+            }, 800);
+            return () => clearTimeout(timeout);
+        }
+        if (!dreamTransition) {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setDreamTransition(true);
+                });
+            });
+        }
+    }, [dreamIndex, dreamList.length, dreamTransition]);
 
     useEffect(() => {
         const fetchHomeData = async () => {
             setIsLoading(true);
             try {
-                const [allPackages, trendingData] = await Promise.all([
+                const [allPackages, trendingData, dreamData] = await Promise.all([
                     packages.getAll(),
                     trendingDestinationsApi.getAll(),
+                    dreamDestinationsApi.getAll(),
                 ]);
                 const toursData = allPackages.filter((t: any) => t.is_featured);
                 setDynamicTours(toursData);
                 setDynamicPackages(toursData);
                 if (trendingData && trendingData.length > 0) {
                     setTrendingImages(trendingData);
-                } else {
-                    // setTrendingImages(TRENDING_DESTINATIONS.map((d) => ({ id: d.id, image_url: d.image })));
+                }
+                if (dreamData && dreamData.length > 0) {
+                    setDreamOffers(dreamData);
                 }
             } catch (err) {
                 console.error('Error fetching home data:', err);
@@ -302,16 +401,87 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
         pkg.location.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const packagesPerPage = 4;
+    const loopedTours = [...filteredTours, ...filteredTours];
     const [pkgIndex, setPkgIndex] = useState(0);
+    const [pkgTransition, setPkgTransition] = useState(true);
+    const pkgContainerRef = useRef<HTMLDivElement>(null);
+    const [pkgStepPx, setPkgStepPx] = useState(312);
 
-    const handleNextPkg = () => {
-        setPkgIndex((prev) => (prev + packagesPerPage >= filteredPackages.length ? 0 : prev + packagesPerPage));
-    };
+    useEffect(() => {
+        const calcStep = () => {
+            const W = pkgContainerRef.current?.offsetWidth ?? window.innerWidth;
+            if (W >= 1024) setPkgStepPx((W - 96) / 4 + 32);
+            else if (W >= 768) setPkgStepPx((W - 32) / 2 + 32);
+            else setPkgStepPx(280 + 32);
+        };
+        calcStep();
+        window.addEventListener('resize', calcStep);
+        return () => window.removeEventListener('resize', calcStep);
+    }, []);
 
+    const handleNextPkg = () => setPkgIndex(prev => prev + 1);
     const handlePrevPkg = () => {
-        setPkgIndex((prev) => (prev - packagesPerPage < 0 ? Math.max(0, filteredPackages.length - packagesPerPage) : prev - packagesPerPage));
+        if (pkgIndex === 0) {
+            setPkgTransition(false);
+            setPkgIndex(filteredTours.length);
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                setPkgTransition(true);
+                setPkgIndex(filteredTours.length - 1);
+            }));
+        } else {
+            setPkgIndex(prev => prev - 1);
+        }
     };
+
+    useEffect(() => {
+        if (filteredTours.length < 1) return;
+        if (window.innerWidth < 768) return;
+        const timer = setInterval(() => setPkgIndex(prev => prev + 1), 3000);
+        return () => clearInterval(timer);
+    }, [filteredTours.length]);
+
+    useEffect(() => {
+        if (pkgIndex === filteredTours.length) {
+            const t = setTimeout(() => { setPkgTransition(false); setPkgIndex(0); }, 800);
+            return () => clearTimeout(t);
+        }
+        if (!pkgTransition) {
+            requestAnimationFrame(() => requestAnimationFrame(() => setPkgTransition(true)));
+        }
+    }, [pkgIndex, filteredTours.length, pkgTransition]);
+
+    const loopedTestimonials = [...TESTIMONIALS, ...TESTIMONIALS];
+    const [testimIndex, setTestimIndex] = useState(0);
+    const [testimTransition, setTestimTransition] = useState(true);
+
+    const handleNextTestim = () => setTestimIndex(prev => prev + 1);
+    const handlePrevTestim = () => {
+        if (testimIndex === 0) {
+            setTestimTransition(false);
+            setTestimIndex(TESTIMONIALS.length);
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                setTestimTransition(true);
+                setTestimIndex(TESTIMONIALS.length - 1);
+            }));
+        } else {
+            setTestimIndex(prev => prev - 1);
+        }
+    };
+
+    useEffect(() => {
+        const timer = setInterval(() => setTestimIndex((prev: number) => prev + 1), 3500);
+        return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
+        if (testimIndex === TESTIMONIALS.length) {
+            const t = setTimeout(() => { setTestimTransition(false); setTestimIndex(0); }, 800);
+            return () => clearTimeout(t);
+        }
+        if (!testimTransition) {
+            requestAnimationFrame(() => requestAnimationFrame(() => setTestimTransition(true)));
+        }
+    }, [testimIndex, testimTransition]);
 
     return (
         <div className="min-h-screen bg-white font-sans text-slate-800">
@@ -358,7 +528,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
             {/* 1. HERO SECTION (BANNER) */}
             <section
-                className="relative w-full lg:h-[760px] h-[500px]  lg:bg-white  bg-cover bg-center overflow-hidden flex items-center justify-center bg-[url('/images/backgrond.png')]   lg:bg-[url('/images/homeBg.png')] lg:bg-contain lg:bg-no-repeat lg:bg-center "
+                className="relative w-full lg:h-[760px] h-[500px] z-0 mt-[-9%]   lg:bg-white  bg-cover bg-center overflow-hidden flex items-center justify-center bg-[url('/images/backgrond.png')]   lg:bg-[url('/images/homeBg.png')] lg:bg-contain lg:bg-no-repeat lg:bg-center "
             // style={{
             //     backgroundImage: "url('/images/homeBg.png')",
             //     backgroundSize: "contain",
@@ -387,7 +557,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                 href={getWhatsAppLink('Hi! I would like to enquire about your travel packages.')}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-8 py-3 rounded-full border border-white/40 text-white font-bold text-sm flex items-center gap-2 hover:bg-white/20 transition-all group backdrop-blur-md"
+                                className="px-8 py-3 rounded-full border border-white/40 text-white font-bold text-sm flex items-center gap-2 hover:bg-white/20 transition-all group backdrop-blur-md bg-[#25D366]"
                             >
                                 Whatsapp Now
                             </a>
@@ -427,48 +597,61 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
             {/* 2. DREAM DESTINATION SECTION */}
             <section className="global-page-container lg:mt-[-95px] relative overflow-hidden">
-                <div className="max-w-7xl mx-auto  z-10">
-                    <div className="text-left mb-10 animate-fade-in-up">
-                        <h2 className="text-3xl text-center lg:text-left md:text-[45px] font-sans font-black text-slate-900 leading-tight px-[20px]">
+                <div className="max-w-7xl mx-auto z-10">
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-10 px-[20px] animate-fade-in-up gap-6">
+                        <h2 className="text-3xl text-center lg:text-left md:text-[45px] font-sans font-black text-slate-900 leading-tight">
                             Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
                         </h2>
+
+                        <div className="flex items-center gap-4">
+                            <button
+                                onClick={handlePrevDream}
+                                className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:border-[#00A9D7]"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={handleNextDream}
+                                className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:border-[#00A9D7]"
+                            >
+                                <ChevronRight className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative mx-[20px]">
-                        {/* Decorative background element (curved dashed line) */}
-
-
-
-
-                        {OFFERS.map((offer, idx) => (
-                            <div
-                                key={offer.id}
-                                className={`relative rounded-3xl overflow-hidden p-6 h-[180px]  bg-no-repeat bg-right-bottom bg-cover  `}
-                                style={{ backgroundImage: `url(${offer.image})` }}
-                            >
-
-                                {/* TITLE */}
-                                <h3 className="text-white font-semibold text-[20px] leading-5 ">
-                                    {offer.title.split(' ').slice(0, -1).join(' ')}<br />
-                                    {offer.title.split(' ').slice(-1)}
-                                </h3>
-
-                                {/* BUTTON */}
-                                <button
+                    <div className="relative overflow-hidden mx-[20px]">
+                        <div
+                            className="flex gap-8"
+                            style={{
+                                transform: `translateX(calc(-${dreamIndex} * (25% + 8px)))`,
+                                transition: dreamTransition ? 'transform 0.8s ease-in-out' : 'none',
+                            }}
+                        >
+                            {loopedDreamList.map((offer, idx) => (
+                                <div
+                                    key={`${offer.id}-${idx}`}
+                                    className="dream-card relative rounded-3xl overflow-hidden px-[5px]  h-[180px] lg:w-[calc((100%-96px)/4)] md:w-[calc((100%-32px)/2)] w-[280px] bg-no-repeat bg-right-bottom bg-cover shrink-0 cursor-pointer"
+                                    style={{ backgroundImage: `url(${offer.image})` }}
                                     onClick={() => {
-                                        if (offer.title.includes('INDIA')) {
+                                        if (offer.link) {
+                                            navigate(offer.link);
+                                        } else if (offer.title.includes('INDIA')) {
                                             navigate('/india-tours');
                                         } else if (offer.title.includes('DUBAI')) {
                                             navigate('/dubai-tours');
                                         }
                                     }}
-                                    className="absolute bottom-6 left-6 text-xs  bg-white text-[#00A9D7] px-[20px] py-[10px] rounded-full"
                                 >
-                                    Book Now
-                                </button>
-
-                            </div>
-                        ))}
+                                    <h3 className="text-white font-semibold text-[20px] leading-5">
+                                        {offer.title.split(' ').slice(0, -1).join(' ')}<br />
+                                        {offer.title.split(' ').slice(-1)}
+                                    </h3>
+                                    <button className="absolute bottom-6 left-6 text-xs bg-white text-[#00A9D7] px-[20px] py-[10px] rounded-full">
+                                        Book Now
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -488,7 +671,25 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                         backgroundRepeat: "no-repeat",
                     }}
                 >
-                    <div className="lg:text-white text-3xl text-black lg:text-[45px] text-3xl font-bold text-center">Amazing Trendings Desinations</div>
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-10 w-full relative z-10 lg:px-14 px-6 gap-6">
+                        <div className="lg:text-white text-3xl text-black lg:text-[45px] font-bold text-center lg:text-left">
+                            Amazing Trendings Desinations
+                        </div>
+                        <div className="flex items-center justify-end gap-4">
+                            <button
+                                onClick={handlePrevPkg}
+                                className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white bg-white/10 hover:bg-[#00A9D7] hover:border-[#00A9D7] transition-all shadow-sm"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={handleNextPkg}
+                                className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white bg-white/10 hover:bg-[#00A9D7] hover:border-[#00A9D7] transition-all shadow-sm"
+                            >
+                                <ChevronRight className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
 
                     {/* Decorative Dashed Line */}
                     <div className="absolute top-[60%] left-0 right-0 -translate-y-1/2 pointer-events-none z-0 opacity-40">
@@ -503,58 +704,64 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                         </svg>
                     </div>
 
-                    <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col items-center">
-                        {/* Heading with 3D Plane */}
-
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative mt-[80px]">
-                            {displayTours.map((tour: any) => (
-                                <div
-                                    key={tour.id}
-                                    onClick={() => onExplore(tour)}
-                                    className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-2xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer"
-                                >
-                                    {/* Image Container */}
-                                    <div className="relative p-3 h-[160px]">
-                                        <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                                            <img src={tour.image_url || tour.image} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-
-
-                                        </div>
-                                    </div>
-
-                                    {/* Content Details */}
-                                    <div className="px-7 pb-7 pt-2 flex flex-col flex-grow">
-                                        <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#35BCE2] transition-colors">
-                                            {tour.title}
-                                        </h3>
-
-                                        <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-2 h-2 rounded-full bg-[#35BCE2]/20 flex items-center justify-center">
-                                                    <div className="w-1 h-1 rounded-full bg-[#35BCE2]" />
-                                                </div>
-                                                {tour.duration}
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-2 h-2 rounded-full bg-[#35BCE2]/20 flex items-center justify-center">
-                                                    <Users className="w-3.5 h-3.5 text-[#35BCE2]" strokeWidth={3} />
-                                                </div>
-                                                {tour.guest_capacity || tour.guest}
+                    <div className="relative z-10 w-full mt-[30px] ">
+                        <div className="overflow-hidden mx-[20px] mb-[20px]">
+                            <div
+                                className="flex gap-8"
+                                style={{
+                                    transform: `translateX(calc(-${pkgIndex} * (25% + 8px)))`,
+                                    transition: pkgTransition ? 'transform 0.8s ease-in-out' : 'none',
+                                }}
+                            >
+                                {loopedTours.map((tour: any, idx: number) => (
+                                    <div
+                                        key={`${tour.id}-${idx}`}
+                                        onClick={() => onExplore(tour)}
+                                        className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-xl transition-all duration-500 group cursor-pointer shrink-0 lg:w-[calc((100%-96px)/4)] md:w-[calc((100%-32px)/2)] w-[280px]"
+                                    >
+                                        <div className="relative p-3 h-[160px]">
+                                            <div className="w-full h-full rounded-[24px] overflow-hidden relative">
+                                                <img src={tour.image_url || tour.image} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                             </div>
                                         </div>
-
-                                        <div className="mt-auto flex items-center justify-center">
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); onBookClick?.(); }}
-                                                className="bg-[#35BCE2]/10 text-[#35BCE2] w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#35BCE2] hover:text-white transition-all shadow-sm hover:shadow-md"
-                                            >
-                                                Book Now
-                                            </button>
+                                        <div className="px-7 pb-7 pt-2 flex flex-col flex-grow">
+                                            <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#35BCE2] transition-colors">
+                                                {tour.title}
+                                            </h3>
+                                            <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-2 h-2 rounded-full bg-[#35BCE2]/20 flex items-center justify-center">
+                                                        <div className="w-1 h-1 rounded-full bg-[#35BCE2]" />
+                                                    </div>
+                                                    {tour.duration}
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-2 h-2 rounded-full bg-[#35BCE2]/20 flex items-center justify-center">
+                                                        <Users className="w-3.5 h-3.5 text-[#35BCE2]" strokeWidth={3} />
+                                                    </div>
+                                                    {tour.guest_capacity || tour.guest}
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center justify-between mb-6">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
+                                                    <span className="text-xl font-black text-[#35BCE2]">
+                                                        {tour.price ? (tour.price.toString().startsWith('AED') || tour.price.toString().startsWith('₹') ? tour.price : `AED${tour.price}`) : 'AED0'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="mt-auto flex items-center justify-center">
+                                                <button
+                                                    onClick={(e: React.MouseEvent) => { e.stopPropagation(); onBookClick?.(); }}
+                                                    className="bg-[#35BCE2]/10 text-[#35BCE2] w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#35BCE2] hover:text-white transition-all shadow-sm hover:shadow-md"
+                                                >
+                                                    Book Now
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -650,7 +857,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             </section> */}
             {/* sections 5*/}
 
-            <section className="w-full lg:h-[621px] h-[400px] relative bg-[#00A9D7] lg:bg-white overflow-hidden lg:bg-[url('/images/bannerFour.png')] lg:bg-cover lg:bg-no-repeat lg:bg-center flex items-center justify-end px-6 lg:px-40 lg:mt-[275px] mt-[20px]" style={{
+            <section className="w-full lg:h-[621px] h-[400px] relative bg-[#00A9D7] lg:bg-white overflow-hidden lg:bg-[url('/images/bannerFour.png')] lg:bg-cover lg:bg-no-repeat lg:bg-center flex items-center justify-end px-6 lg:px-40 lg:mt-[307px] mt-[20px]" style={{
                 // backgroundImage: "url('/images/bannerFour.png')",
                 // backgroundSize: "cover",
                 // backgroundPosition: "center",
@@ -658,14 +865,12 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             }}>
                 <div className="absolute lg:left-10 left-0 lg:top-12 z-10 max-w-2xl text-white space-y-8 animate-fade-in-right">
                     <h2 className="text-3xl md:text-[60px] text-center lg:text-left font-sans font-black leading-[1.1] tracking-tight drop-shadow-lg">
-                        30% off for Online <br />
-                        <span className="text-white">1st Booking</span>
+                        Get 5–10% OFF on <br />
+                        <span className="text-white">Your First Online Booking</span>
                     </h2>
 
                     <p className="text-xl md:text-[20px] text-center lg:text-left font-medium leading-relaxed opacity-90 drop-shadow-md max-w-xl">
-                        From sun-kissed beaches to vibrant city escapes,
-                        soak up the perfect weather and create
-                        unforgettable memories.
+                        Explore beautiful beaches and exciting cities while making memories that last forever.
                     </p>
 
                     <div className="flex flex-wrap gap-6 pt-4 justify-center lg:justify-start">
@@ -680,6 +885,89 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                             Explore More
                         </button> */}
                     </div>
+                </div>
+            </section>
+
+            {/* Testimonials Section */}
+            <section className="bg-white global-page-container py-[60px]">
+                <div className="max-w-7xl mx-auto">
+                    {/* Header */}
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-10 px-[20px] gap-6">
+                        <div>
+                            <span className="inline-block text-[#00A9D7] text-sm font-black uppercase tracking-widest mb-2">
+                                Traveler Stories
+                            </span>
+                            <h2 className="text-3xl md:text-[45px] font-sans font-black text-slate-900 leading-tight">
+                                What Our <span className="text-[#00A9D7]">Travelers Say</span>
+                            </h2>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <button
+                                onClick={handlePrevTestim}
+                                className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:border-[#00A9D7]"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={handleNextTestim}
+                                className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:border-[#00A9D7]"
+                            >
+                                <ChevronRight className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Slider */}
+                    <div className="overflow-hidden mx-[20px]">
+                        <div
+                            className="flex gap-8"
+                            style={{
+                                transform: `translateX(calc(-${testimIndex} * (33.334% + 10.667px)))`,
+                                transition: testimTransition ? 'transform 0.8s ease-in-out' : 'none',
+                            }}
+                        >
+                            {loopedTestimonials.map((t, idx) => (
+                                <div
+                                    key={`${t.id}-${idx}`}
+                                    className="bg-[#00A9D7] rounded-[28px] p-6 flex flex-col gap-4 shadow-xl border border-gray-100 shrink-0 lg:w-[calc((100%-64px)/3)] md:w-[calc((100%-32px)/2)] w-[280px]"
+                                >
+                                    {/* Quote Icon */}
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-1">
+                                            {Array.from({ length: t.rating }).map((_, i) => (
+                                                <Star key={i} className="w-[18px] h-[18px] text-amber-400 fill-amber-400" />
+                                            ))}
+                                        </div>
+                                        <svg width="36" height="28" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M0 28V17.2C0 14.1333 0.533333 11.3333 1.6 8.8C2.66667 6.26667 4.13333 4.13333 6 2.4C7.86667 0.666667 10.0667 -0.133333 12.6 0L13.4 2.4C11.4 2.93333 9.73333 4.06667 8.4 5.8C7.06667 7.53333 6.26667 9.46667 6 11.6H13.4V28H0ZM22.6 28V17.2C22.6 14.1333 23.1333 11.3333 24.2 8.8C25.2667 6.26667 26.7333 4.13333 28.6 2.4C30.4667 0.666667 32.6667 -0.133333 35.2 0L36 2.4C34 2.93333 32.3333 4.06667 31 5.8C29.6667 7.53333 28.8667 9.46667 28.6 11.6H36V28H22.6Z" fill="white" />
+                                        </svg>
+                                    </div>
+
+                                    {/* Review Text */}
+                                    <p className="text-white text-[13.5px] font-medium leading-relaxed flex-grow">
+                                        {t.review}
+                                    </p>
+
+                                    {/* Reviewer Info */}
+                                    <div className="flex items-center gap-3 pt-1">
+                                        <div
+                                            className="w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0 ring-2 ring-white shadow-md"
+                                            style={{ backgroundColor: t.avatarColor }}
+                                        >
+                                            {t.avatar}
+                                        </div>
+                                        <div>
+                                            <p className="text-white text-sm font-black leading-tight">{t.name}</p>
+                                            <p className="text-white text-[11px] font-semibold uppercase tracking-wide mt-0.5">
+                                                {t.location} • <span className="text-white">{t.trip}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
@@ -733,19 +1021,19 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                             {[...trendingImages, ...trendingImages, ...trendingImages].map((dest, idx) => (
                                 <div
                                     key={`${dest.id}-${idx}`}
-                                    className="flex-shrink-0 w-[180px] flex flex-col gap-2 hover:scale-105 transition-transform duration-500"
+                                    className="flex-shrink-0 w-[180px] group hover:scale-105 transition-transform duration-500"
                                 >
-                                    {dest.name && (
-                                        <p className="text-white text-sm font-bold text-center truncate px-1 drop-shadow-md">
-                                            {dest.name}
-                                        </p>
-                                    )}
-                                    <div className="w-full h-[150px] rounded-[20px] overflow-hidden shadow-2xl">
+                                    <div className="relative w-full h-[150px] rounded-[20px] overflow-hidden shadow-2xl">
                                         <img
                                             src={dest.image_url}
                                             alt={dest.name || 'Trending Destination'}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover transition-opacity duration-400 group-hover:opacity-50"
                                         />
+                                        {dest.name && (
+                                            <p className="absolute bottom-3 left-3 text-white text-lg font-bold drop-shadow-lg leading-tight">
+                                                {dest.name}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             ))}

@@ -6,6 +6,10 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM        = process.env.EMAIL_FROM;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 
+// Startup check — print to server console so you can verify env is loaded
+console.log('[mailer] FROM:', FROM);
+console.log('[mailer] ADMIN_EMAIL:', ADMIN_EMAIL);
+
 // ── Shared HTML wrapper ──────────────────────────────────────────
 const wrapHtml = (body) => `
 <!DOCTYPE html>

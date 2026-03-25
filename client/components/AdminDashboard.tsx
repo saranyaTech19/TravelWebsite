@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { auth, packages as packagesApi, enquiries as enquiriesApi, packageEnquiries as pkgEnquiriesApi, contact as contactApi, uploadImage, trendingDestinations as trendingApi } from '../lib/apiClient';
+import { auth, packages as packagesApi, enquiries as enquiriesApi, packageEnquiries as pkgEnquiriesApi, contact as contactApi, uploadImage, trendingDestinations as trendingApi, dreamDestinations as dreamApi } from '../lib/apiClient';
 import { useAuth } from '../context/AuthContext';
 import { slugify } from '../utils/slugify';
 import {
   LayoutDashboard, ShoppingCart, Users, Package, FileText,
   Settings, RefreshCcw, Bell, LogOut, ChevronRight, MapPin,
   Calendar, Star, CheckCircle2, Image as ImageIcon, Trash2, Save,
-  Upload, X, Plus, Mail, MessageSquare, Eye, EyeOff
+  Upload, X, Plus, Mail, MessageSquare, Eye, EyeOff, Pencil
 } from 'lucide-react';
 
 interface EnquieryEntry {
@@ -15,10 +15,13 @@ interface EnquieryEntry {
   full_name: string;
   email: string;
   phone: string;
+  travel_origin: string;
   destination: string;
   travel_date: string;
   adults: string;
   children: string;
+  tentative_budget: string;
+  specific_requirements: string;
   message: string;
   created_at: string;
 }
@@ -35,6 +38,7 @@ interface TourPackage {
   duration: string;
   guest_capacity: string;
   tag: string;
+  price: string;
   is_featured: boolean;
   overview: string;
   highlights: string[];
@@ -69,7 +73,7 @@ interface ContactEntry {
 
 const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const { profile, loading: authLoading, signOut } = useAuth();
-  const [view, setView] = useState<'leads' | 'packages' | 'package-enquiries' | 'contact' | 'trending'>('leads');
+  const [view, setView] = useState<'leads' | 'packages' | 'package-enquiries' | 'contact' | 'trending' | 'dream'>('leads');
   const [enquiries, setEnquiries] = useState<EnquieryEntry[]>([]);
   const [packages, setPackages] = useState<TourPackage[]>([]);
   const [packageEnquiries, setPackageEnquiries] = useState<PackageEnquiryEntry[]>([]);
@@ -85,9 +89,23 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const trendingInputRef = useRef<HTMLInputElement>(null);
+  const trendingEditInputRef = useRef<HTMLInputElement>(null);
   const [trendingDestinationsList, setTrendingDestinationsList] = useState<{ id: number; name: string; image_url: string }[]>([]);
   const [isTrendingUploading, setIsTrendingUploading] = useState(false);
   const [trendingNewName, setTrendingNewName] = useState('');
+  const [editingTrendingId, setEditingTrendingId] = useState<number | null>(null);
+  const [editTrendingName, setEditTrendingName] = useState('');
+  const [isTrendingEditUploading, setIsTrendingEditUploading] = useState(false);
+  const [dreamDestinationsList, setDreamDestinationsList] = useState<{ id: number; title: string; image_url: string; link: string }[]>([]);
+  const [isDreamUploading, setIsDreamUploading] = useState(false);
+  const [dreamNewTitle, setDreamNewTitle] = useState('');
+  const [dreamNewLink, setDreamNewLink] = useState('');
+  const dreamInputRef = useRef<HTMLInputElement>(null);
+  const [editingDreamId, setEditingDreamId] = useState<number | null>(null);
+  const [editDreamTitle, setEditDreamTitle] = useState('');
+  const [editDreamLink, setEditDreamLink] = useState('');
+  const [isDreamEditUploading, setIsDreamEditUploading] = useState(false);
+  const dreamEditInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (file: File) => {
     setIsUploading(true);
@@ -136,6 +154,19 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     }
   };
 
+  const fetchDreamDestinations = async () => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const data = await dreamApi.getAll();
+      setDreamDestinationsList(data || []);
+    } catch (err: any) {
+      setError(`Dream Destinations: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (profile) {
       if (view === 'leads') fetchLeads();
@@ -143,6 +174,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       else if (view === 'package-enquiries') fetchPackageEnquiries();
       else if (view === 'contact') fetchContactMessages();
       else if (view === 'trending') fetchTrendingDestinations();
+      else if (view === 'dream') fetchDreamDestinations();
     }
   }, [profile, view]);
 
@@ -419,7 +451,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   setSelectedPackage({
                     title: '', slug: '', location: '', region: 'India', category: 'Standard',
                     image_url: '', rating: '5.0 (0)', duration: '', guest_capacity: '4-6 guest',
-                    tag: 'Tour', is_featured: false, overview: '',
+                    tag: 'Tour', price: '', is_featured: false, overview: '',
                     highlights: [], inclusions: [], exclusions: [], gallery: [], itinerary: []
                   });
                   setIsEditingPackage(true);
@@ -451,6 +483,13 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-bold transition-all ${view === 'trending' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}
           >
             <ImageIcon className="w-5 h-5" /> Trending Destinations
+          </button>
+
+          <button
+            onClick={() => { setView('dream'); setError(''); }}
+            className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-bold transition-all ${view === 'dream' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}
+          >
+            <MapPin className="w-5 h-5" /> Dream Destinations
           </button>
 
           <div className="pt-8 pb-2 px-6">
@@ -497,6 +536,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 else if (view === 'package-enquiries') fetchPackageEnquiries();
                 else if (view === 'contact') fetchContactMessages();
                 else if (view === 'trending') fetchTrendingDestinations();
+                else if (view === 'dream') fetchDreamDestinations();
               }}
               className="text-slate-400 hover:text-slate-900 transition-colors"
             >
@@ -533,6 +573,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   else if (view === 'package-enquiries') fetchPackageEnquiries();
                   else if (view === 'contact') fetchContactMessages();
                   else if (view === 'trending') fetchTrendingDestinations();
+                else if (view === 'dream') fetchDreamDestinations();
                 }}
                 className="ml-auto bg-white text-red-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest border border-red-100 hover:bg-red-50 transition-all"
               >
@@ -731,7 +772,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           setSelectedPackage({
                             title: '', slug: '', location: '', region: 'India', category: 'Standard',
                             image_url: '', rating: '5.0 (0)', duration: '', guest_capacity: '4-6 guest',
-                            tag: 'Tour', is_featured: false, overview: '',
+                            tag: 'Tour', price: '', is_featured: false, overview: '',
                             highlights: [], inclusions: [], exclusions: [], gallery: [], itinerary: []
                           });
                           setIsEditingPackage(true);
@@ -749,6 +790,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             <th className="px-6 py-5">Region</th>
                             <th className="px-6 py-5">Category</th>
                             <th className="px-6 py-5">Duration</th>
+                            <th className="px-6 py-5">Price</th>
                             <th className="px-6 py-5">Guests</th>
                             <th className="px-8 py-5 text-right">Actions</th>
                           </tr>
@@ -756,7 +798,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <tbody className="divide-y divide-slate-100">
                           {packages.length === 0 ? (
                             <tr>
-                              <td colSpan={6} className="px-8 py-20 text-center">
+                              <td colSpan={7} className="px-8 py-20 text-center">
                                 <div className="flex flex-col items-center gap-3">
                                   <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center">
                                     <Package className="w-5 h-5 text-slate-300" />
@@ -786,6 +828,9 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               </td>
                               <td className="px-6 py-6">
                                 <span className="text-xs font-bold text-slate-500">{p.duration}</span>
+                              </td>
+                              <td className="px-6 py-6">
+                                <span className="text-xs font-bold text-slate-500">{p.price ? `${p.region === 'Dubai' ? 'AED' : '₹'} ${p.price}` : '—'}</span>
                               </td>
                               <td className="px-6 py-6 text-xs font-bold text-slate-500">
                                 {p.guest_capacity}
@@ -877,7 +922,6 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               <select value={selectedPackage.region} onChange={e => setSelectedPackage({ ...selectedPackage, region: e.target.value, category: getCategoryOptions(e.target.value)[0] })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all">
                                 <option value="India">India</option>
                                 <option value="Dubai">Dubai</option>
-                                <option value="International">International</option>
                               </select>
                             </div>
                             <div className="space-y-2">
@@ -892,7 +936,6 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Package Priority</label>
                               <select value={selectedPackage.is_featured ? 'yes' : 'no'} onChange={e => setSelectedPackage({ ...selectedPackage, is_featured: e.target.value === 'yes' })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all">
                                 <option value="no">Standard Visibility</option>
-                                <option value="yes">Feature on Home Page</option>
                               </select>
                             </div>
                           </div>
@@ -909,6 +952,13 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             <div className="space-y-2">
                               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Guest Capacity</label>
                               <input value={selectedPackage.guest_capacity} onChange={e => setSelectedPackage({ ...selectedPackage, guest_capacity: e.target.value })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all" placeholder="e.g. 4-6 guest" />
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-3 gap-8 pt-4">
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Price</label>
+                              <input value={selectedPackage.price} onChange={e => setSelectedPackage({ ...selectedPackage, price: e.target.value })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all" placeholder="e.g. 25000" />
                             </div>
                           </div>
 
@@ -1290,6 +1340,10 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <p className="text-base font-bold text-slate-900">{selectedLead.phone}</p>
                   </div>
                   <div className="space-y-1">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Travel Origin</p>
+                    <p className="text-base font-bold text-slate-900">{selectedLead.travel_origin || 'Not specified'}</p>
+                  </div>
+                  <div className="space-y-1">
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Requested Destination</p>
                     <p className="text-base font-bold text-indigo-600">{selectedLead.destination}</p>
                   </div>
@@ -1298,9 +1352,21 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <p className="text-base font-bold text-slate-900">{selectedLead.travel_date || 'Not specified'}</p>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Travelers (A+C)</p>
-                    <p className="text-base font-bold text-slate-900">{selectedLead.adults} Adults / {selectedLead.children || '0'} Children</p>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No. of Adults</p>
+                    <p className="text-base font-bold text-slate-900">{selectedLead.adults || 'Not specified'}</p>
                   </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No. of Children</p>
+                    <p className="text-base font-bold text-slate-900">{selectedLead.children || '0'}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tentative Budget</p>
+                    <p className="text-base font-bold text-slate-900">{selectedLead.tentative_budget || 'Not specified'}</p>
+                  </div>
+                </div>
+                <div className="pt-8 border-t border-slate-100">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Specific Requirements</p>
+                  <p className="text-sm font-medium leading-relaxed text-slate-700 whitespace-pre-wrap bg-slate-50 p-6 rounded-2xl border border-slate-100">{selectedLead.specific_requirements || "No specific requirements provided."}</p>
                 </div>
                 <div className="pt-8 border-t border-slate-100">
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Customer Message</p>
@@ -1459,28 +1525,308 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <p className="text-[11px] text-slate-300 font-bold">Upload images to show in the marquee</p>
               </div>
             ) : (
+              <>
+              <input
+                ref={trendingEditInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file || editingTrendingId === null) return;
+                  setIsTrendingEditUploading(true);
+                  try {
+                    const url = await handleFileUpload(file);
+                    if (url) {
+                      const updated = await trendingApi.update(editingTrendingId, { name: editTrendingName, image_url: url });
+                      setTrendingDestinationsList(prev => prev.map(d => d.id === editingTrendingId ? { ...d, ...updated } : d));
+                    }
+                  } catch (err: any) {
+                    alert('Upload failed: ' + err.message);
+                  } finally {
+                    setIsTrendingEditUploading(false);
+                    e.target.value = '';
+                  }
+                }}
+              />
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {trendingDestinationsList.map((dest) => (
+                  <div key={dest.id} className="flex flex-col gap-2">
+                    {editingTrendingId === dest.id ? (
+                      <div className="flex flex-col gap-2 bg-white border border-indigo-200 rounded-2xl p-3 shadow-sm">
+                        <div
+                          className="relative rounded-xl overflow-hidden aspect-[6/5] bg-slate-100 cursor-pointer group"
+                          onClick={() => trendingEditInputRef.current?.click()}
+                        >
+                          <img src={dest.image_url} alt={dest.name} className="w-full h-full object-cover" />
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            {isTrendingEditUploading ? (
+                              <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              <Upload className="w-5 h-5 text-white" />
+                            )}
+                          </div>
+                        </div>
+                        <input
+                          value={editTrendingName}
+                          onChange={e => setEditTrendingName(e.target.value)}
+                          className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                          placeholder="Place name"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={async () => {
+                              try {
+                                const updated = await trendingApi.update(dest.id, { name: editTrendingName, image_url: dest.image_url });
+                                setTrendingDestinationsList(prev => prev.map(d => d.id === dest.id ? { ...d, ...updated } : d));
+                                setEditingTrendingId(null);
+                              } catch (err: any) {
+                                alert('Save failed: ' + err.message);
+                              }
+                            }}
+                            className="flex-1 bg-indigo-600 text-white text-xs font-bold py-1.5 rounded-lg hover:bg-indigo-700 transition-all flex items-center justify-center gap-1"
+                          >
+                            <Save className="w-3 h-3" /> Save
+                          </button>
+                          <button
+                            onClick={() => setEditingTrendingId(null)}
+                            className="flex-1 bg-slate-100 text-slate-600 text-xs font-bold py-1.5 rounded-lg hover:bg-slate-200 transition-all flex items-center justify-center gap-1"
+                          >
+                            <X className="w-3 h-3" /> Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-1">
+                        <div className="relative group rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-[6/5] bg-slate-100">
+                          <img src={dest.image_url} alt={dest.name || 'Trending'} className="w-full h-full object-cover" />
+                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={() => { setEditingTrendingId(dest.id); setEditTrendingName(dest.name || ''); }}
+                              className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-700 transition-all"
+                            >
+                              <Pencil className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={async () => {
+                                if (!window.confirm('Delete this image?')) return;
+                                try {
+                                  await trendingApi.delete(dest.id);
+                                  setTrendingDestinationsList(prev => prev.filter(d => d.id !== dest.id));
+                                } catch (err: any) {
+                                  alert('Delete failed: ' + err.message);
+                                }
+                              }}
+                              className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-all"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                        {dest.name && (
+                          <p className="text-xs font-bold text-slate-600 text-center truncate px-1">{dest.name}</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              </>
+            )}
+          </div>
+        )}
+        {view === 'dream' && (
+          <div className="space-y-8">
+            <div className="flex flex-col gap-4 mb-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-black text-slate-900">
+                  Dream Destinations{' '}
+                  <span className="text-slate-400 ml-2 font-bold">({dreamDestinationsList.length})</span>
+                </h2>
+              </div>
+              <div className="flex items-center gap-3">
+                <input
+                  type="text"
+                  value={dreamNewTitle}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDreamNewTitle(e.target.value)}
+                  placeholder="Title (e.g. INDIA TOURS)"
+                  className="flex-1 border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <input
+                  type="text"
+                  value={dreamNewLink}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDreamNewLink(e.target.value)}
+                  placeholder="Link (e.g. /india-tours)"
+                  className="flex-1 border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <button
+                  onClick={() => dreamInputRef.current?.click()}
+                  disabled={isDreamUploading || !dreamNewTitle.trim()}
+                  className="bg-[#4F46E5] text-white px-8 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-indigo-200 hover:bg-[#4338CA] transition-all flex items-center gap-2 disabled:opacity-60 whitespace-nowrap"
+                >
+                  <Upload className="w-4 h-4" />
+                  {isDreamUploading ? 'Uploading…' : 'Upload Image'}
+                </button>
+              </div>
+              <input
+                ref={dreamInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  setIsDreamUploading(true);
+                  try {
+                    const url = await handleFileUpload(file);
+                    if (url) {
+                      const added = await dreamApi.add(dreamNewTitle.trim(), url, dreamNewLink.trim(), dreamDestinationsList.length);
+                      setDreamDestinationsList(prev => [...prev, added]);
+                      setDreamNewTitle('');
+                      setDreamNewLink('');
+                    }
+                  } catch (err: any) {
+                    alert('Upload failed: ' + err.message);
+                  } finally {
+                    setIsDreamUploading(false);
+                    e.target.value = '';
+                  }
+                }}
+              />
+            </div>
+
+            {isLoading ? (
+              <div className="flex flex-col items-center gap-3 py-20">
+                <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+                <p className="text-sm font-black text-slate-400 uppercase tracking-widest">Loading dream destinations…</p>
+              </div>
+            ) : dreamDestinationsList.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-slate-200 flex flex-col items-center gap-4 py-20">
+                <ImageIcon className="w-10 h-10 text-slate-300" />
+                <p className="text-sm font-black text-slate-400 uppercase tracking-widest">No dream destinations yet</p>
+                <p className="text-[11px] text-slate-300 font-bold">Upload images to show in the Dream Destination slider</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {dreamDestinationsList.map((dest) => (
                   <div key={dest.id} className="flex flex-col gap-1">
-                    <div className="relative group rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-[6/5] bg-slate-100">
-                      <img src={dest.image_url} alt={dest.name || 'Trending'} className="w-full h-full object-cover" />
-                      <button
-                        onClick={async () => {
-                          if (!window.confirm('Delete this image?')) return;
-                          try {
-                            await trendingApi.delete(dest.id);
-                            setTrendingDestinationsList((prev: { id: number; name: string; image_url: string }[]) => prev.filter((d: { id: number }) => d.id !== dest.id));
-                          } catch (err: any) {
-                            alert('Delete failed: ' + err.message);
-                          }
-                        }}
-                        className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                    {dest.name && (
-                      <p className="text-xs font-bold text-slate-600 text-center truncate px-1">{dest.name}</p>
+                    {editingDreamId === dest.id ? (
+                      /* ---- EDIT MODE ---- */
+                      <div className="rounded-2xl border-2 border-indigo-400 bg-white p-3 shadow-lg flex flex-col gap-2">
+                        <div className="relative rounded-xl overflow-hidden aspect-[6/5] bg-slate-100">
+                          <img src={dest.image_url} alt={dest.title || 'Dream'} className="w-full h-full object-cover" />
+                          <button
+                            onClick={() => dreamEditInputRef.current?.click()}
+                            disabled={isDreamEditUploading}
+                            className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-[10px] font-bold uppercase tracking-widest opacity-0 hover:opacity-100 transition-opacity"
+                          >
+                            {isDreamEditUploading ? 'Uploading…' : 'Change Image'}
+                          </button>
+                        </div>
+                        <input
+                          ref={dreamEditInputRef}
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            setIsDreamEditUploading(true);
+                            try {
+                              const url = await handleFileUpload(file);
+                              if (url) {
+                                setDreamDestinationsList((prev: { id: number; title: string; image_url: string; link: string }[]) =>
+                                  prev.map((d: { id: number; title: string; image_url: string; link: string }) => d.id === dest.id ? { ...d, image_url: url } : d)
+                                );
+                              }
+                            } catch (err: any) {
+                              alert('Upload failed: ' + err.message);
+                            } finally {
+                              setIsDreamEditUploading(false);
+                              e.target.value = '';
+                            }
+                          }}
+                        />
+                        <input
+                          type="text"
+                          value={editDreamTitle}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditDreamTitle(e.target.value)}
+                          placeholder="Title"
+                          className="border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        />
+                        <input
+                          type="text"
+                          value={editDreamLink}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditDreamLink(e.target.value)}
+                          placeholder="Link (e.g. /india-tours)"
+                          className="border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={async () => {
+                              const current = dreamDestinationsList.find((d: { id: number }) => d.id === dest.id);
+                              if (!current) return;
+                              try {
+                                await dreamApi.update(dest.id, {
+                                  title: editDreamTitle,
+                                  image_url: current.image_url,
+                                  link: editDreamLink,
+                                });
+                                setDreamDestinationsList((prev: { id: number; title: string; image_url: string; link: string }[]) =>
+                                  prev.map((d: { id: number; title: string; image_url: string; link: string }) => d.id === dest.id ? { ...d, title: editDreamTitle, link: editDreamLink } : d)
+                                );
+                                setEditingDreamId(null);
+                              } catch (err: any) {
+                                alert('Save failed: ' + err.message);
+                              }
+                            }}
+                            className="flex-1 bg-[#4F46E5] text-white py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-[#4338CA] transition-all"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => setEditingDreamId(null)}
+                            className="flex-1 bg-slate-100 text-slate-500 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-slate-200 transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      /* ---- VIEW MODE ---- */
+                      <>
+                        <div className="relative group rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-[6/5] bg-slate-100">
+                          <img src={dest.image_url} alt={dest.title || 'Dream'} className="w-full h-full object-cover" />
+                          <div className="absolute top-2 right-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={() => {
+                                setEditingDreamId(dest.id);
+                                setEditDreamTitle(dest.title);
+                                setEditDreamLink(dest.link);
+                              }}
+                              className="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-600 transition-colors"
+                            >
+                              <Pencil className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={async () => {
+                                if (!window.confirm('Delete this dream destination?')) return;
+                                try {
+                                  await dreamApi.delete(dest.id);
+                                  setDreamDestinationsList((prev: { id: number; title: string; image_url: string; link: string }[]) => prev.filter((d: { id: number }) => d.id !== dest.id));
+                                } catch (err: any) {
+                                  alert('Delete failed: ' + err.message);
+                                }
+                              }}
+                              className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-xs font-bold text-slate-600 text-center truncate px-1">{dest.title}</p>
+                        {dest.link && <p className="text-[10px] text-slate-400 text-center truncate px-1">{dest.link}</p>}
+                      </>
                     )}
                   </div>
                 ))}

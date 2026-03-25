@@ -102,7 +102,7 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   return (
     <div className="min-h-screen bg-brand-bg">
       {/* Hero Header Section */}
-      <div className="lg:h-[340px]  h-[300px] w-full flex items-center justify-center lg:bg-contain bg-cover  " style={{
+      <div className="lg:h-[340px] z-0 mt-[-9%]  h-[300px] w-full flex items-center justify-center lg:bg-contain bg-cover  " style={{
         backgroundImage: "url('/images/contact.png')",
         // backgroundSize: "contain",
         backgroundPosition: "100% 100%",

@@ -116,10 +116,13 @@ export const enquiries = {
     full_name: string;
     email: string;
     phone: string;
+    travel_origin?: string;
     destination?: string;
     travel_date?: string;
     adults?: string;
     children?: string;
+    tentative_budget?: string;
+    specific_requirements?: string;
     message?: string;
   }) {
     return apiFetch('/enquiries', {
@@ -203,8 +206,42 @@ export const trendingDestinations = {
     });
   },
 
+  async update(id: string | number, data: { name: string; image_url: string; sort_order?: number }) {
+    return apiFetch<any>(`/trending-destinations/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
   async delete(id: string | number) {
     return apiFetch<any>(`/trending-destinations/${id}`, { method: 'DELETE' });
+  },
+};
+
+// ============================================================
+// DREAM DESTINATIONS
+// ============================================================
+export const dreamDestinations = {
+  async getAll() {
+    return apiFetch<any[]>('/dream-destinations');
+  },
+
+  async add(title: string, image_url: string, link = '', sort_order = 0) {
+    return apiFetch<any>('/dream-destinations', {
+      method: 'POST',
+      body: JSON.stringify({ title, image_url, link, sort_order }),
+    });
+  },
+
+  async update(id: string | number, data: { title: string; image_url: string; link: string; sort_order?: number }) {
+    return apiFetch<any>(`/dream-destinations/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async delete(id: string | number) {
+    return apiFetch<any>(`/dream-destinations/${id}`, { method: 'DELETE' });
   },
 };
 
