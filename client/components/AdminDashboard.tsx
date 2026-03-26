@@ -2,12 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { auth, packages as packagesApi, enquiries as enquiriesApi, packageEnquiries as pkgEnquiriesApi, contact as contactApi, uploadImage, trendingDestinations as trendingApi, dreamDestinations as dreamApi } from '../lib/apiClient';
 import { useAuth } from '../context/AuthContext';
-import { slugify } from '../utils/slugify';
 import {
-  LayoutDashboard, ShoppingCart, Users, Package, FileText,
+  LayoutDashboard, Package,
   Settings, RefreshCcw, Bell, LogOut, ChevronRight, MapPin,
-  Calendar, Star, CheckCircle2, Image as ImageIcon, Trash2, Save,
-  Upload, X, Plus, Mail, MessageSquare, Eye, EyeOff, Pencil
+  Calendar, Image as ImageIcon, Trash2, Save,
+  Upload, X, Plus, Mail, MessageSquare, Eye, EyeOff, Pencil,
+  Search, TrendingUp
 } from 'lucide-react';
 
 interface EnquieryEntry {
@@ -106,6 +106,111 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const [editDreamLink, setEditDreamLink] = useState('');
   const [isDreamEditUploading, setIsDreamEditUploading] = useState(false);
   const dreamEditInputRef = useRef<HTMLInputElement>(null);
+
+  // ── Search & Pagination ──────────────────────────────────────────────────
+  const [searchQuery, setSearchQuery] = useState('');
+  const ITEMS_PER_PAGE = 10;
+  const [leadsPage, setLeadsPage] = useState(1);
+  const [pkgEnqPage, setPkgEnqPage] = useState(1);
+  const [contactPage, setContactPage] = useState(1);
+  const [packagesPage, setPackagesPage] = useState(1);
+
+  // Reset page-1 on view change or search change
+  useEffect(() => { setLeadsPage(1); setPkgEnqPage(1); setContactPage(1); setPackagesPage(1); }, [view]);
+  useEffect(() => { setLeadsPage(1); setPkgEnqPage(1); setContactPage(1); setPackagesPage(1); }, [searchQuery]);
+
+  const q = searchQuery.trim().toLowerCase();
+
+  const filteredEnquiries = enquiries.filter(e =>
+    !q || e.full_name?.toLowerCase().includes(q) || e.email?.toLowerCase().includes(q) ||
+    e.destination?.toLowerCase().includes(q) || e.phone?.includes(q) ||
+    e.travel_origin?.toLowerCase().includes(q)
+  );
+  const filteredPkgEnquiries = packageEnquiries.filter(e =>
+    !q || e.name?.toLowerCase().includes(q) || e.email?.toLowerCase().includes(q) ||
+    e.package_title?.toLowerCase().includes(q) || e.phone?.includes(q)
+  );
+  const filteredContacts = contactMessages.filter(m =>
+    !q || (m.first_name + ' ' + m.last_name).toLowerCase().includes(q) ||
+    m.email?.toLowerCase().includes(q) || m.phone?.includes(q) ||
+    m.message?.toLowerCase().includes(q)
+  );
+  const filteredPackages = packages.filter(p =>
+    !q || p.title?.toLowerCase().includes(q) || p.region?.toLowerCase().includes(q) ||
+    p.category?.toLowerCase().includes(q) || p.location?.toLowerCase().includes(q) ||
+    p.tag?.toLowerCase().includes(q)
+  );
+
+  const paginate = <T,>(arr: T[], page: number) =>
+    arr.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+
+  const pagedEnquiries    = paginate<EnquieryEntry>(filteredEnquiries, leadsPage);
+  const pagedPkgEnquiries = paginate<PackageEnquiryEntry>(filteredPkgEnquiries, pkgEnqPage);
+  const pagedContacts     = paginate<ContactEntry>(filteredContacts, contactPage);
+  const pagedPackages     = paginate<TourPackage>(filteredPackages, packagesPage);
+
+  // ── Shared Pagination UI ─────────────────────────────────────────────────
+  const PaginationBar = ({
+    total, page, onPage
+  }: { total: number; page: number; onPage: (p: number) => void }) => {
+    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    if (totalPages <= 1) return null;
+    const start = (page - 1) * ITEMS_PER_PAGE + 1;
+    const end   = Math.min(page * ITEMS_PER_PAGE, total);
+
+    // Build page numbers with ellipsis
+    const pages: (number | '...')[] = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (page > 3) pages.push('...');
+      for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) pages.push(i);
+      if (page < totalPages - 2) pages.push('...');
+      pages.push(totalPages);
+    }
+
+    return (
+      <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between">
+        <p className="text-xs text-slate-400">
+          Showing <span className="font-semibold text-slate-600">{start}–{end}</span> of{' '}
+          <span className="font-semibold text-slate-600">{total}</span> results
+          {q && <span className="ml-1 text-blue-500">for "{searchQuery}"</span>}
+        </p>
+        <div className="flex items-center gap-1">
+          <button
+            disabled={page === 1}
+            onClick={() => onPage(page - 1)}
+            className="px-3 py-1.5 text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            Prev
+          </button>
+          {pages.map((p, i) =>
+            p === '...' ? (
+              <span key={`dot-${i}`} className="px-2 text-slate-400 text-xs">…</span>
+            ) : (
+              <button
+                key={p}
+                onClick={() => onPage(p as number)}
+                className={`w-8 h-8 rounded-lg text-xs font-semibold transition-all ${
+                  p === page ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100'
+                }`}
+              >
+                {p}
+              </button>
+            )
+          )}
+          <button
+            disabled={page === totalPages}
+            onClick={() => onPage(page + 1)}
+            className="px-3 py-1.5 text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   const handleFileUpload = async (file: File) => {
     setIsUploading(true);
@@ -411,124 +516,130 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
   // --- MAIN DASHBOARD VIEW ---
   return (
-    <div className="min-h-screen bg-[#F5F7FA] flex font-sans">
+    <div className="min-h-screen bg-[#F0F2F5] flex font-sans">
       {/* 1. LEFT SIDEBAR */}
-      <aside className="w-[260px] bg-[#222E3C] flex flex-col fixed inset-y-0 z-50 transition-all">
-        <div className="p-8 pb-12 flex items-center gap-3">
-          {/* <div className="w-10 h-10 bg-brand-gold rounded-xl flex items-center justify-center shadow-lg shadow-brand-gold/20">
-            <Package className="text-brand-dark w-6 h-6" />
-          </div> */}
-          <img
-            src="/images/logo.png"
-            alt="Global Connect"
-            className="h-16 md:h-20 w-auto object-contai"
-          />
-          {/* <span className="text-white font-black text-xl tracking-tighter">GLOBAL CONNECT</span> */}
+      <aside className="w-[240px] bg-[#1A2332] flex flex-col fixed inset-y-0 z-50">
+        {/* Logo + Brand */}
+        <div className="px-6 pt-6 pb-4 flex items-center gap-3 border-b border-white/5">
+          <img src="/images/logo.png" alt="Global Connect" className="h-12 w-auto object-contain" />
         </div>
 
-        <nav className="flex-1 px-4 space-y-1 overflow-y-auto no-scrollbar pt-6">
-          <button onClick={() => { setView('leads'); setIsEditingPackage(false); setError(''); }} className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-bold transition-all ${view === 'leads' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}>
-            <LayoutDashboard className="w-5 h-5" /> Enquiry Details
+        {/* Digital Dashboard label */}
+        <div className="px-6 pt-5 pb-2">
+          <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.25em]">Digital Dashboard</p>
+        </div>
+
+        <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto no-scrollbar pt-1">
+          {/* Enquiry Details */}
+          <button
+            onClick={() => { setView('leads'); setIsEditingPackage(false); setError(''); }}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-semibold transition-all ${view === 'leads' ? 'bg-[#2D3F55] text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+          >
+            <LayoutDashboard className="w-4 h-4 shrink-0" /> Enquiry Details
           </button>
 
-          <div className="pt-8 pb-2 px-6">
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Catalogs</span>
+          {/* Catalogs section */}
+          <div className="pt-5 pb-1 px-4">
+            <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Catalogs</span>
           </div>
-          <div className="space-y-1">
+
+          <button
+            onClick={() => { setView('packages'); setError(''); }}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-semibold transition-all ${view === 'packages' ? 'bg-[#2D3F55] text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+          >
+            <Package className="w-4 h-4 shrink-0" /> Tour Packages
+          </button>
+
+          {/* Sub items */}
+          <div className="ml-7 space-y-0.5">
             <button
-              onClick={() => { setView('packages'); setError(''); }}
-              className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-bold transition-all ${view === 'packages' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}
+              onClick={() => {
+                setView('packages'); setError('');
+                setSelectedPackage({ title: '', slug: '', location: '', region: 'India', category: 'Standard', image_url: '', rating: '5.0 (0)', duration: '', guest_capacity: '4-6 guest', tag: 'Tour', price: '', is_featured: false, overview: '', highlights: [], inclusions: [], exclusions: [], gallery: [], itinerary: [] });
+                setIsEditingPackage(true); setFormStep(1);
+              }}
+              className={`w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold transition-all flex items-center gap-2.5 ${view === 'packages' && isEditingPackage && !selectedPackage?.id ? 'text-[#38BDF8]' : 'text-slate-500 hover:text-slate-300'}`}
             >
-              <Package className="w-5 h-5" /> Tour Packages
+              <span className={`w-1.5 h-1.5 rounded-full ${view === 'packages' && isEditingPackage && !selectedPackage?.id ? 'bg-[#38BDF8]' : 'bg-slate-600'}`} />
+              Add New Package
             </button>
-
-            {/* SUBMENUS */}
-            <div className="ml-12 space-y-1 pb-2">
-              <button
-                onClick={() => {
-                  setView('packages');
-                  setError('');
-                  setSelectedPackage({
-                    title: '', slug: '', location: '', region: 'India', category: 'Standard',
-                    image_url: '', rating: '5.0 (0)', duration: '', guest_capacity: '4-6 guest',
-                    tag: 'Tour', price: '', is_featured: false, overview: '',
-                    highlights: [], inclusions: [], exclusions: [], gallery: [], itinerary: []
-                  });
-                  setIsEditingPackage(true);
-                  setFormStep(1);
-                }}
-                className={`w-full text-left px-4 py-2 rounded-lg text-[12px] font-bold transition-all flex items-center gap-3 ${view === 'packages' && isEditingPackage && !selectedPackage?.id ? 'text-brand-gold' : 'text-slate-500 hover:text-slate-300'}`}
-              >
-                <div className={`w-1 h-1 rounded-full ${view === 'packages' && isEditingPackage && !selectedPackage?.id ? 'bg-brand-gold shadow-[0_0_8px_rgba(255,191,0,0.6)]' : 'bg-slate-600'}`} />
-                Add New Package
-              </button>
-
-              <button
-                onClick={() => {
-                  setView('packages');
-                  setError('');
-                  setIsEditingPackage(false);
-                  setFormStep(1);
-                }}
-                className={`w-full text-left px-4 py-2 rounded-lg text-[12px] font-bold transition-all flex items-center gap-3 ${view === 'packages' && !isEditingPackage ? 'text-brand-gold' : 'text-slate-500 hover:text-slate-300'}`}
-              >
-                <div className={`w-1 h-1 rounded-full ${view === 'packages' && !isEditingPackage ? 'bg-brand-gold shadow-[0_0_8px_rgba(255,191,0,0.6)]' : 'bg-slate-600'}`} />
-                Manage Packages
-              </button>
-            </div>
+            <button
+              onClick={() => { setView('packages'); setError(''); setIsEditingPackage(false); setFormStep(1); }}
+              className={`w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold transition-all flex items-center gap-2.5 ${view === 'packages' && !isEditingPackage ? 'text-[#38BDF8]' : 'text-slate-500 hover:text-slate-300'}`}
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${view === 'packages' && !isEditingPackage ? 'bg-[#38BDF8]' : 'bg-slate-600'}`} />
+              Manage Packages
+            </button>
           </div>
 
           <button
             onClick={() => { setView('trending'); setError(''); }}
-            className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-bold transition-all ${view === 'trending' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-semibold transition-all ${view === 'trending' ? 'bg-[#2D3F55] text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
           >
-            <ImageIcon className="w-5 h-5" /> Trending Destinations
+            <TrendingUp className="w-4 h-4 shrink-0" /> Trending
           </button>
 
           <button
             onClick={() => { setView('dream'); setError(''); }}
-            className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-bold transition-all ${view === 'dream' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-semibold transition-all ${view === 'dream' ? 'bg-[#2D3F55] text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
           >
-            <MapPin className="w-5 h-5" /> Dream Destinations
+            <MapPin className="w-4 h-4 shrink-0" /> Dream Destinations
           </button>
 
-          <div className="pt-8 pb-2 px-6">
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Operations</span>
+          <div className="pt-5 pb-1 px-4">
+            <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Operations</span>
           </div>
-          <button onClick={() => { setView('package-enquiries'); setError(''); }} className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-bold transition-all ${view === 'package-enquiries' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}>
-            <MessageSquare className="w-5 h-5" /> Package Enquiries
+
+          <button onClick={() => { setView('package-enquiries'); setError(''); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-semibold transition-all ${view === 'package-enquiries' ? 'bg-[#2D3F55] text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
+            <MessageSquare className="w-4 h-4 shrink-0" /> Package Enquiries
           </button>
-          <button onClick={() => { setView('contact'); setError(''); }} className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-bold transition-all ${view === 'contact' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}>
-            <Mail className="w-5 h-5" /> Contact Details
+          <button onClick={() => { setView('contact'); setError(''); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-semibold transition-all ${view === 'contact' ? 'bg-[#2D3F55] text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
+            <Mail className="w-4 h-4 shrink-0" /> Contact Details
+          </button>
+
+          <div className="pt-5 pb-1 px-4">
+            <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Account</span>
+          </div>
+          <button onClick={signOut} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-semibold text-red-400 hover:bg-red-400/10 transition-all">
+            <LogOut className="w-4 h-4 shrink-0" /> Logout Session
           </button>
         </nav>
 
-        <div className="p-6 border-t border-white/5 space-y-4">
-          <button onClick={signOut} className="w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-bold text-red-400 hover:bg-red-400/10 transition-all">
-            <LogOut className="w-5 h-5" /> Logout Session
+        {/* Bottom CTA */}
+        <div className="p-4 border-t border-white/5">
+          <button
+            onClick={() => {
+              setView('packages'); setError('');
+              setSelectedPackage({ title: '', slug: '', location: '', region: 'India', category: 'Standard', image_url: '', rating: '5.0 (0)', duration: '', guest_capacity: '4-6 guest', tag: 'Tour', price: '', is_featured: false, overview: '', highlights: [], inclusions: [], exclusions: [], gallery: [], itinerary: [] });
+              setIsEditingPackage(true); setFormStep(1);
+            }}
+            className="w-full bg-[#38BDF8]/10 hover:bg-[#38BDF8]/20 border border-[#38BDF8]/20 text-[#38BDF8] px-4 py-3 rounded-xl text-[12px] font-bold flex items-center justify-center gap-2 transition-all"
+          >
+            <Plus className="w-4 h-4" /> Create New Package
           </button>
         </div>
       </aside>
 
       {/* 2. MAIN CONTENT AREA */}
-      <main className="flex-1 ml-[260px]">
+      <main className="flex-1 ml-[240px]">
         {/* Top Header Bar */}
-        <header className="h-[80px] bg-white border-b border-slate-200 flex items-center justify-between px-10 sticky top-0 z-40">
-          <div className="flex items-center gap-4 text-slate-400 font-bold text-[13px]">
-            <span>GLOBAL CONNECT</span>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-slate-900 capitalize">
-              {view === 'leads' ? 'Travel Details' : view.replace('-', ' ')}
-            </span>
-            {selectedPackage && isEditingPackage && (
-              <>
-                <ChevronRight className="w-4 h-4" />
-                <span className="text-slate-900">{selectedPackage.title || 'New Package'}</span>
-              </>
-            )}
-          </div>
+        <header className="h-[68px] bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-40">
+          {/* Search — hidden on Add/Edit package form */}
+          {!(view === 'packages' && isEditingPackage) && (
+            <div className="relative w-72">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Search enquiries, packages, contacts..."
+                className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 placeholder-slate-400 outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+              />
+            </div>
+          )}
 
-          <div className="flex items-center gap-8">
+          {/* Right actions */}
+          <div className="flex items-center gap-3">
             <button
               onClick={() => {
                 if (view === 'leads') fetchLeads();
@@ -538,32 +649,40 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 else if (view === 'trending') fetchTrendingDestinations();
                 else if (view === 'dream') fetchDreamDestinations();
               }}
-              className="text-slate-400 hover:text-slate-900 transition-colors"
+              className="p-2.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-all"
+              title="Refresh"
             >
-              <RefreshCcw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
-            <div className="flex items-center gap-3 border-l border-slate-200 pl-8">
-              <div className="text-right">
-                <p className="text-sm font-bold text-slate-900 leading-none">{profile.full_name}</p>
-                <p className="text-[10px] text-[#00A9D7] mt-1 uppercase font-black">Admin Manager</p>
+            <button className="p-2.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-all relative">
+              <Bell className="w-4 h-4" />
+              <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+            </button>
+            <button className="p-2.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-all">
+              <Settings className="w-4 h-4" />
+            </button>
+            <div className="flex items-center gap-2.5 ml-2 pl-3 border-l border-slate-200">
+              <div className="w-9 h-9 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center overflow-hidden shadow-sm">
+                <img src="/images/Favicon.png" alt="Admin" className="w-7 h-7 object-contain" />
               </div>
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden border border-slate-200">
-                <img src="/images/Favicon.png" alt="Admin" className="w-8 h-8 object-contain" />
+              <div>
+                <p className="text-sm font-semibold text-slate-800 leading-none">{profile.full_name}</p>
+                <p className="text-[10px] text-[#38BDF8] mt-0.5 font-bold">Admin Manager</p>
               </div>
             </div>
           </div>
         </header>
 
         {/* Dynamic Content */}
-        <div className="p-10">
+        <div className="p-8">
           {error && (
-            <div className="mb-8 bg-red-50 border border-red-200 rounded-2xl p-6 flex items-center gap-4 animate-shake">
-              <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
-                <X className="w-5 h-5 text-red-600" />
+            <div className="mb-6 bg-red-50 border border-red-200 rounded-2xl p-5 flex items-center gap-4">
+              <div className="w-9 h-9 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+                <X className="w-4 h-4 text-red-600" />
               </div>
-              <div>
-                <p className="text-sm font-black text-red-900">System Sync Error</p>
-                <p className="text-xs font-bold text-red-500 mt-0.5">{error}</p>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-red-900">Sync Error</p>
+                <p className="text-xs text-red-500 mt-0.5">{error}</p>
               </div>
               <button
                 onClick={() => {
@@ -575,86 +694,128 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   else if (view === 'trending') fetchTrendingDestinations();
                   else if (view === 'dream') fetchDreamDestinations();
                 }}
-                className="ml-auto bg-white text-red-600 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest border border-red-100 hover:bg-red-50 transition-all"
+                className="bg-white text-red-600 px-4 py-2 rounded-lg text-xs font-bold border border-red-100 hover:bg-red-50 transition-all"
               >
-                Attempt Retry
+                Retry
               </button>
             </div>
           )}
           {view === 'leads' && (
-            <div className="space-y-8">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-black text-slate-900">Travel Details (General Enquiries) <span className="text-slate-400 ml-2 font-bold">({enquiries.length})</span></h2>
+            <div className="space-y-6">
+              {/* Page Header */}
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-slate-900">Enquiry Details</h2>
+                    <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                      {q ? `${filteredEnquiries.length} / ${enquiries.length}` : `${enquiries.length} Total`}
+                    </span>
+                  </div>
+                  <p className="text-slate-500 text-sm mt-1">Manage and track high-quality travel requests from global clients.</p>
+                </div>
               </div>
+
+              {/* Table */}
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <table className="w-full text-left">
                   <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[11px] font-black uppercase tracking-widest">
-                      <th className="px-8 py-5">Date</th>
-                      <th className="px-8 py-5">Full Name</th>
-                      <th className="px-8 py-5">Destination</th>
-                      <th className="px-8 py-5">Phone</th>
-                      <th className="px-8 py-5 text-right">Actions</th>
+                    <tr className="border-b border-slate-100 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <th className="px-6 py-4">Date Requested</th>
+                      <th className="px-6 py-4">Full Name & Contact</th>
+                      <th className="px-6 py-4">Destination</th>
+                      <th className="px-6 py-4">Phone Number</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-50">
                     {isLoading ? (
                       <tr>
-                        <td colSpan={5} className="px-8 py-20 text-center">
+                        <td colSpan={5} className="px-6 py-16 text-center">
                           <div className="flex flex-col items-center gap-3">
-                            <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-                            <p className="text-sm font-black text-slate-400 uppercase tracking-widest">Loading travel details...</p>
+                            <div className="w-8 h-8 border-2 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+                            <p className="text-sm text-slate-400">Loading enquiries...</p>
                           </div>
                         </td>
                       </tr>
-                    ) : enquiries.length === 0 ? (
+                    ) : filteredEnquiries.length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="px-8 py-20 text-center">
-                          <div className="flex flex-col items-center gap-3">
+                        <td colSpan={5} className="px-6 py-16 text-center">
+                          <div className="flex flex-col items-center gap-2">
                             <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center">
-                              <RefreshCcw className="w-5 h-5 text-slate-300" />
+                              <Search className="w-5 h-5 text-slate-300" />
                             </div>
-                            <p className="text-sm font-black text-slate-400 uppercase tracking-widest">No travel enquiries found</p>
-                            <p className="text-[11px] text-slate-300 font-bold">Try refreshing or check database connection</p>
+                            <p className="text-sm font-semibold text-slate-400">
+                              {q ? `No results for "${searchQuery}"` : 'No enquiries found'}
+                            </p>
+                            {q && <p className="text-xs text-slate-300">Try a different search term</p>}
                           </div>
                         </td>
                       </tr>
-                    ) : enquiries.map((e) => (
-                      <tr key={e.id} className="hover:bg-slate-50 transition-colors cursor-pointer group" onClick={() => setSelectedLead(e)}>
-                        <td className="px-8 py-5 text-xs font-bold text-slate-500">{new Date(e.created_at).toLocaleDateString()}</td>
-                        <td className="px-8 py-5">
-                          <p className="text-sm font-black text-slate-900">{e.full_name}</p>
-                          <p className="text-[11px] text-slate-400 font-bold">{e.email}</p>
-                        </td>
-                        <td className="px-8 py-5 text-sm font-bold text-slate-700">{e.destination}</td>
-                        <td className="px-8 py-5 text-sm font-medium text-slate-600">{e.phone}</td>
-                        <td className="px-8 py-5 text-right">
-                          <button onClick={(ev) => { ev.stopPropagation(); handleDeleteLead(e.id); }} className="p-2 text-slate-300 hover:text-red-500 transition-all">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    ) : pagedEnquiries.map((e) => {
+                      const initials = e.full_name?.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() || '?';
+                      const colors = ['bg-blue-500', 'bg-purple-500', 'bg-green-500', 'bg-orange-500', 'bg-pink-500', 'bg-teal-500'];
+                      const color = colors[e.full_name?.charCodeAt(0) % colors.length] || 'bg-blue-500';
+                      return (
+                        <tr key={e.id} className="hover:bg-slate-50/70 transition-colors cursor-pointer group" onClick={() => setSelectedLead(e)}>
+                          <td className="px-6 py-4">
+                            <p className="text-sm font-medium text-slate-700">{new Date(e.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">{new Date(e.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</p>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-9 h-9 ${color} rounded-full flex items-center justify-center shrink-0 shadow-sm`}>
+                                <span className="text-white text-xs font-bold">{initials}</span>
+                              </div>
+                              <div>
+                                <p className="text-sm font-semibold text-slate-800">{e.full_name}</p>
+                                <p className="text-xs text-slate-400">{e.email}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                              <MapPin className="w-3 h-3" /> {e.destination}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-600">+{e.phone?.replace(/^\+/, '')}</td>
+                          <td className="px-6 py-4 text-right">
+                            <button onClick={(ev) => { ev.stopPropagation(); handleDeleteLead(e.id); }} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
+                <PaginationBar total={filteredEnquiries.length} page={leadsPage} onPage={setLeadsPage} />
               </div>
+
             </div>
           )}
 
           {view === 'package-enquiries' && (
-            <div className="space-y-8">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-black text-slate-900">Package Enquiries <span className="text-slate-400 ml-2 font-bold">({packageEnquiries.length})</span></h2>
+            <div className="space-y-6">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-slate-900">Package Enquiries</h2>
+                    <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                      {q ? `${filteredPkgEnquiries.length} / ${packageEnquiries.length}` : `${packageEnquiries.length} Total`}
+                    </span>
+                  </div>
+                  <p className="text-slate-500 text-sm mt-1">Track enquiries submitted for specific tour packages.</p>
+                </div>
               </div>
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <table className="w-full text-left">
                   <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[11px] font-black uppercase tracking-widest">
-                      <th className="px-8 py-5">Date</th>
-                      <th className="px-8 py-5">User</th>
-                      <th className="px-8 py-5">Package</th>
-                      <th className="px-8 py-5">Travel Date</th>
-                      <th className="px-8 py-5 text-right">Actions</th>
+                    <tr className="border-b border-slate-100 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <th className="px-6 py-4">Date</th>
+                      <th className="px-6 py-4">User</th>
+                      <th className="px-6 py-4">Package</th>
+                      <th className="px-6 py-4">Travel Date</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -667,53 +828,83 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           </div>
                         </td>
                       </tr>
-                    ) : packageEnquiries.length === 0 ? (
+                    ) : filteredPkgEnquiries.length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="px-8 py-20 text-center">
-                          <div className="flex flex-col items-center gap-3">
+                        <td colSpan={5} className="px-6 py-16 text-center">
+                          <div className="flex flex-col items-center gap-2">
                             <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center">
-                              <MessageSquare className="w-5 h-5 text-slate-300" />
+                              <Search className="w-5 h-5 text-slate-300" />
                             </div>
-                            <p className="text-sm font-black text-slate-400 uppercase tracking-widest">No package enquiries found</p>
+                            <p className="text-sm font-semibold text-slate-400">
+                              {q ? `No results for "${searchQuery}"` : 'No package enquiries found'}
+                            </p>
                           </div>
                         </td>
                       </tr>
-                    ) : packageEnquiries.map((e) => (
-                      <tr key={e.id} className="hover:bg-slate-50 transition-colors cursor-pointer group" onClick={() => setSelectedPkgEnquiry(e)}>
-                        <td className="px-8 py-5 text-xs font-bold text-slate-500">{new Date(e.created_at).toLocaleDateString()}</td>
-                        <td className="px-8 py-5">
-                          <p className="text-sm font-black text-slate-900">{e.name}</p>
-                          <p className="text-[11px] text-slate-400 font-bold">{e.email}</p>
-                        </td>
-                        <td className="px-8 py-5 text-sm font-bold text-slate-700">{e.package_title || 'N/A'}</td>
-                        <td className="px-8 py-5 text-sm font-medium text-slate-600">{e.travel_date || 'N/A'}</td>
-                        <td className="px-8 py-5 text-right">
-                          <button onClick={(ev) => { ev.stopPropagation(); handleDeletePackageEnquiry(e.id); }} className="p-2 text-slate-300 hover:text-red-500 transition-all">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    ) : pagedPkgEnquiries.map((e) => {
+                      const initials = e.name?.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() || '?';
+                      const colors = ['bg-indigo-500', 'bg-violet-500', 'bg-cyan-500', 'bg-rose-500', 'bg-amber-500', 'bg-emerald-500'];
+                      const color = colors[e.name?.charCodeAt(0) % colors.length] || 'bg-indigo-500';
+                      return (
+                        <tr key={e.id} className="hover:bg-slate-50 transition-colors cursor-pointer group" onClick={() => setSelectedPkgEnquiry(e)}>
+                          <td className="px-6 py-4">
+                            <p className="text-sm font-medium text-slate-700">{new Date(e.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">{new Date(e.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</p>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-9 h-9 ${color} rounded-full flex items-center justify-center shrink-0 shadow-sm`}>
+                                <span className="text-white text-xs font-bold">{initials}</span>
+                              </div>
+                              <div>
+                                <p className="text-sm font-semibold text-slate-800">{e.name}</p>
+                                <p className="text-xs text-slate-400">{e.email}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                              <Package className="w-3 h-3" /> {e.package_title || 'N/A'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-600">{e.travel_date || 'N/A'}</td>
+                          <td className="px-6 py-4 text-right">
+                            <button onClick={(ev) => { ev.stopPropagation(); handleDeletePackageEnquiry(e.id); }} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
+                <PaginationBar total={filteredPkgEnquiries.length} page={pkgEnqPage} onPage={setPkgEnqPage} />
               </div>
             </div>
           )}
 
           {view === 'contact' && (
-            <div className="space-y-8">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-black text-slate-900">Contact Messages <span className="text-slate-400 ml-2 font-bold">({contactMessages.length})</span></h2>
+            <div className="space-y-6">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-slate-900">Contact Messages</h2>
+                    <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                      {q ? `${filteredContacts.length} / ${contactMessages.length}` : `${contactMessages.length} Total`}
+                    </span>
+                  </div>
+                  <p className="text-slate-500 text-sm mt-1">Messages submitted through the website contact form.</p>
+                </div>
               </div>
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <table className="w-full text-left">
                   <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[11px] font-black uppercase tracking-widest">
-                      <th className="px-8 py-5">Date</th>
-                      <th className="px-8 py-5">Name</th>
-                      <th className="px-8 py-5">Phone</th>
-                      <th className="px-8 py-5">Message Snippet</th>
-                      <th className="px-8 py-5 text-right">Actions</th>
+                    <tr className="border-b border-slate-100 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <th className="px-6 py-4">Date</th>
+                      <th className="px-6 py-4">Name</th>
+                      <th className="px-6 py-4">Phone</th>
+                      <th className="px-6 py-4">Message Snippet</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -726,35 +917,55 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           </div>
                         </td>
                       </tr>
-                    ) : contactMessages.length === 0 ? (
+                    ) : filteredContacts.length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="px-8 py-20 text-center">
-                          <div className="flex flex-col items-center gap-3">
+                        <td colSpan={5} className="px-6 py-16 text-center">
+                          <div className="flex flex-col items-center gap-2">
                             <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center">
-                              <Mail className="w-5 h-5 text-slate-300" />
+                              <Search className="w-5 h-5 text-slate-300" />
                             </div>
-                            <p className="text-sm font-black text-slate-400 uppercase tracking-widest">No contact messages found</p>
+                            <p className="text-sm font-semibold text-slate-400">
+                              {q ? `No results for "${searchQuery}"` : 'No contact messages found'}
+                            </p>
                           </div>
                         </td>
                       </tr>
-                    ) : contactMessages.map((m) => (
-                      <tr key={m.id} className="hover:bg-slate-50 transition-colors cursor-pointer group" onClick={() => setSelectedContact(m)}>
-                        <td className="px-8 py-5 text-xs font-bold text-slate-500">{new Date(m.created_at).toLocaleDateString()}</td>
-                        <td className="px-8 py-5">
-                          <p className="text-sm font-black text-slate-900">{m.first_name} {m.last_name}</p>
-                          <p className="text-[11px] text-slate-400 font-bold">{m.email}</p>
-                        </td>
-                        <td className="px-8 py-5 text-sm font-medium text-slate-600">{m.phone}</td>
-                        <td className="px-8 py-5 text-sm text-slate-700 truncate max-w-[200px]">{m.message}</td>
-                        <td className="px-8 py-5 text-right">
-                          <button onClick={(ev) => { ev.stopPropagation(); handleDeleteContactMessage(m.id); }} className="p-2 text-slate-300 hover:text-red-500 transition-all">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    ) : pagedContacts.map((m) => {
+                      const initials = (m.first_name?.[0] || '') + (m.last_name?.[0] || '');
+                      const colors = ['bg-rose-500', 'bg-fuchsia-500', 'bg-sky-500', 'bg-lime-600', 'bg-orange-500', 'bg-teal-500'];
+                      const color = colors[m.first_name?.charCodeAt(0) % colors.length] || 'bg-rose-500';
+                      return (
+                        <tr key={m.id} className="hover:bg-slate-50 transition-colors cursor-pointer group" onClick={() => setSelectedContact(m)}>
+                          <td className="px-6 py-4">
+                            <p className="text-sm font-medium text-slate-700">{new Date(m.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">{new Date(m.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</p>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-9 h-9 ${color} rounded-full flex items-center justify-center shrink-0 shadow-sm`}>
+                                <span className="text-white text-xs font-bold">{initials.toUpperCase() || '?'}</span>
+                              </div>
+                              <div>
+                                <p className="text-sm font-semibold text-slate-800">{m.first_name} {m.last_name}</p>
+                                <p className="text-xs text-slate-400">{m.email}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-600">{m.phone}</td>
+                          <td className="px-6 py-4 text-sm text-slate-500 max-w-[240px]">
+                            <p className="truncate">{m.message}</p>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <button onClick={(ev) => { ev.stopPropagation(); handleDeleteContactMessage(m.id); }} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
+                <PaginationBar total={filteredContacts.length} page={contactPage} onPage={setContactPage} />
               </div>
             </div>
           )}
@@ -766,7 +977,15 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 {!isEditingPackage ? (
                   <>
                     <div className="flex justify-between items-center mb-6">
-                      <h2 className="text-2xl font-black text-slate-900">Catalogs / Tour Packages <span className="text-slate-400 ml-2 font-bold">({packages.length})</span></h2>
+                      <div>
+                        <div className="flex items-center gap-3">
+                          <h2 className="text-2xl font-bold text-slate-900">Catalogs / Tour Packages</h2>
+                          <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                            {q ? `${filteredPackages.length} / ${packages.length}` : `${packages.length} Total`}
+                          </span>
+                        </div>
+                        <p className="text-slate-500 text-sm mt-1">Manage your tour catalog and package listings.</p>
+                      </div>
                       <button
                         onClick={() => {
                           setSelectedPackage({
@@ -777,7 +996,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           });
                           setIsEditingPackage(true);
                         }}
-                        className="bg-[#4F46E5] text-white px-8 py-3 rounded-lg text-sm font-bold shadow-lg shadow-indigo-200 hover:bg-[#4338CA] transition-all"
+                        className="bg-[#4F46E5] text-white px-6 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-indigo-200 hover:bg-[#4338CA] transition-all"
                       >
                         Create New Package
                       </button>
@@ -785,68 +1004,73 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                       <table className="w-full text-left">
                         <thead>
-                          <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[11px] font-black uppercase tracking-widest">
-                            <th className="px-8 py-5">Package Details</th>
-                            <th className="px-6 py-5">Region</th>
-                            <th className="px-6 py-5">Category</th>
-                            <th className="px-6 py-5">Duration</th>
-                            <th className="px-6 py-5">Price</th>
-                            <th className="px-6 py-5">Guests</th>
-                            <th className="px-8 py-5 text-right">Actions</th>
+                          <tr className="border-b border-slate-100 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                            <th className="px-6 py-4">Package Details</th>
+                            <th className="px-5 py-4">Region</th>
+                            <th className="px-5 py-4">Category</th>
+                            <th className="px-5 py-4">Duration</th>
+                            <th className="px-5 py-4">Price</th>
+                            <th className="px-5 py-4">Guests</th>
+                            <th className="px-6 py-4 text-right">Actions</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                          {packages.length === 0 ? (
+                          {isLoading ? (
                             <tr>
-                              <td colSpan={7} className="px-8 py-20 text-center">
+                              <td colSpan={7} className="px-6 py-16 text-center">
                                 <div className="flex flex-col items-center gap-3">
-                                  <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center">
-                                    <Package className="w-5 h-5 text-slate-300" />
-                                  </div>
-                                  <p className="text-sm font-black text-slate-400 uppercase tracking-widest">No tour packages found</p>
+                                  <div className="w-8 h-8 border-2 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+                                  <p className="text-sm text-slate-400">Loading packages...</p>
                                 </div>
                               </td>
                             </tr>
-                          ) : packages.map((p) => (
+                          ) : filteredPackages.length === 0 ? (
+                            <tr>
+                              <td colSpan={7} className="px-6 py-16 text-center">
+                                <div className="flex flex-col items-center gap-2">
+                                  <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center">
+                                    <Search className="w-5 h-5 text-slate-300" />
+                                  </div>
+                                  <p className="text-sm font-semibold text-slate-400">
+                                    {q ? `No results for "${searchQuery}"` : 'No tour packages found'}
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                          ) : pagedPackages.map((p) => (
                             <tr key={p.id} className="hover:bg-slate-50 transition-colors cursor-pointer group" onClick={() => { setSelectedPackage(p); setIsEditingPackage(true); }}>
-                              <td className="px-8 py-6">
+                              <td className="px-6 py-5">
                                 <div className="flex items-center gap-4">
-                                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm shrink-0">
+                                  <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm shrink-0">
                                     <img src={p.image_url} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                                   </div>
                                   <div>
-                                    <p className="text-sm font-black text-slate-900 leading-tight mb-1">{p.title}</p>
-                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{p.slug}</p>
+                                    <p className="text-sm font-semibold text-slate-900 leading-tight">{p.title}</p>
+                                    <p className="text-xs text-slate-400 mt-0.5">{p.location || p.slug}</p>
                                   </div>
                                 </div>
                               </td>
-                              <td className="px-6 py-6 font-bold text-xs text-slate-600">
-                                <span className="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">{p.region}</span>
+                              <td className="px-5 py-5">
+                                <span className="bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-full text-xs font-semibold">{p.region}</span>
                               </td>
-                              <td className="px-6 py-6">
-                                <span className="text-xs font-bold text-slate-500">{p.category}</span>
+                              <td className="px-5 py-5 text-xs text-slate-500">{p.category}</td>
+                              <td className="px-5 py-5 text-xs text-slate-500">{p.duration || '—'}</td>
+                              <td className="px-5 py-5 text-xs font-semibold text-slate-700">
+                                {p.price ? `${p.region === 'Dubai' ? 'AED' : '₹'} ${p.price}` : '—'}
                               </td>
-                              <td className="px-6 py-6">
-                                <span className="text-xs font-bold text-slate-500">{p.duration}</span>
-                              </td>
-                              <td className="px-6 py-6">
-                                <span className="text-xs font-bold text-slate-500">{p.price ? `${p.region === 'Dubai' ? 'AED' : '₹'} ${p.price}` : '—'}</span>
-                              </td>
-                              <td className="px-6 py-6 text-xs font-bold text-slate-500">
-                                {p.guest_capacity}
-                              </td>
-                              <td className="px-8 py-6 text-right">
-                                <div className="flex items-center justify-end gap-2">
+                              <td className="px-5 py-5 text-xs text-slate-500">{p.guest_capacity}</td>
+                              <td className="px-6 py-5 text-right">
+                                <div className="flex items-center justify-end gap-1.5 transition-all">
                                   <button
                                     onClick={(ev) => { ev.stopPropagation(); setSelectedPackage(p); setIsEditingPackage(true); }}
-                                    className="p-2.5 bg-slate-100 text-slate-400 hover:bg-indigo-600 hover:text-white rounded-lg transition-all shadow-sm"
+                                    className="p-2 bg-slate-100 text-slate-500 hover:bg-indigo-600 hover:text-white rounded-lg transition-all"
                                     title="Edit Package"
                                   >
                                     <RefreshCcw className="w-3.5 h-3.5" />
                                   </button>
                                   <button
                                     onClick={(ev) => { ev.stopPropagation(); handleDeletePackage(p.id!); }}
-                                    className="p-2.5 bg-slate-100 text-slate-400 hover:bg-red-500 hover:text-white rounded-lg transition-all shadow-sm"
+                                    className="p-2 bg-slate-100 text-slate-500 hover:bg-red-500 hover:text-white rounded-lg transition-all"
                                     title="Delete Package"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
@@ -857,6 +1081,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           ))}
                         </tbody>
                       </table>
+                      <PaginationBar total={filteredPackages.length} page={packagesPage} onPage={setPackagesPage} />
                     </div>
                   </>
                 ) : (
@@ -1372,6 +1597,14 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Customer Message</p>
                   <p className="text-sm font-medium leading-relaxed text-slate-700 whitespace-pre-wrap bg-slate-50 p-6 rounded-2xl border border-slate-100">{selectedLead.message || "No specific instructions provided."}</p>
                 </div>
+                <div className="pt-8 border-t border-slate-100 flex justify-end">
+                  <button
+                    onClick={() => handleDeleteLead(selectedLead.id)}
+                    className="flex items-center gap-2 px-6 py-2.5 bg-red-50 text-red-600 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-red-600 hover:text-white transition-all border border-red-100"
+                  >
+                    <Trash2 className="w-4 h-4" /> Delete Enquiry
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1418,6 +1651,14 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Message / Requirements</p>
                   <p className="text-sm font-medium leading-relaxed text-slate-700 whitespace-pre-wrap bg-indigo-50/20 p-6 rounded-2xl border border-indigo-100/50">{selectedPkgEnquiry.message || "No specific requirements."}</p>
                 </div>
+                <div className="pt-8 border-t border-slate-100 flex justify-end">
+                  <button
+                    onClick={() => handleDeletePackageEnquiry(selectedPkgEnquiry.id)}
+                    className="flex items-center gap-2 px-6 py-2.5 bg-red-50 text-red-600 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-red-600 hover:text-white transition-all border border-red-100"
+                  >
+                    <Trash2 className="w-4 h-4" /> Delete Enquiry
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1456,6 +1697,14 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="pt-8 border-t border-slate-100">
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Complete Message</p>
                   <p className="text-sm font-medium leading-relaxed text-slate-700 whitespace-pre-wrap bg-slate-50 p-6 rounded-2xl border border-slate-100">{selectedContact.message}</p>
+                </div>
+                <div className="pt-8 border-t border-slate-100 flex justify-end">
+                  <button
+                    onClick={() => handleDeleteContactMessage(selectedContact.id)}
+                    className="flex items-center gap-2 px-6 py-2.5 bg-red-50 text-red-600 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-red-600 hover:text-white transition-all border border-red-100"
+                  >
+                    <Trash2 className="w-4 h-4" /> Delete Message
+                  </button>
                 </div>
               </div>
             </div>
@@ -1600,7 +1849,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <div className="flex flex-col gap-1">
                           <div className="relative group rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-[6/5] bg-slate-100">
                             <img src={dest.image_url} alt={dest.name || 'Trending'} className="w-full h-full object-cover" />
-                            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="absolute top-2 right-2 flex gap-1 transition-opacity">
                               <button
                                 onClick={() => { setEditingTrendingId(dest.id); setEditTrendingName(dest.name || ''); }}
                                 className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-700 transition-all"
@@ -1797,7 +2046,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       <>
                         <div className="relative group rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-[6/5] bg-slate-100">
                           <img src={dest.image_url} alt={dest.title || 'Dream'} className="w-full h-full object-cover" />
-                          <div className="absolute top-2 right-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="absolute top-2 right-2 flex gap-1.5 transition-opacity">
                             <button
                               onClick={() => {
                                 setEditingDreamId(dest.id);
