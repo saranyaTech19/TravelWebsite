@@ -123,8 +123,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
             </div>
           ) : (
             <>
-              <div className="mb-4">
-                <p className="font-cursive text-brand-gold text-[24px] leading-none mb-1">Book your spot</p>
+              <div className="">
                 <h2 className="text-[32px] font-serif font-bold text-brand-dark leading-tight">Enquiry Form</h2>
               </div>
 
@@ -184,7 +183,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Tentative Budget</label>
-                    <input name="tentativeBudget" value={formData.tentativeBudget} onChange={handleChange} placeholder="e.g. $2000" className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm" />
+                    <input name="tentativeBudget" value={formData.tentativeBudget} onChange={handleChange} placeholder="2000" className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm" />
                   </div>
                 </div>
 

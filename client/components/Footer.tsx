@@ -174,7 +174,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
       <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
           {/* Column 1: Brand */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="lg:col-span-2 space-y-6">
             <img
               src="/images/logo.png"
               alt="Global Connect"
@@ -224,20 +224,35 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
             </ul>
           </div>
 
-          {/* Column 3: Support */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* Column 3: Services */}
+          <div className="lg:col-span-4 space-y-6">
             <h4 className="text-[#00A9D7] font-bold text-lg">Services</h4>
-            <ul className="space-y-4">
-              {['Getting started', 'Help center', 'Server status', 'Report a bug', 'Chat support'].map(link => (
-                <li key={link}>
-                  <a href="#" className="text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">{link}</a>
-                </li>
-              ))}
-            </ul>
+            <div className="flex gap-6">
+              <ul className="space-y-4 flex-1">
+                {[
+                  'International & Domestic Flight Booking',
+                  'Worldwide Hotel Booking',
+                  'Worldwide Transportation Arrangements',
+                  'UAE & Global Visa Assistance',
+                ].map(service => (
+                  <li key={service} className="text-slate-600 text-sm">{service}</li>
+                ))}
+              </ul>
+              <ul className="space-y-4 flex-1">
+                {[
+                  'Worldwide Holiday Packages',
+                  'Car Rentals',
+                  '24/7 Availability & Emergency Travel Assistance',
+                  'Luxury Staycation',
+                ].map(service => (
+                  <li key={service} className="text-slate-600 text-sm">{service}</li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* Column 4: Contacts us */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-4 space-y-6">
             <h4 className="text-[#00A9D7] font-bold text-lg">Contacts us</h4>
             <div className="space-y-4">
               <a href="mailto:booking@globalconnectworldtravel.com" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">

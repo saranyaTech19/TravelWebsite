@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travelor - Premium Travel Experts</title>
+    <title>Best Tours & Holiday Packages - Premium Travel Experts</title>
     <link rel="icon" type="image/png" href="/images/Favicon.png">
+
 
     <script>
         !function (f, b, e, v, n, t, s) {
@@ -160,6 +161,26 @@
     <div id="root"></div>
     <script type="module" src="/index.tsx">
 
+    </script>
+    <script>
+        function removeDollar(node) {
+            if (node.nodeType === 3) {
+                node.nodeValue = node.nodeValue.replace(/\$/g, '');
+            } else {
+                node.childNodes.forEach(removeDollar);
+            }
+        }
+
+        const observer = new MutationObserver(() => {
+            removeDollar(document.body);
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        removeDollar(document.body);
     </script>
 </body>
 

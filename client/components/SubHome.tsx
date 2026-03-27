@@ -8,7 +8,8 @@ import {
     Plane, Hotel, Palmtree, Ticket, FileText, Search, MapPin,
     Calendar, Users, ChevronRight, ChevronLeft, Star,
     Instagram, Facebook, Twitter, Linkedin, Mail, Phone,
-    PlaneTakeoff, ShieldCheck, Headphones, ArrowUpRight, MoveRight
+    PlaneTakeoff, ShieldCheck, Headphones, ArrowUpRight, MoveRight,
+    Car, Globe
 } from 'lucide-react';
 
 const TABS = [
@@ -595,8 +596,82 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
 
 
+            {/* OUR SERVICES SECTION */}
+            <section className=" py-10 lg:mt-[-100px] relative z-50 global-page-container">
+                <div className="max-w-7xl mx-auto px-[20px]">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="text-3xl md:text-[42px] font-black text-brand-dark mb-10"
+                    >
+                        Our <span className="text-[#00A9D7]">Services</span>
+                    </motion.h2>
+
+                    {/* Responsive grid: 2 cols mobile, 4 cols desktop */}
+                    <div className="grid grid-cols-2 md:grid-cols-8  gap-6 md:gap-8">
+                        {[
+                            {
+                                label: 'Domestic & Intl\nFlight Booking',
+                                img: '/images/flightbooking.jpg'
+                            },
+                            {
+                                label: 'Worldwide\nHotel Booking',
+                                img: '/images/hotelBook.jpg'
+                            },
+                            {
+                                label: 'Global Transport\nServices',
+                                img: '/images/worldwide.jpg'
+                            },
+                            {
+                                label: 'UAE & Global\nVisa Assistance',
+                                img: '/images/passport.jpg'
+                            },
+                            {
+                                label: 'Worldwide\nHoliday Packages',
+                                img: '/images/hpack.jpg'
+                            },
+                            {
+                                label: 'Car Rentals',
+                                img: '/images/carrentals.webp'
+                            },
+                            {
+                                label: '24/7 Support',
+                                img: '/images/24into7.avif'
+                            },
+                            {
+                                label: 'Luxury\nStaycation',
+                                img: '/images/Luxury Staycation.jpg'
+                            },
+                        ].map((service, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.4, delay: i * 0.06 }}
+                                className="flex flex-col items-center gap-3 w-[100px] md:w-[110px] shrink-0 cursor-pointer group"
+                            >
+                                {/* Circular image */}
+                                <div className="transition-transform duration-300 group-hover:scale-105">
+                                    <img
+                                        src={service.img}
+                                        alt={service.label.replace(/\n/g, ' ')}
+                                        className="w-[82px] h-[82px] md:w-[90px] md:h-[90px] rounded-full object-cover"
+                                    />
+                                </div>
+                                <p className="text-[11px] md:text-[12px] font-semibold text-brand-dark text-center leading-snug whitespace-pre-line">
+                                    {service.label}
+                                </p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* 2. DREAM DESTINATION SECTION */}
-            <section className="global-page-container lg:mt-[-95px] relative overflow-hidden">
+            <section className="global-page-container lg:mt-[-50px] relative overflow-hidden">
                 <div className="max-w-7xl mx-auto z-10">
                     <div className="flex flex-col md:flex-row items-center justify-between mb-10 px-[20px] animate-fade-in-up gap-6">
                         <h2 className="text-3xl text-center lg:text-left md:text-[45px] font-sans font-black text-slate-900 leading-tight">
@@ -646,7 +721,10 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                         {offer.title.split(' ').slice(0, -1).join(' ')}<br />
                                         {offer.title.split(' ').slice(-1)}
                                     </h3>
-                                    <button className="absolute bottom-6 left-6 text-xs bg-white text-[#00A9D7] px-[20px] py-[10px] rounded-full">
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); onBookClick(); }}
+                                        className="absolute bottom-6 left-6 text-xs bg-white text-[#00A9D7] px-[20px] py-[10px] rounded-full"
+                                    >
                                         Book Now
                                     </button>
                                 </div>

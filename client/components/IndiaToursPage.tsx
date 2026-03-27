@@ -171,7 +171,7 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="lg:text-white text-black lg:text-[38px] text-3xl font-bold text-center mb-12">International Trips from India
+          <div className="lg:text-white text-black lg:text-[38px] text-3xl font-bold text-center mb-12">International to Domestic India Tours
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
