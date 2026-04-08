@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { auth, packages as packagesApi, enquiries as enquiriesApi, packageEnquiries as pkgEnquiriesApi, contact as contactApi, uploadImage, trendingDestinations as trendingApi, dreamDestinations as dreamApi } from '../lib/apiClient';
+import { auth, packages as packagesApi, enquiries as enquiriesApi, packageEnquiries as pkgEnquiriesApi, contact as contactApi, uploadImage, trendingDestinations as trendingApi, dreamDestinations as dreamApi, resolveImageUrl } from '../lib/apiClient';
 import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Package,
@@ -90,11 +90,13 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const trendingInputRef = useRef<HTMLInputElement>(null);
   const trendingEditInputRef = useRef<HTMLInputElement>(null);
-  const [trendingDestinationsList, setTrendingDestinationsList] = useState<{ id: number; name: string; image_url: string }[]>([]);
+  const [trendingDestinationsList, setTrendingDestinationsList] = useState<{ id: number; name: string; image_url: string; link: string }[]>([]);
   const [isTrendingUploading, setIsTrendingUploading] = useState(false);
   const [trendingNewName, setTrendingNewName] = useState('');
+  const [trendingNewLink, setTrendingNewLink] = useState('');
   const [editingTrendingId, setEditingTrendingId] = useState<number | null>(null);
   const [editTrendingName, setEditTrendingName] = useState('');
+  const [editTrendingLink, setEditTrendingLink] = useState('');
   const [isTrendingEditUploading, setIsTrendingEditUploading] = useState(false);
   const [dreamDestinationsList, setDreamDestinationsList] = useState<{ id: number; title: string; image_url: string; link: string }[]>([]);
   const [isDreamUploading, setIsDreamUploading] = useState(false);
@@ -1042,7 +1044,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               <td className="px-6 py-5">
                                 <div className="flex items-center gap-4">
                                   <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm shrink-0">
-                                    <img src={p.image_url} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                                    <img src={resolveImageUrl(p.image_url)} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                                   </div>
                                   <div>
                                     <p className="text-sm font-semibold text-slate-900 leading-tight">{p.title}</p>
@@ -1226,7 +1228,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               <div className="w-full max-w-sm h-44 rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 overflow-hidden flex items-center justify-center relative group">
                                 {selectedPackage.image_url ? (
                                   <>
-                                    <img src={selectedPackage.image_url} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                    <img src={resolveImageUrl(selectedPackage.image_url)} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                       <span className="bg-white/90 backdrop-blur text-indigo-600 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">Live Preview Enabled</span>
                                     </div>
@@ -1727,6 +1729,13 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   placeholder="Place name (e.g. Maldives)"
                   className="flex-1 border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
+                <input
+                  type="text"
+                  value={trendingNewLink}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTrendingNewLink(e.target.value)}
+                  placeholder="Link (e.g. /india-tours)"
+                  className="flex-1 border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
                 <button
                   onClick={() => trendingInputRef.current?.click()}
                   disabled={isTrendingUploading}
@@ -1748,9 +1757,10 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   try {
                     const url = await handleFileUpload(file);
                     if (url) {
-                      const added = await trendingApi.add(url, trendingNewName.trim(), trendingDestinationsList.length);
+                      const added = await trendingApi.add(url, trendingNewName.trim(), trendingNewLink.trim(), trendingDestinationsList.length);
                       setTrendingDestinationsList(prev => [...prev, added]);
                       setTrendingNewName('');
+                      setTrendingNewLink('');
                     }
                   } catch (err: any) {
                     alert('Upload failed: ' + err.message);
@@ -1787,7 +1797,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     try {
                       const url = await handleFileUpload(file);
                       if (url) {
-                        const updated = await trendingApi.update(editingTrendingId, { name: editTrendingName, image_url: url });
+                        const updated = await trendingApi.update(editingTrendingId, { name: editTrendingName, image_url: url, link: editTrendingLink });
                         setTrendingDestinationsList(prev => prev.map(d => d.id === editingTrendingId ? { ...d, ...updated } : d));
                       }
                     } catch (err: any) {
@@ -1807,7 +1817,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             className="relative rounded-xl overflow-hidden aspect-[6/5] bg-slate-100 cursor-pointer group"
                             onClick={() => trendingEditInputRef.current?.click()}
                           >
-                            <img src={dest.image_url} alt={dest.name} className="w-full h-full object-cover" />
+                            <img src={resolveImageUrl(dest.image_url)} alt={dest.name} className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                               {isTrendingEditUploading ? (
                                 <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -1822,11 +1832,17 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                             placeholder="Place name"
                           />
+                          <input
+                            value={editTrendingLink}
+                            onChange={e => setEditTrendingLink(e.target.value)}
+                            className="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                            placeholder="Link (e.g. /india-tours)"
+                          />
                           <div className="flex gap-2">
                             <button
                               onClick={async () => {
                                 try {
-                                  const updated = await trendingApi.update(dest.id, { name: editTrendingName, image_url: dest.image_url });
+                                  const updated = await trendingApi.update(dest.id, { name: editTrendingName, image_url: dest.image_url, link: editTrendingLink });
                                   setTrendingDestinationsList(prev => prev.map(d => d.id === dest.id ? { ...d, ...updated } : d));
                                   setEditingTrendingId(null);
                                 } catch (err: any) {
@@ -1848,10 +1864,10 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       ) : (
                         <div className="flex flex-col gap-1">
                           <div className="relative group rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-[6/5] bg-slate-100">
-                            <img src={dest.image_url} alt={dest.name || 'Trending'} className="w-full h-full object-cover" />
+                            <img src={resolveImageUrl(dest.image_url)} alt={dest.name || 'Trending'} className="w-full h-full object-cover" />
                             <div className="absolute top-2 right-2 flex gap-1 transition-opacity">
                               <button
-                                onClick={() => { setEditingTrendingId(dest.id); setEditTrendingName(dest.name || ''); }}
+                                onClick={() => { setEditingTrendingId(dest.id); setEditTrendingName(dest.name || ''); setEditTrendingLink(dest.link || ''); }}
                                 className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-700 transition-all"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
@@ -1874,6 +1890,9 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           </div>
                           {dest.name && (
                             <p className="text-xs font-bold text-slate-600 text-center truncate px-1">{dest.name}</p>
+                          )}
+                          {dest.link && (
+                            <p className="text-[10px] text-slate-400 text-center truncate px-1">{dest.link}</p>
                           )}
                         </div>
                       )}
@@ -1963,7 +1982,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       /* ---- EDIT MODE ---- */
                       <div className="rounded-2xl border-2 border-indigo-400 bg-white p-3 shadow-lg flex flex-col gap-2">
                         <div className="relative rounded-xl overflow-hidden aspect-[6/5] bg-slate-100">
-                          <img src={dest.image_url} alt={dest.title || 'Dream'} className="w-full h-full object-cover" />
+                          <img src={resolveImageUrl(dest.image_url)} alt={dest.title || 'Dream'} className="w-full h-full object-cover" />
                           <button
                             onClick={() => dreamEditInputRef.current?.click()}
                             disabled={isDreamEditUploading}
@@ -2045,7 +2064,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       /* ---- VIEW MODE ---- */
                       <>
                         <div className="relative group rounded-2xl overflow-hidden shadow-sm border border-slate-200 aspect-[6/5] bg-slate-100">
-                          <img src={dest.image_url} alt={dest.title || 'Dream'} className="w-full h-full object-cover" />
+                          <img src={resolveImageUrl(dest.image_url)} alt={dest.title || 'Dream'} className="w-full h-full object-cover" />
                           <div className="absolute top-2 right-2 flex gap-1.5 transition-opacity">
                             <button
                               onClick={() => {

@@ -1,42 +1,32 @@
 
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import AboutSection from './components/AboutSection';
-import DestinationsSection from './components/DestinationsSection';
-import PopularToursSection from './components/PopularToursSection';
-import IndiaToursSection from './components/IndiaToursSection';
-import PopularDestinationsSection from './components/PopularDestinationsSection';
-import FactsSection from './components/FactsSection';
-import StatsSection from './components/StatsSection';
-import WideBanner from './components/WideBanner';
-import GallerySection from './components/GallerySection';
-import BlogSection from './components/BlogSection';
-import CaptureBeautySection from './components/CaptureBeautySection';
-import FaqSection from './components/FaqSection';
-import TestimonialSection from './components/TestimonialSection';
 import Footer from './components/Footer';
-import DestinationsPage from './components/DestinationsPage';
-import DubaiToursPage from './components/DubaiToursPage';
-import IndiaToursPage from './components/IndiaToursPage';
-import PackagesPage from './components/PackagesPage';
-import HolidaysPage from './components/HolidaysPage';
-import AboutPage from './components/AboutPage';
-import SearchPage from './components/SearchPage';
-import BlogPage from './components/BlogPage';
-import ContactPage from './components/ContactPage';
 import BookingModal from './components/BookingModal';
-import PackageDetailPage from './components/PackageDetailPage';
-import BlogDetailPage from './components/BlogDetailPage';
-import AdminDashboard from './components/AdminDashboard';
 import { AuthProvider } from './context/AuthContext';
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import SubHome from './components/SubHome';
-import TermsAndConditions from './components/TermsAndConditions';
-import PrivacyPolicy from './components/PrivacyPolicy';
 import { getWhatsAppLink } from './utils/whatsapp';
 import { slugify } from './utils/slugify';
-import { motion } from "motion/react";
+
+const DestinationsPage = React.lazy(() => import('./components/DestinationsPage'));
+const DubaiToursPage = React.lazy(() => import('./components/DubaiToursPage'));
+const DubaiInternationalToursPage = React.lazy(() => import('./components/DubaiInternationalToursPage'));
+const DubaiLocalToursPage = React.lazy(() => import('./components/DubaiLocalToursPage'));
+const IndiaToursPage = React.lazy(() => import('./components/IndiaToursPage'));
+const IndiaInternationalToursPage = React.lazy(() => import('./components/IndiaInternationalToursPage'));
+const IndiaLocalToursPage = React.lazy(() => import('./components/IndiaLocalToursPage'));
+const PackagesPage = React.lazy(() => import('./components/PackagesPage'));
+const HolidaysPage = React.lazy(() => import('./components/HolidaysPage'));
+const AboutPage = React.lazy(() => import('./components/AboutPage'));
+const SearchPage = React.lazy(() => import('./components/SearchPage'));
+const BlogPage = React.lazy(() => import('./components/BlogPage'));
+const ContactPage = React.lazy(() => import('./components/ContactPage'));
+const PackageDetailPage = React.lazy(() => import('./components/PackageDetailPage'));
+const BlogDetailPage = React.lazy(() => import('./components/BlogDetailPage'));
+const AdminDashboard = React.lazy(() => import('./components/AdminDashboard'));
+const TermsAndConditions = React.lazy(() => import('./components/TermsAndConditions'));
+const PrivacyPolicy = React.lazy(() => import('./components/PrivacyPolicy'));
 
 
 function RouteSync() {
@@ -134,101 +124,123 @@ const App: React.FC = () => {
         )}
 
         <main className="w-full">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <SubHome
-                    onExplore={handlePackageClick}
-                    onBookClick={toggleBooking}
-                  />
+          <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-10 h-10 border-4 border-[#1B6B93] border-t-transparent rounded-full animate-spin"></div></div>}>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <SubHome
+                      onExplore={handlePackageClick}
+                      onBookClick={toggleBooking}
+                    />
 
-                </>
-              }
-            />
+                  </>
+                }
+              />
 
-            <Route
-              path="/destinations"
-              element={<DestinationsPage onBookClick={toggleBooking} />}
-            />
+              <Route
+                path="/destinations"
+                element={<DestinationsPage onBookClick={toggleBooking} />}
+              />
 
-            <Route
-              path="/dubai-tours"
-              element={<DubaiToursPage onBack={() => navigate("/")} onExplore={handlePackageClick} onBookClick={toggleBooking} />}
-            />
+              <Route
+                path="/dubai-tours"
+                element={<DubaiToursPage onBack={() => navigate("/")} onExplore={handlePackageClick} onBookClick={toggleBooking} />}
+              />
 
-            <Route
-              path="/india-tours"
-              element={<IndiaToursPage onBack={() => navigate("/")} onExplore={handlePackageClick} onBookClick={toggleBooking} />}
-            />
+              <Route
+                path="/dubai-tours/international"
+                element={<DubaiInternationalToursPage onExplore={handlePackageClick} onBookClick={toggleBooking} />}
+              />
 
-            <Route
-              path="/packages"
-              element={<PackagesPage onBack={() => navigate("/")}
-                onExplore={handlePackageClick} onBookClick={toggleBooking} />}
-            />
+              <Route
+                path="/dubai-tours/local"
+                element={<DubaiLocalToursPage onExplore={handlePackageClick} onBookClick={toggleBooking} />}
+              />
 
-            <Route
-              path="/holidays"
-              element={<HolidaysPage onBack={() => navigate("/")}
-                onExplore={handlePackageClick} onBookClick={toggleBooking} />}
-            />
+              <Route
+                path="/india-tours"
+                element={<IndiaToursPage onBack={() => navigate("/")} onExplore={handlePackageClick} onBookClick={toggleBooking} />}
+              />
 
-            <Route
-              path="/about"
-              element={<AboutPage onBack={() => navigate("/")} onBookClick={toggleBooking} />}
-            />
+              <Route
+                path="/india-tours/international"
+                element={<IndiaInternationalToursPage onExplore={handlePackageClick} onBookClick={toggleBooking} />}
+              />
 
-            <Route
-              path="/search"
-              element={<SearchPage query={searchQuery} onBack={() => navigate("/")} />}
-            />
+              <Route
+                path="/india-tours/local"
+                element={<IndiaLocalToursPage onExplore={handlePackageClick} onBookClick={toggleBooking} />}
+              />
 
-            <Route
-              path="/blog"
+              <Route
+                path="/packages"
+                element={<PackagesPage onBack={() => navigate("/")}
+                  onExplore={handlePackageClick} onBookClick={toggleBooking} />}
+              />
 
-              element={<BlogPage onBlogClick={handleBlogClick} onExplore={handlePackageClick} />}
-            />
+              <Route
+                path="/holidays"
+                element={<HolidaysPage onBack={() => navigate("/")}
+                  onExplore={handlePackageClick} onBookClick={toggleBooking} />}
+              />
 
-            <Route
-              path="/contact"
-              element={<ContactPage />}
-            />
+              <Route
+                path="/about"
+                element={<AboutPage onBack={() => navigate("/")} onBookClick={toggleBooking} />}
+              />
 
-            <Route
-              path="/package/:id"
-              element={<PackageDetailPage onBookClick={toggleBooking} />}
-            />
+              <Route
+                path="/search"
+                element={<SearchPage query={searchQuery} onBack={() => navigate("/")} />}
+              />
 
-            <Route
-              path="/tour/:id"
-              element={<PackageDetailPage onBookClick={toggleBooking} />}
-            />
+              <Route
+                path="/blog"
 
-            <Route
-              path="/blog/:id"
-              element={<BlogDetailPage />}
-            />
+                element={<BlogPage onBlogClick={handleBlogClick} onExplore={handlePackageClick} />}
+              />
 
-            <Route
-              path="/admin"
-              element={<AdminDashboard onBack={() => navigate("/")} />}
-            />
-            <Route
-              path="/terms"
-              element={<TermsAndConditions />}
-            />
-            <Route
-              path="/privacy"
-              element={<PrivacyPolicy />}
-            />
-            <Route
-              path="/subhome"
-              element={<SubHome onExplore={handlePackageClick} />}
-            />
+              <Route
+                path="/contact"
+                element={<ContactPage />}
+              />
 
-          </Routes>
+              <Route
+                path="/package/:id"
+                element={<PackageDetailPage onBookClick={toggleBooking} />}
+              />
+
+              <Route
+                path="/tour/:id"
+                element={<PackageDetailPage onBookClick={toggleBooking} />}
+              />
+
+              <Route
+                path="/blog/:id"
+                element={<BlogDetailPage />}
+              />
+
+              <Route
+                path="/admin"
+                element={<AdminDashboard onBack={() => navigate("/")} />}
+              />
+              <Route
+                path="/terms"
+                element={<TermsAndConditions />}
+              />
+              <Route
+                path="/privacy"
+                element={<PrivacyPolicy />}
+              />
+              <Route
+                path="/subhome"
+                element={<SubHome onExplore={handlePackageClick} />}
+              />
+
+            </Routes>
+          </React.Suspense>
         </main>
 
         {location.pathname !== '/admin' && (

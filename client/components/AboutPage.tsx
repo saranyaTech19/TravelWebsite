@@ -93,21 +93,21 @@ const AboutPage: React.FC<AboutPageProps> = ({ onBack, onBookClick }) => {
           <div className="w-full lg:w-1/2 grid grid-cols-2 gap-4">
             <div className="space-y-4 pt-12">
               <div className="rounded-[2rem] overflow-hidden shadow-2xl h-64 group relative">
-                <img src="/images/taj-mahal.jpg" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="India Taj Mahal" />
+                <img loading="lazy" src="/images/taj-mahal.jpg" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="India Taj Mahal" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
               </div>
               <div className="rounded-[2rem] overflow-hidden shadow-xl h-80 group relative">
-                <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kerala Backwaters" />
+                <img loading="lazy" src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kerala Backwaters" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
               </div>
             </div>
             <div className="space-y-4">
               <div className="rounded-[2rem] overflow-hidden shadow-2xl h-80 group relative">
-                <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Dubai Skyline" />
+                <img loading="lazy" src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Dubai Skyline" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
               </div>
               <div className="rounded-[2rem] overflow-hidden shadow-xl h-64 group relative">
-                <img src="https://images.unsplash.com/photo-1452022582947-af526465192c?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Dubai Desert" />
+                <img loading="lazy" src="https://images.unsplash.com/photo-1452022582947-af526465192c?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Dubai Desert" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
               </div>
             </div>
