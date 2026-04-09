@@ -1,15 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { packages, trendingDestinations as trendingDestinationsApi, dreamDestinations as dreamDestinationsApi } from '../lib/apiClient';
+import { packages, trendingDestinations as trendingDestinationsApi, dreamDestinations as dreamDestinationsApi, resolveImageUrl } from '../lib/apiClient';
 import { getWhatsAppLink } from '../utils/whatsapp';
 import {
     Plane, Hotel, Palmtree, Ticket, FileText, Search, MapPin,
-    Calendar, Users, ChevronRight, ChevronLeft, Star,
-    Instagram, Facebook, Twitter, Linkedin, Mail, Phone,
-    PlaneTakeoff, ShieldCheck, Headphones, ArrowUpRight, MoveRight,
-    Car, Globe
+    Users, ChevronRight, ChevronLeft, Star, MoveRight
 } from 'lucide-react';
 
 const TABS = [
@@ -36,13 +32,13 @@ const AIRLINES = [
 
 export const TOURS = [
     {
-        id: 201, title: 'Rajasthan Heritage & Palaces Tour', location: 'Rajasthan, India', price: '$450', rating: '4.9', duration: '7 days 6 nights', guest: '2-4 guest', image: '/images/htwo.jpg', tag: 'Heritage',
+        id: 201, title: 'Rajasthan Heritage ', location: 'Rajasthan, India', price: '₹24,500', rating: '4.9', duration: '7 days 6 nights', guest: '2-4 guest', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774874169/htwo_compressed_vhaw4v.webp',
         gallery: [
-            "/images/hone.jpg",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774874169/htwo_compressed_vhaw4v.webp",
             "/images/htwo.jpg",
-            "/images/AbhudaiCityTourTwo.webp",
-            "/images/hthree.jpg",
-            "/images/hfour.jpg"
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774874635/hfour_compressed_qyhirt.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774874364/hthree_compressed_b0bswl.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774874635/hfour_compressed_qyhirt.webp"
         ],
         overview: "Journey through the land of Maharajas and majestic forts. Our Rajasthan Heritage tour brings you into a world of royal palaces, vibrant bazaars, and golden desert sands, offering a glimpse into the opulent history of India's most colorful state.",
         highlights: [
@@ -68,13 +64,13 @@ export const TOURS = [
         ]
     },
     {
-        id: 202, title: 'Mumbai City Lights & Street Food', location: 'Mumbai, India', price: '$120', rating: '4.8', duration: '2 days 1 nights', guest: '2-6 guest', image: '/images/mumbai street food.jpg', tag: 'City',
+        id: 202, title: 'Mumbai City Lights ', location: 'Mumbai, India', price: '₹28,000', rating: '4.8', duration: '2 days 1 nights', guest: '2-6 guest', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774875684/mumbai_street_food_compressed_ugmj9j.webp', tag: 'City',
         gallery: [
-            "/images/mumfour.jpg",
-            "/images/mumone.jpg",
-            "/images/mumtwo.jpg",
-            "/images/mumthree.jpg",
-            "/images/hfour.jpg"
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774875684/mumbai_street_food_compressed_ugmj9j.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774875618/mumthree_compressed_yaz9yv.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774875579/mumone_compressed_hztmws.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774875538/mumfour_compressed_iyxpoy.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774875599/mumtwo_compressed_zodfmy.webp"
         ],
         overview: "Experience the electric energy of India's maximum city. From the colonial landmarks of South Mumbai to the bustling street food trails of Colaba and the iconic Marine Drive sunset, this tour captures the true spirit of Mumbai.",
         highlights: [
@@ -100,13 +96,13 @@ export const TOURS = [
         ]
     },
     {
-        id: 203, title: 'Dubai Mall & Burj Khalifa Experience', location: 'Dubai, UAE', price: '$199', rating: '5.0', duration: '1 day', guest: '1-10 guest', image: '/images/burij khalifa.avif', tag: 'Luxury',
+        id: 203, title: 'Dubai Mall ', location: 'Dubai, UAE', price: 'AED 199', rating: '5.0', duration: '1 day', guest: '1-10 guest', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774876150/dmThree_compressed_tkt0zt.webp', tag: 'Luxury',
         gallery: [
-            "/images/dm.jpg",
-            "/images/DmFive.jpg",
-            "/images/dmThree.jpg",
-            "/images/dmtwo.jpg",
-            "/images/hfour.jpg"
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876150/dmThree_compressed_tkt0zt.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876134/dmtwo_compressed_khtke2.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876115/dm_compressed_hwifsw.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876201/DmFive_compressed_vu14lp.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876150/dmThree_compressed_tkt0zt.webp"
         ],
         overview: "Touch the sky with our exclusive Burj Khalifa experience. Visit the world's tallest building, witness the spectacular Dubai Fountain show, and enjoy world-class shopping and dining at the iconic Dubai Mall.",
         highlights: [
@@ -132,14 +128,14 @@ export const TOURS = [
         ]
     },
     {
-        id: 204, title: 'Goa Coastal Adventure & Water Sports', location: 'Goa, India', price: '$85', rating: '4.7', duration: '1 day', guest: '2-8 guest', image: '/images/raul-varela-MnDgb8HH-y8-unsplash.jpg', tag: 'Adventure',
+        id: 204, title: 'Goa Coastal Adventure ', location: 'Goa, India', price: '₹20,500', rating: '4.7', duration: '1 day', guest: '2-8 guest', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774876438/goaFour_compressed_ktj0kr.webp', tag: 'Adventure',
 
         gallery: [
-            "/images/goa.jpg",
-            "/images/goa.jpg",
-            "/images/goaThree.jpg",
-            "/images/goaTwo.jpg",
-            "/images/hfour.jpg"
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876438/goaFour_compressed_ktj0kr.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876422/goaThree_compressed_gqzozo.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876411/goaTwo_compressed_xegw3u.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876422/goaThree_compressed_gqzozo.webp",
+            "https://res.cloudinary.com/dn29cn21x/image/upload/v1774876438/goaFour_compressed_ktj0kr.webp"
         ],
         overview: "Get your heart racing with our Goa coastal adventure. Spend a day on Goa's sun-drenched beaches participating in thrilling water sports, exploring hidden coves, and enjoying fresh seafood by the Arabian Sea.",
         highlights: [
@@ -302,10 +298,11 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [activeTab, setActiveTab] = useState('holidays');
+    const [expandedService, setExpandedService] = useState<number | null>(null);
     const [dynamicTours, setDynamicTours] = useState<any[]>([]);
     const [dynamicPackages, setDynamicPackages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [trendingImages, setTrendingImages] = useState<{ id: number; name: string; image_url: string }[]>([]);
+    const [trendingImages, setTrendingImages] = useState<{ id: number; name: string; image_url: string; link: string }[]>([]);
     const [dreamOffers, setDreamOffers] = useState<{ id: number; title: string; image_url: string; link: string }[]>([]);
     const dreamRef = React.useRef<HTMLDivElement>(null);
 
@@ -318,7 +315,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     const [dreamTransition, setDreamTransition] = useState(true);
 
     const handleNextDream = () => {
-        setDreamIndex(prev => prev + 1);
+        setDreamIndex(prev => prev >= dreamList.length ? prev : prev + 1);
     };
 
     const handlePrevDream = () => {
@@ -342,7 +339,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             setDreamIndex(prev => prev + 1);
         }, 3000);
         return () => clearInterval(timer);
-    }, [dreamList.length]);
+    }, [dreamList.length, dreamIndex]);
 
     useEffect(() => {
         if (dreamIndex === dreamList.length) {
@@ -364,33 +361,48 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     useEffect(() => {
         const fetchHomeData = async () => {
             setIsLoading(true);
+
+            // Fetch each independently so one failure doesn't block the others
             try {
-                const [allPackages, trendingData, dreamData] = await Promise.all([
-                    packages.getAll(),
-                    trendingDestinationsApi.getAll(),
-                    dreamDestinationsApi.getAll(),
-                ]);
+                const allPackages = await packages.getAll();
                 const toursData = allPackages.filter((t: any) => t.is_featured);
+                console.log(toursData, "toursData");
                 setDynamicTours(toursData);
                 setDynamicPackages(toursData);
+            } catch (err) {
+                console.error('Error fetching packages:', err);
+            }
+
+            try {
+                const trendingData = await trendingDestinationsApi.getAll();
                 if (trendingData && trendingData.length > 0) {
                     setTrendingImages(trendingData);
+                } else {
+                    setTrendingImages(TRENDING_DESTINATIONS.map((d) => ({ id: d.id, name: '', image_url: d.image, link: '' })));
                 }
+            } catch (err) {
+                console.error('Error fetching trending destinations:', err);
+                setTrendingImages(TRENDING_DESTINATIONS.map((d) => ({ id: d.id, name: '', image_url: d.image, link: '' })));
+            }
+
+            try {
+                const dreamData = await dreamDestinationsApi.getAll();
                 if (dreamData && dreamData.length > 0) {
                     setDreamOffers(dreamData);
                 }
             } catch (err) {
-                console.error('Error fetching home data:', err);
-                // setTrendingImages(TRENDING_DESTINATIONS.map((d) => ({ id: d.id, image_url: d.image })));
-            } finally {
-                setIsLoading(false);
+                console.error('Error fetching dream destinations:', err);
             }
+
+            setIsLoading(false);
         };
         fetchHomeData();
     }, []);
 
     const displayTours = dynamicTours.length > 0 ? dynamicTours : TOURS;
     const displayPackages = dynamicPackages.length > 0 ? dynamicPackages : PACKAGES;
+    console.log(displayTours, "displayTours");
+    console.log(dynamicPackages, "pack");
 
     const filteredTours = displayTours.filter(tour =>
         tour.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -403,6 +415,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     );
 
     const loopedTours = [...filteredTours, ...filteredTours];
+    console.log(loopedTours, "loopedTours");
     const [pkgIndex, setPkgIndex] = useState(0);
     const [pkgTransition, setPkgTransition] = useState(true);
     const pkgContainerRef = useRef<HTMLDivElement>(null);
@@ -420,7 +433,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
         return () => window.removeEventListener('resize', calcStep);
     }, []);
 
-    const handleNextPkg = () => setPkgIndex(prev => prev + 1);
+    const handleNextPkg = () => setPkgIndex(prev => prev >= filteredTours.length ? prev : prev + 1);
     const handlePrevPkg = () => {
         if (pkgIndex === 0) {
             setPkgTransition(false);
@@ -437,9 +450,9 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     useEffect(() => {
         if (filteredTours.length < 1) return;
         if (window.innerWidth < 768) return;
-        const timer = setInterval(() => setPkgIndex(prev => prev + 1), 3000);
+        const timer = setInterval(() => setPkgIndex(prev => prev + 1), 5000);
         return () => clearInterval(timer);
-    }, [filteredTours.length]);
+    }, [filteredTours.length, pkgIndex]);
 
     useEffect(() => {
         if (pkgIndex === filteredTours.length) {
@@ -455,7 +468,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     const [testimIndex, setTestimIndex] = useState(0);
     const [testimTransition, setTestimTransition] = useState(true);
 
-    const handleNextTestim = () => setTestimIndex(prev => prev + 1);
+    const handleNextTestim = () => setTestimIndex(prev => prev >= TESTIMONIALS.length ? prev : prev + 1);
     const handlePrevTestim = () => {
         if (testimIndex === 0) {
             setTestimTransition(false);
@@ -472,7 +485,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
     useEffect(() => {
         const timer = setInterval(() => setTestimIndex((prev: number) => prev + 1), 3500);
         return () => clearInterval(timer);
-    }, []);
+    }, [testimIndex]);
 
     useEffect(() => {
         if (testimIndex === TESTIMONIALS.length) {
@@ -486,71 +499,102 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
     return (
         <div className="min-h-screen bg-white font-sans text-slate-800">
-            <style dangerouslySetInnerHTML={{
-                __html: `
-        @keyframes fade-in-up {
-          from { opacity: 0; transform: translateY(40px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fade-in-right {
-          from { opacity: 0; transform: translateX(60px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes bounce-subtle {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-15px); }
-        }
-        @keyframes spin-slow-subtle {
-          0% { transform: rotate(0deg); }
-          50% { transform: rotate(10deg); }
-          100% { transform: rotate(0deg); }
-        }
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes scroll-subtle {
-          0% { transform: translateX(0); }
-          50% { transform: translateX(-20px); }
-          100% { transform: translateX(0); }
-        }
-        .animate-fade-in-up { animation: fade-in-up 1s ease-out forwards; }
-        .animate-fade-in-right { animation: fade-in-right 1s ease-out forwards; }
-        .animate-bounce-subtle { animation: bounce-subtle 4s ease-in-out infinite; }
-        .animate-spin-slow-subtle { animation: spin-slow-subtle 6s ease-in-out infinite; }
-        .animate-spin-slow { animation: spin-slow 12s linear infinite; }
-        .animate-scroll-subtle { animation: scroll-subtle 10s ease-in-out infinite; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-400 { animation-delay: 0.4s; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .shadow-3xl { shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.4); }
-      ` }} />
 
             {/* 1. HERO SECTION (BANNER) */}
             <section
-                className="relative w-full lg:h-[760px] h-[500px] z-0 mt-[-9%]   lg:bg-white  bg-cover bg-center overflow-hidden flex items-center justify-center bg-[url('/images/backgrond.png')]   lg:bg-[url('/images/homeBg.png')] lg:bg-contain lg:bg-no-repeat lg:bg-center "
-            // style={{
-            //     backgroundImage: "url('/images/homeBg.png')",
-            //     backgroundSize: "contain",
-            //     backgroundRepeat: "no-repeat",
-            //     backgroundPosition: "center"
-            // }}
+                className="relative w-full lg:h-[760px] h-auto z-0 mt-[-9%] lg:bg-white overflow-hidden flex items-center justify-center"
             >
+                {/* LCP images as <img> with fetchpriority="high" for fast loading */}
+                <img src="https://res.cloudinary.com/dn29cn21x/image/upload/v1774847994/backgrond_compressed_aupq3k.webp" fetchPriority="high" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover object-center lg:hidden" />
+                <img src="https://res.cloudinary.com/dn29cn21x/image/upload/v1774845947/homeBg_compressed_ecbphd.webp" fetchPriority="high" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-contain object-center hidden lg:block" />
 
-                <div className="relative z-10 lg:left-[60px] max-w-[1440px] mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                    <div className="lg:mt-[-60px] mt-[82px]">
-                        <h2 className="text-[30px] md:text-[60px] font-sans font-bold text-center lg:text-left text-white drop-shadow-2xl leading-tight animate-fade-in-up">
+                {/* Mobile hero layout */}
+                <div className="relative z-10 w-full px-6 pt-[63px] pb-[40px] flex flex-col items-center lg:hidden">
+                    <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-[0.2em] px-5 py-2 rounded-full mb-6 animate-fade-in-up">
+                        Your Journey Starts Here
+                    </span>
+
+                    <h1 className="text-[30px] font-sans font-bold text-center text-white drop-shadow-2xl leading-tight animate-fade-in-up">
+                        Book Your Next <br /> Adventure Today
+                    </h1>
+
+                    <p className="text-white/80 text-[14px] text-center leading-relaxed mt-4 max-w-[320px] animate-fade-in-up">
+                        Curated travel experiences from Dubai to Bali. Premium flights, luxury stays, and unforgettable adventures.
+                    </p>
+
+                    {/* Buttons */}
+                    <div className="flex gap-4 animate-fade-in-up delay-200 mt-5">
+                        <button
+                            onClick={onBookClick}
+                            className="px-4 py-3 rounded-full border border-white/40 text-white font-bold text-sm hover:bg-white/20 transition-all backdrop-blur-md"
+                        >
+                            Book Now
+                        </button>
+                        <a
+                            href={getWhatsAppLink('Hi! I would like to enquire about your travel packages.')}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-3 rounded-full border border-white/40 text-white font-bold text-sm flex items-center gap-2 hover:bg-white/20 transition-all backdrop-blur-md bg-[#25D366]"
+                        >
+                            Whatsapp Now
+                        </a>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="w-full max-w-md bg-white/95 backdrop-blur-md rounded-xl shadow-3xl p-2 animate-fade-in-up border border-white/20 mt-6">
+                        <div className="flex items-center gap-2">
+                            <div className="flex-1 flex items-center gap-3 px-3 py-2">
+                                <MapPin className="w-5 h-5 text-[#00A9D7] shrink-0" />
+                                <input
+                                    type="text"
+                                    placeholder="Where do you want to go?"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="bg-transparent text-sm font-bold text-gray-800 focus:outline-none w-full placeholder:text-gray-400 border-none ring-0"
+                                />
+                            </div>
+                            <button
+                                onClick={() => {
+                                    if (searchQuery.trim()) {
+                                        navigate(`/packages?search=${encodeURIComponent(searchQuery.trim())}`);
+                                    }
+                                }}
+                                className="h-10 w-12 bg-[#00A9D7] hover:bg-[#008db3] text-white rounded-2xl flex items-center justify-center transition-all shadow-lg shrink-0">
+                                <Search className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Stats Row */}
+                    <div className="flex items-center justify-center gap-6 mt-8 w-full animate-fade-in-up">
+                        <div className="text-center">
+                            <p className="text-white text-xl font-black">500+</p>
+                            <p className="text-white text-[10px] font-medium">Destinations</p>
+                        </div>
+                        <div className="w-[1px] h-8 bg-white/30" />
+                        <div className="text-center">
+                            <p className="text-white text-xl font-black">10K+</p>
+                            <p className="text-white text-[10px] font-medium">Happy Travelers</p>
+                        </div>
+                        <div className="w-[1px] h-8 bg-white/30" />
+                        <div className="text-center">
+                            <p className="text-white text-xl font-black">4.9</p>
+                            <p className="text-white text-[10px] font-medium">Rating</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Desktop hero layout */}
+                <div className="relative z-10 lg:left-[60px] max-w-[1440px] mx-auto w-full px-6 grid-cols-1 lg:grid-cols-2 gap-10 items-center hidden lg:grid">
+                    <div className="lg:mt-[-90px]">
+                        <h1 className="text-[60px] font-sans font-bold text-left text-white drop-shadow-2xl leading-tight animate-fade-in-up">
                             Book Your Next <br /> Adventure Today
-                        </h2>
+                        </h1>
 
-                        <div className="flex flex-column gap-4 animate-fade-in-up delay-200 justify-center lg:justify-start">
-                            {/* <button className="px-8 py-3 rounded-full border border-white/40 text-white font-bold text-sm flex items-center gap-2 hover:bg-white/20 transition-all group backdrop-blur-md">
-                                Tour Guide <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                            </button> */}
+                        <div className="flex flex-column gap-4 animate-fade-in-up delay-200 justify-start pt-[20px]">
                             <button
                                 onClick={onBookClick}
-                                className="lg:px-8 px-4 py-3 rounded-full border border-white/40 text-white font-bold text-sm hover:bg-white/20 transition-all backdrop-blur-md"
+                                className="px-8 py-3 rounded-full border border-white/40 text-white font-bold text-sm hover:bg-white/20 transition-all backdrop-blur-md"
                             >
                                 Book Now
                             </button>
@@ -564,10 +608,10 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                             </a>
                         </div>
 
-                        {/* Premium Redesigned Search Bar - Single Location Input */}
-                        <div className="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-[32px] shadow-3xl p-3 animate-fade-in-up delay-400  border border-white/20 mt-[20px]">
-                            <div className="flex items-center lg:gap-4 gap-2">
-                                <div className="flex-1 flex items-center gap-4 lg:px-6 px-2 py-3 bg-gray-50/50 rounded-2xl border border-gray-100 group focus-within:border-[#00A9D7]/30 focus-within:bg-white transition-all">
+                        {/* Premium Redesigned Search Bar */}
+                        <div className="w-full max-w-2xl bg-white/95 backdrop-blur-md rounded-full shadow-3xl p-3 animate-fade-in-up delay-400 border border-white/20 mt-[30px]">
+                            <div className="flex items-center gap-4">
+                                <div className="flex-1 flex items-center gap-4 px-6 py-3 bg-gray-50/50 rounded-2xl border border-gray-100 group focus-within:border-[#00A9D7]/30 focus-within:bg-white transition-all">
                                     <MapPin className="w-5 h-5 text-[#00A9D7]" />
                                     <input
                                         type="text"
@@ -583,9 +627,9 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                             navigate(`/packages?search=${encodeURIComponent(searchQuery.trim())}`);
                                         }
                                     }}
-                                    className="lg:px-10 lg:h-14 h-10 bg-[#00A9D7] hover:bg-[#008db3] text-white rounded-2xl flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest transition-all shadow-lg hover:shadow-xl shrink-0 group">
-                                    <Search className="lg:w-4 lg:h-4  w-10 transition-transform group-hover:scale-110" />
-                                    <span className="lg:block hidden"> Search</span>
+                                    className="px-10 h-14 bg-[#00A9D7] hover:bg-[#008db3] text-white rounded-2xl flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest transition-all shadow-lg hover:shadow-xl shrink-0 group">
+                                    <Search className="w-4 h-4 transition-transform group-hover:scale-110" />
+                                    <span>Search</span>
                                 </button>
                             </div>
                         </div>
@@ -597,88 +641,193 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
 
             {/* OUR SERVICES SECTION */}
-            <section className=" py-10 lg:mt-[-100px] relative z-50 global-page-container">
-                <div className="max-w-7xl mx-auto px-[20px]">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="text-3xl md:text-[42px] font-black text-brand-dark mb-10"
-                    >
-                        Our <span className="text-[#00A9D7]">Services</span>
-                    </motion.h2>
+            <section className="py-8 lg:mt-[-100px] relative z-50 global-page-container overflow-hidden">
 
-                    {/* Responsive grid: 2 cols mobile, 4 cols desktop */}
-                    <div className="grid grid-cols-2 md:grid-cols-8  gap-6 md:gap-8">
-                        {[
+                <div className="max-w-7xl mx-auto lg:px-[20px] relative z-10">
+                    {/* <p className="md:hidden text-[#00A9D7] text-xs font-bold tracking-[0.2em] uppercase text-center mb-2 animate-fade-in-up">What We Offer</p> */}
+                    <h2
+                        className="text-2xl md:text-[42px] font-black text-brand-dark mb-3 lg:text-left text-center animate-fade-in-up"
+                    >
+                        Our <span className="text-[#00A9D7] ">Services</span>
+                    </h2>
+                    <p className="md:hidden text-gray-500 text-[13px] text-center mb-8 animate-fade-in-up">Everything you need for a perfect trip, all in one place</p>
+
+                    {/* Services list */}
+                    {(() => {
+                        const services = [
                             {
-                                label: 'Domestic & Intl\nFlight Booking',
-                                img: '/images/flightbooking.jpg'
+                                label: 'Flight Booking',
+                                desc: 'Domestic & international flights at best prices',
+                                detail: 'Compare 500+ airlines, get instant confirmations, and enjoy exclusive deals on business & economy class.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774701649/flightbookingcloud_lnvyup.jpg'
                             },
                             {
-                                label: 'Worldwide\nHotel Booking',
-                                img: '/images/hotelBook.jpg'
+                                label: 'Hotel Booking',
+                                desc: 'Luxury to budget stays worldwide',
+                                detail: 'Access 1M+ properties worldwide with free cancellation, best price guarantee, and loyalty rewards.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774702257/hotelbookingCloud_ezqgsc.jpg'
                             },
                             {
-                                label: 'Global Transport\nServices',
-                                img: '/images/worldwide.jpg'
+                                label: 'Global Transport',
+                                desc: 'Worldwide transport & transfer services',
+                                detail: 'Airport transfers, intercity rides, and chauffeur services across major destinations worldwide.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1775709484/transporation_compressed_ickuh0.webp'
                             },
                             {
-                                label: 'UAE & Global\nVisa Assistance',
-                                img: '/images/passport.jpg'
+                                label: 'Visa Assistance',
+                                desc: 'UAE & global visa processing support',
+                                detail: 'Smooth visa support for 50+ countries with step-by-step document help and faster processing.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774855942/passport_compressed_sjuard.webp'
                             },
                             {
-                                label: 'Worldwide\nHoliday Packages',
-                                img: '/images/hpack.jpg'
+                                label: 'Holiday Packages',
+                                desc: 'Curated worldwide holiday experiences',
+                                detail: 'All-inclusive packages with flights, hotels, transfers, and guided tours at unbeatable prices.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774855999/hpack_compressed_f00jgm.webp'
                             },
                             {
                                 label: 'Car Rentals',
-                                img: '/images/carrentals.webp'
+                                desc: 'Self-drive & chauffeur car rentals',
+                                detail: 'Wide range of vehicles from economy to luxury with flexible pickup and drop-off locations.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774856692/carrentals_compressed_uj2g5p.webp'
                             },
                             {
                                 label: '24/7 Support',
-                                img: '/images/24into7.avif'
+                                desc: 'Round the clock customer assistance',
+                                detail: 'Dedicated travel experts available anytime via call, chat, or email for all your travel needs.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774856755/24into7_compressed_ni6guy.webp'
                             },
                             {
-                                label: 'Luxury\nStaycation',
-                                img: '/images/Luxury Staycation.jpg'
+                                label: 'Luxury Staycation',
+                                desc: 'Premium staycation deals & getaways',
+                                detail: 'Exclusive staycation offers at top-rated resorts and hotels with spa, dining, and activity packages.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774856893/Luxury_Staycation_compressed_jup8ws.webp'
                             },
-                        ].map((service, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: i * 0.06 }}
-                                className="flex flex-col items-center gap-3 w-[100px] md:w-[110px] shrink-0 cursor-pointer group"
-                            >
-                                {/* Circular image */}
-                                <div className="transition-transform duration-300 group-hover:scale-105">
-                                    <img
-                                        src={service.img}
-                                        alt={service.label.replace(/\n/g, ' ')}
-                                        className="w-[82px] h-[82px] md:w-[90px] md:h-[90px] rounded-full object-cover"
-                                    />
+                            {
+                                label: 'Luxury Yachts',
+                                desc: 'Private yacht cruises & charters',
+                                detail: 'Experience the ultimate luxury on the water with private yacht charters for special occasions and leisure cruises.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1775303887/yatch_aku4yu.webp'
+                            },
+                            {
+                                label: 'Limousines',
+                                desc: 'Premium limousine hire services',
+                                detail: 'Travel in style with our chauffeur-driven limousine services for airport transfers, events, and city tours.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1775711370/lums_compressed_tv7apv.webp'
+                            },
+                            {
+                                label: 'Charter Flight',
+                                desc: 'Private & group charter flights',
+                                detail: 'Book private charter flights for business or leisure with flexible schedules and personalized in-flight services.',
+                                img: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1775710235/Sleek_white_jet_on_sunny_tarmac_1__compressed_dcckmh.webp'
+                            },
+                        ];
+                        return (
+                            <>
+                                {/* Mobile: horizontal card list with expandable detail */}
+                                <div className="flex flex-col gap-3 md:hidden">
+                                    {services.map((service, i) => {
+                                        const isOpen = expandedService === i;
+                                        return (
+                                            <div
+                                                key={i}
+                                                className="bg-[#f4f7fa] rounded-2xl px-4 py-2  animate-fade-in-up transition-all duration-300"
+                                                style={{ animationDelay: `${i * 0.06}s`, animationFillMode: 'both' }}
+                                                onClick={() => setExpandedService(isOpen ? null : i)}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-[50px] h-[50px] rounded-xl bg-white flex items-center justify-center shrink-0">
+                                                        <img
+                                                            loading="lazy"
+                                                            src={service.img}
+                                                            alt={service.label}
+                                                            width={50}
+                                                            height={50}
+                                                            className="w-[50px] h-[50px] rounded-xl object-cover"
+                                                        />
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-[14px] font-bold text-brand-dark">{service.label}</p>
+                                                        <p className="text-[12px] text-gray-500 leading-snug">{service.desc}</p>
+                                                    </div>
+                                                    <svg className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                    </svg>
+                                                </div>
+                                                <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-[200px] mt-3' : 'max-h-0'}`}>
+                                                    <p className="text-[12px] text-gray-500 leading-relaxed pl-[66px]">
+                                                        {service.detail}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                                <p className="text-[11px] md:text-[12px] font-semibold text-brand-dark text-center leading-snug whitespace-pre-line">
-                                    {service.label}
-                                </p>
-                            </motion.div>
-                        ))}
-                    </div>
+
+                                {/* Desktop: circular icon grid — Row 1 (6 items) + Row 2 (5 items centered) */}
+                                <div className="hidden md:flex flex-col gap-10 w-full">
+                                    <div className="grid grid-cols-6 gap-y-10 justify-items-center w-full">
+                                        {services.slice(0, 6).map((service, i) => (
+                                            <div
+                                                key={i}
+                                                className="flex flex-col items-center gap-3 group animate-fade-in-up"
+                                                style={{ animationDelay: `${i * 0.06}s`, animationFillMode: 'both' }}
+                                            >
+                                                <div className="transition-transform duration-300 group-hover:scale-105">
+                                                    <img
+                                                        loading="lazy"
+                                                        src={service.img}
+                                                        alt={service.label}
+                                                        width={120}
+                                                        height={120}
+                                                        className="w-[120px] h-[120px] rounded-full object-cover"
+                                                    />
+                                                </div>
+                                                <p className="text-[13px] font-semibold text-brand-dark text-center leading-snug">
+                                                    {service.label}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="grid grid-cols-5 justify-items-center w-full px-16">
+                                        {services.slice(6).map((service, i) => (
+                                            <div
+                                                key={i + 6}
+                                                className="flex flex-col items-center gap-3 group animate-fade-in-up"
+                                                style={{ animationDelay: `${(i + 6) * 0.06}s`, animationFillMode: 'both' }}
+                                            >
+                                                <div className="transition-transform duration-300 group-hover:scale-105">
+                                                    <img
+                                                        loading="lazy"
+                                                        src={service.img}
+                                                        alt={service.label}
+                                                        width={120}
+                                                        height={120}
+                                                        className="w-[120px] h-[120px] rounded-full object-cover"
+                                                    />
+                                                </div>
+                                                <p className="text-[13px] font-semibold text-brand-dark text-center leading-snug">
+                                                    {service.label}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
+                        );
+                    })()}
                 </div>
             </section>
 
             {/* 2. DREAM DESTINATION SECTION */}
-            <section className="global-page-container lg:mt-[-50px] relative overflow-hidden">
+            <section className="global-page-container lg:mt-[] relative overflow-hidden">
                 <div className="max-w-7xl mx-auto z-10">
-                    <div className="flex flex-col md:flex-row items-center justify-between mb-10 px-[20px] animate-fade-in-up gap-6">
-                        <h2 className="text-3xl text-center lg:text-left md:text-[45px] font-sans font-black text-slate-900 leading-tight">
+                    <div className="flex flex-col md:flex-row items-center justify-between lg:mb-10 mb-4 px-[20px] animate-fade-in-up gap-6">
+                        <h2 className="text-2xl text-center lg:text-left md:text-[45px] font-sans font-black text-slate-900 leading-tight">
                             Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
                         </h2>
 
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 ">
                             <button
                                 onClick={handlePrevDream}
                                 className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:border-[#00A9D7]"
@@ -694,18 +843,20 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                         </div>
                     </div>
 
-                    <div className="relative overflow-hidden mx-[20px]">
+                    <div className="relative overflow-hidden mx-[20px]" style={{ touchAction: 'pan-y' }}>
                         <div
                             className="flex gap-8"
                             style={{
-                                transform: `translateX(calc(-${dreamIndex} * (25% + 8px)))`,
+                                transform: window.innerWidth <= 768
+                                    ? `translateX(calc(-${dreamIndex} * (100% + 32px)))`
+                                    : `translateX(calc(-${dreamIndex} * (25% + 8px)))`,
                                 transition: dreamTransition ? 'transform 0.8s ease-in-out' : 'none',
                             }}
                         >
                             {loopedDreamList.map((offer, idx) => (
                                 <div
                                     key={`${offer.id}-${idx}`}
-                                    className="dream-card relative rounded-3xl overflow-hidden px-[5px]  h-[180px] lg:w-[calc((100%-96px)/4)] md:w-[calc((100%-32px)/2)] w-[280px] bg-no-repeat bg-right-bottom bg-cover shrink-0 cursor-pointer"
+                                    className="dream-card relative rounded-3xl overflow-hidden px-[10px] py-[10px] h-[180px] lg:w-[calc((100%-96px)/4)] md:w-[calc((100%-32px)/2)] w-full shrink-0 cursor-pointer bg-no-repeat bg-right-bottom bg-cover"
                                     style={{ backgroundImage: `url(${offer.image})` }}
                                     onClick={() => {
                                         if (offer.link) {
@@ -717,13 +868,13 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                         }
                                     }}
                                 >
-                                    <h3 className="text-white font-semibold text-[20px] leading-5">
+                                    <div className="text-white font-semibold text-[16px] leading-5 relative flex px-[16px] py-[7px] z-1111">
                                         {offer.title.split(' ').slice(0, -1).join(' ')}<br />
                                         {offer.title.split(' ').slice(-1)}
-                                    </h3>
+                                    </div>
                                     <button
                                         onClick={(e) => { e.stopPropagation(); onBookClick(); }}
-                                        className="absolute bottom-6 left-6 text-xs bg-white text-[#00A9D7] px-[20px] py-[10px] rounded-full"
+                                        className="absolute bottom-6 left-6 text-xs bg-white text-[#00A9D7] px-[20px] z-111 py-[10px] rounded-full"
                                     >
                                         Book Now
                                     </button>
@@ -739,18 +890,73 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
 
             {/* section 3 */}
 
-            <section className="bg-white  ">
+            <section className="bg-white">
+                {/* Mobile: vertical card list */}
+                <div className="md:hidden px-4 py-8">
+                    <h2 className="text-2xl font-bold text-black text-center mb-6">
+                        Amazing Trendings Desinations
+                    </h2>
+                    <div className="flex flex-col gap-5">
+                        {filteredTours.map((tour: any, idx: number) => (
+                            <div
+                                key={`${tour.id}-mobile-${idx}`}
+                                onClick={() => onExplore(tour)}
+                                className="bg-white rounded-2xl overflow-hidden flex flex-col cursor-pointer"
+                                style={{ boxShadow: "rgb(149 157 165 / 10%) 0px 8px 24px" }}
+                            >
+                                <div className="relative h-[185px]">
+                                    <img loading="lazy" src={resolveImageUrl(tour.image_url) || tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                                    <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                                        <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                        <span className="text-xs font-bold text-slate-700">{tour.rating}</span>
+                                    </div>
+                                </div>
+                                <div className="p-[18px] flex flex-col flex-grow">
+                                    <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
+                                        {tour.title}
+                                    </div>
+                                    <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4 p-0 pb-[9px] border-b-[1px] border-[#ebe0e0]">
+                                        <div className="flex items-center gap-1.5">
+                                            <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+                                            {tour.duration}
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
+                                            {tour.guest_capacity || tour.guest}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-end justify-between mt-auto">
+                                        <div className="flex flex-col">
+                                            <span className="text-[11px] text-slate-400">Starting from</span>
+                                            <span className="text-lg font-bold text-[#1B6B93]">
+                                                {tour.price ? (tour.price.toString().startsWith('AED') || tour.price.toString().startsWith('₹') ? tour.price : `${tour.price}`) : 'AED 0'}
+                                            </span>
+                                        </div>
+                                        <button
+                                            onClick={(e: React.MouseEvent) => { e.stopPropagation(); onBookClick?.(); }}
+                                            className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                                        >
+                                            Book Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Desktop: original slider */}
                 <div
-                    className="w-full h-[360px] relative flex flex-col items-center justify-start lg:pt-24 overflow-visible global-page-container p-cards   lg:mt-[30px]"
+                    className="hidden md:flex w-full h-[360px] relative flex-col items-center justify-start lg:pt-24 overflow-visible global-page-container p-cards lg:mt-[30px]"
                     style={{
-                        backgroundImage: "url('/images/bannerfive.png')",
+                        backgroundImage: "url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774846701/bannerfive_compressed_zvo9gv.webp')",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat",
                     }}
                 >
-                    <div className="flex flex-col md:flex-row items-center justify-between mb-10 w-full relative z-10 lg:px-14 px-6 gap-6">
-                        <div className="lg:text-white text-3xl text-black lg:text-[45px] font-bold text-center lg:text-left">
+                    <div className="flex flex-row items-center justify-center mb-10 w-full relative z-10 lg:px-14 px-6 gap-6 pt-[45px]">
+                        <div className="lg:text-white text-2xl lg:text-[45px] font-bold text-center">
                             Amazing Trendings Desinations
                         </div>
                         <div className="flex items-center justify-end gap-4">
@@ -782,7 +988,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                         </svg>
                     </div>
 
-                    <div className="relative z-10 w-full mt-[30px] ">
+                    <div className="relative z-10 w-full mt-[30px]">
                         <div className="overflow-hidden mx-[20px] mb-[20px]">
                             <div
                                 className="flex gap-8"
@@ -795,43 +1001,40 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                     <div
                                         key={`${tour.id}-${idx}`}
                                         onClick={() => onExplore(tour)}
-                                        className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-xl transition-all duration-500 group cursor-pointer shrink-0 lg:w-[calc((100%-96px)/4)] md:w-[calc((100%-32px)/2)] w-[280px]"
+                                        className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-lg cursor-pointer shrink-0 mb-6 lg:w-[calc((100%-96px)/4)] md:w-[calc((100%-32px)/2)]"
+                                        style={{ boxShadow: "rgb(149 157 165 / 10%) 0px 8px 24px" }}
                                     >
-                                        <div className="relative p-3 h-[160px]">
-                                            <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                                                <img src={tour.image_url || tour.image} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                        <div className="relative h-[185px]">
+                                            <img loading="lazy" src={resolveImageUrl(tour.image_url) || tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                                            <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                                                <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                                <span className="text-xs font-bold text-slate-700">{tour.rating}</span>
                                             </div>
                                         </div>
-                                        <div className="px-7 pb-7 pt-2 flex flex-col flex-grow">
-                                            <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#35BCE2] transition-colors">
+                                        <div className="p-[18px] flex flex-col flex-grow">
+                                            <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                                                 {tour.title}
-                                            </h3>
-                                            <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-2 h-2 rounded-full bg-[#35BCE2]/20 flex items-center justify-center">
-                                                        <div className="w-1 h-1 rounded-full bg-[#35BCE2]" />
-                                                    </div>
+                                            </div>
+                                            <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4 p-0 pb-[9px] border-b-[1px] border-[#ebe0e0]">
+                                                <div className="flex items-center gap-1.5">
+                                                    <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                                                     {tour.duration}
                                                 </div>
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-2 h-2 rounded-full bg-[#35BCE2]/20 flex items-center justify-center">
-                                                        <Users className="w-3.5 h-3.5 text-[#35BCE2]" strokeWidth={3} />
-                                                    </div>
+                                                <div className="flex items-center gap-1.5">
+                                                    <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
                                                     {tour.guest_capacity || tour.guest}
                                                 </div>
                                             </div>
-                                            <div className="flex items-center justify-between mb-6">
+                                            <div className="flex items-end justify-between mt-auto">
                                                 <div className="flex flex-col">
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                                                    <span className="text-xl font-black text-[#35BCE2]">
-                                                        {tour.price ? (tour.price.toString().startsWith('AED') || tour.price.toString().startsWith('₹') ? tour.price : `AED${tour.price}`) : 'AED0'}
+                                                    <span className="text-[11px] text-slate-400">Starting from</span>
+                                                    <span className="text-lg font-bold text-[#1B6B93]">
+                                                        {tour.price ? (tour.price.toString().startsWith('AED') || tour.price.toString().startsWith('₹') ? tour.price : `${tour.price}`) : 'AED 0'}
                                                     </span>
                                                 </div>
-                                            </div>
-                                            <div className="mt-auto flex items-center justify-center">
                                                 <button
                                                     onClick={(e: React.MouseEvent) => { e.stopPropagation(); onBookClick?.(); }}
-                                                    className="bg-[#35BCE2]/10 text-[#35BCE2] w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#35BCE2] hover:text-white transition-all shadow-sm hover:shadow-md"
+                                                    className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
                                                 >
                                                     Book Now
                                                 </button>
@@ -893,15 +1096,15 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                     >
                                         <div className="relative p-3 h-[200px]">
                                             <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                                                <img src={pkg.image_url || pkg.image} alt={pkg.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                                <img loading="lazy" src={resolveImageUrl(pkg.image_url) || pkg.image} alt={pkg.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 
                                             </div>
                                         </div>
 
                                         <div className="px-7 pb-7 pt-2 flex flex-col flex-grow">
-                                            <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                                            <div className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
                                                 {pkg.title}
-                                            </h3>
+                                            </div>
                                             <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
@@ -935,17 +1138,17 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             </section> */}
             {/* sections 5*/}
 
-            <section className="w-full lg:h-[621px] h-[400px] relative bg-[#00A9D7] lg:bg-white overflow-hidden lg:bg-[url('/images/bannerFour.png')] lg:bg-cover lg:bg-no-repeat lg:bg-center flex items-center justify-end px-6 lg:px-40 lg:mt-[307px] mt-[20px]" style={{
+            <section className="w-full lg:h-[621px] h-[400px] relative bg-[#00A9D7] lg:bg-white overflow-hidden lg:bg-[url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774847784/bannerFour_compressed_u3osie.webp')] lg:bg-cover lg:bg-no-repeat lg:bg-center flex items-center justify-end px-6 lg:px-40 lg:mt-[280px]" style={{
                 // backgroundImage: "url('/images/bannerFour.png')",
                 // backgroundSize: "cover",
                 // backgroundPosition: "center",
                 // backgroundRepeat: "no-repeat"
             }}>
-                <div className="absolute lg:left-10 left-0 lg:top-12 z-10 max-w-2xl text-white space-y-8 animate-fade-in-right">
-                    <h2 className="text-3xl md:text-[60px] text-center lg:text-left font-sans font-black leading-[1.1] tracking-tight drop-shadow-lg">
+                <div className="absolute lg:left-10 left-0 lg:top-4 z-10 max-w-2xl text-white space-y-8 animate-fade-in-right">
+                    <div className="text-3xl md:text-[60px] text-center lg:text-left font-sans font-black leading-[1.1] tracking-tight drop-shadow-lg">
                         Get 5–10% OFF on <br />
                         <span className="text-white">Your First Online Booking</span>
-                    </h2>
+                    </div>
 
                     <p className="text-xl md:text-[20px] text-center lg:text-left font-medium leading-relaxed opacity-90 drop-shadow-md max-w-xl">
                         Explore beautiful beaches and exciting cities while making memories that last forever.
@@ -970,16 +1173,16 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             <section className="bg-white global-page-container py-[60px]">
                 <div className="max-w-7xl mx-auto">
                     {/* Header */}
-                    <div className="flex flex-col md:flex-row items-center justify-between mb-10 px-[20px] gap-6">
+                    <div className="flex flex-col md:flex-row items-center lg:justify-between justify-center lg:mb-10 mb-4 px-[20px] gap-6">
                         <div>
-                            <span className="inline-block text-[#00A9D7] text-sm font-black uppercase tracking-widest mb-2">
+                            <span className=" text-[#00A9D7] inline-block text-sm font-black uppercase tracking-widest mb-2 flex justify-center lg:text-left">
                                 Traveler Stories
                             </span>
-                            <h2 className="text-3xl md:text-[45px] font-sans font-black text-slate-900 leading-tight">
+                            <div className="text-2xl md:text-[45px] font-sans font-black text-slate-900 leading-tight text-center lg:text-left">
                                 What Our <span className="text-[#00A9D7]">Travelers Say</span>
-                            </h2>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="hidden md:flex items-center gap-4">
                             <button
                                 onClick={handlePrevTestim}
                                 className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:border-[#00A9D7]"
@@ -995,8 +1198,46 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                         </div>
                     </div>
 
-                    {/* Slider */}
-                    <div className="overflow-hidden mx-[20px]">
+                    {/* Mobile: vertical card list */}
+                    <div className="md:hidden flex flex-col gap-5 px-[20px]">
+                        {TESTIMONIALS.map((t, idx) => (
+                            <div
+                                key={`${t.id}-mobile-${idx}`}
+                                className="bg-white rounded-[28px] p-6 flex flex-col gap-4 shadow-xl border border-gray-100"
+                            >
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-1">
+                                        {Array.from({ length: t.rating }).map((_, i) => (
+                                            <Star key={i} className="w-[18px] h-[18px] text-amber-400 fill-amber-400" />
+                                        ))}
+                                    </div>
+                                    <svg width="36" height="28" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 28V17.2C0 14.1333 0.533333 11.3333 1.6 8.8C2.66667 6.26667 4.13333 4.13333 6 2.4C7.86667 0.666667 10.0667 -0.133333 12.6 0L13.4 2.4C11.4 2.93333 9.73333 4.06667 8.4 5.8C7.06667 7.53333 6.26667 9.46667 6 11.6H13.4V28H0ZM22.6 28V17.2C22.6 14.1333 23.1333 11.3333 24.2 8.8C25.2667 6.26667 26.7333 4.13333 28.6 2.4C30.4667 0.666667 32.6667 -0.133333 35.2 0L36 2.4C34 2.93333 32.3333 4.06667 31 5.8C29.6667 7.53333 28.8667 9.46667 28.6 11.6H36V28H22.6Z" fill="#d1d5db" />
+                                    </svg>
+                                </div>
+                                <p className="text-slate-600 text-[13.5px] font-medium leading-relaxed flex-grow">
+                                    {t.review}
+                                </p>
+                                <div className="flex items-center gap-3 pt-1">
+                                    <div
+                                        className="w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0 ring-2 ring-white shadow-md"
+                                        style={{ backgroundColor: t.avatarColor }}
+                                    >
+                                        {t.avatar}
+                                    </div>
+                                    <div>
+                                        <p className="text-slate-900 text-sm font-black leading-tight">{t.name}</p>
+                                        <p className="text-[#00A9D7] text-[11px] font-semibold uppercase tracking-wide mt-0.5">
+                                            {t.location}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Desktop: Slider */}
+                    <div className="hidden md:block overflow-hidden mx-[20px]">
                         <div
                             className="flex gap-8"
                             style={{
@@ -1007,9 +1248,8 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                             {loopedTestimonials.map((t, idx) => (
                                 <div
                                     key={`${t.id}-${idx}`}
-                                    className="bg-[#00A9D7] rounded-[28px] p-6 flex flex-col gap-4 shadow-xl border border-gray-100 shrink-0 lg:w-[calc((100%-64px)/3)] md:w-[calc((100%-32px)/2)] w-[280px]"
+                                    className="bg-[#00A9D7] rounded-[28px] p-6 flex flex-col gap-4 shadow-xl border border-gray-100 shrink-0 lg:w-[calc((100%-64px)/3)] md:w-[calc((100%-32px)/2)]"
                                 >
-                                    {/* Quote Icon */}
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-1">
                                             {Array.from({ length: t.rating }).map((_, i) => (
@@ -1020,13 +1260,9 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                             <path d="M0 28V17.2C0 14.1333 0.533333 11.3333 1.6 8.8C2.66667 6.26667 4.13333 4.13333 6 2.4C7.86667 0.666667 10.0667 -0.133333 12.6 0L13.4 2.4C11.4 2.93333 9.73333 4.06667 8.4 5.8C7.06667 7.53333 6.26667 9.46667 6 11.6H13.4V28H0ZM22.6 28V17.2C22.6 14.1333 23.1333 11.3333 24.2 8.8C25.2667 6.26667 26.7333 4.13333 28.6 2.4C30.4667 0.666667 32.6667 -0.133333 35.2 0L36 2.4C34 2.93333 32.3333 4.06667 31 5.8C29.6667 7.53333 28.8667 9.46667 28.6 11.6H36V28H22.6Z" fill="white" />
                                         </svg>
                                     </div>
-
-                                    {/* Review Text */}
                                     <p className="text-white text-[13.5px] font-medium leading-relaxed flex-grow">
                                         {t.review}
                                     </p>
-
-                                    {/* Reviewer Info */}
                                     <div className="flex items-center gap-3 pt-1">
                                         <div
                                             className="w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0 ring-2 ring-white shadow-md"
@@ -1050,21 +1286,72 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             </section>
 
             {/* section 6 */}
-            <div className="my-[40px]">
+            <div className="">
 
+                {/* Mobile: Bento grid layout */}
+                <div className="md:hidden px-4">
+                    <div className="bg-[#00A9D7] rounded-[20px] px-5 py-4 mb-5">
+                        <h2 className="text-2xl font-black text-white text-center leading-tight">
+                            Trending India And Around Destinations
+                        </h2>
+                    </div>
+
+                    {trendingImages.length >= 5 && (
+                        <div className="flex flex-col gap-3">
+                            {/* Row 1: tall left + two stacked right */}
+                            <div className="flex gap-3 h-[280px]">
+                                <div className="relative w-[48%] h-full rounded-2xl overflow-hidden cursor-pointer" onClick={() => trendingImages[0].link && navigate(trendingImages[0].link)}>
+                                    <img loading="lazy" src={resolveImageUrl(trendingImages[0].image_url)} alt={trendingImages[0].name || 'Destination'} className="w-full h-full object-cover" />
+                                    {trendingImages[0].name && <p className="absolute bottom-2 left-3 text-white text-sm font-bold drop-shadow-lg">{trendingImages[0].name}</p>}
+                                </div>
+                                <div className="w-[52%] flex flex-col gap-3">
+                                    <div className="relative flex-1 rounded-2xl overflow-hidden cursor-pointer" onClick={() => trendingImages[1].link && navigate(trendingImages[1].link)}>
+                                        <img loading="lazy" src={resolveImageUrl(trendingImages[1].image_url)} alt={trendingImages[1].name || 'Destination'} className="w-full h-full object-cover" />
+                                        {trendingImages[1].name && <p className="absolute bottom-2 left-3 text-white text-sm font-bold drop-shadow-lg">{trendingImages[1].name}</p>}
+                                    </div>
+                                    <div className="relative flex-1 rounded-2xl overflow-hidden cursor-pointer" onClick={() => trendingImages[2].link && navigate(trendingImages[2].link)}>
+                                        <img loading="lazy" src={resolveImageUrl(trendingImages[2].image_url)} alt={trendingImages[2].name || 'Destination'} className="w-full h-full object-cover" />
+                                        {trendingImages[2].name && <p className="absolute bottom-2 left-3 text-white text-sm font-bold drop-shadow-lg">{trendingImages[2].name}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                            {/* Row 2: two stacked left + tall right (mirrored) */}
+                            <div className="flex gap-3 h-[280px]">
+                                <div className="w-[52%] flex flex-col gap-3">
+                                    <div className="relative flex-1 rounded-2xl overflow-hidden cursor-pointer" onClick={() => trendingImages[3].link && navigate(trendingImages[3].link)}>
+                                        <img loading="lazy" src={resolveImageUrl(trendingImages[3].image_url)} alt={trendingImages[3].name || 'Destination'} className="w-full h-full object-cover" />
+                                        {trendingImages[3].name && <p className="absolute bottom-2 left-3 text-white text-sm font-bold drop-shadow-lg">{trendingImages[3].name}</p>}
+                                    </div>
+                                    <div className="relative flex-1 rounded-2xl overflow-hidden cursor-pointer" onClick={() => trendingImages[4].link && navigate(trendingImages[4].link)}>
+                                        <img loading="lazy" src={resolveImageUrl(trendingImages[4].image_url)} alt={trendingImages[4].name || 'Destination'} className="w-full h-full object-cover" />
+                                        {trendingImages[4].name && <p className="absolute bottom-2 left-3 text-white text-sm font-bold drop-shadow-lg">{trendingImages[4].name}</p>}
+                                    </div>
+                                </div>
+                                {trendingImages[5] && (
+                                    <div className="relative w-[48%] h-full rounded-2xl overflow-hidden cursor-pointer" onClick={() => trendingImages[5].link && navigate(trendingImages[5].link)}>
+                                        <img loading="lazy" src={resolveImageUrl(trendingImages[5].image_url)} alt={trendingImages[5].name || 'Destination'} className="w-full h-full object-cover" />
+                                        {trendingImages[5].name && <p className="absolute bottom-2 left-3 text-white text-sm font-bold drop-shadow-lg">{trendingImages[5].name}</p>}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Desktop: Original marquee layout */}
                 <div
-                    className="w-full h-[340px] relative flex flex-col items-center justify-start mt-[40px] overflow-visible rounded-[40px]"
+                    className="hidden md:flex w-full h-[340px] relative flex-col items-center justify-start mt-[40px] overflow-visible rounded-[40px]"
                     style={{
-                        backgroundImage: "url('/images/bannerfive.png')",
+                        backgroundImage: "url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774846701/bannerfive_compressed_zvo9gv.webp')",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat",
                     }}
                 >
                     <div className="relative z-10 mt-[30px] ">
-                        <h2 className="text-3xl md:text-[45px] font-sans font-black text-white text-center drop-shadow-lg lg:pt-[59px] ">
+                        <div className="text-3xl md:text-[45px] font-sans font-black text-white text-center drop-shadow-lg lg:pt-[59px] ">
                             Trending India And Around  Destinations
-                        </h2>
+                        </div>
                     </div>
 
                     {/* Infinite Marquee Container */}
@@ -1082,29 +1369,22 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                             </svg>
                         </div>
 
-                        <motion.div
-                            className="flex gap-8 px-6 relative z-10"
-                            animate={{
-                                x: [0, -1500],
-                            }}
-                            transition={{
-                                x: {
-                                    repeat: Infinity,
-                                    repeatType: "loop",
-                                    duration: 30,
-                                    ease: "linear",
-                                },
-                            }}
+                        <div
+                            className="flex gap-8 px-6 relative z-10 marquee-scroll"
                         >
                             {[...trendingImages, ...trendingImages, ...trendingImages].map((dest, idx) => (
                                 <div
                                     key={`${dest.id}-${idx}`}
-                                    className="flex-shrink-0 w-[180px] group hover:scale-105 transition-transform duration-500"
+                                    className="flex-shrink-0 w-[180px] group hover:scale-105 transition-transform duration-500 cursor-pointer"
+                                    onClick={() => dest.link && navigate(dest.link)}
                                 >
                                     <div className="relative w-full h-[150px] rounded-[20px] overflow-hidden shadow-2xl">
                                         <img
-                                            src={dest.image_url}
+                                            loading="lazy"
+                                            src={resolveImageUrl(dest.image_url)}
                                             alt={dest.name || 'Trending Destination'}
+                                            width={180}
+                                            height={150}
                                             className="w-full h-full object-cover transition-opacity duration-400 group-hover:opacity-50"
                                         />
                                         {dest.name && (
@@ -1115,7 +1395,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                                     </div>
                                 </div>
                             ))}
-                        </motion.div>
+                        </div>
                     </div>
                 </div>
             </div>

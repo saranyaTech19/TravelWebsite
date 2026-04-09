@@ -5,157 +5,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Best Tours & Holiday Packages - Premium Travel Experts</title>
+    <meta name="description"
+        content="Discover the best tours and holiday packages curated by premium travel experts. Experience seamless travel planning with personalized itineraries, exclusive offers, and unforgettable journeys..">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://res.cloudinary.com">
+    <link rel="preload" as="image" type="image/webp"
+        href="https://res.cloudinary.com/dn29cn21x/image/upload/v1774847994/backgrond_compressed_aupq3k.webp"
+        media="(max-width: 1023px)">
+    <link rel="preload" as="image" type="image/webp"
+        href="https://res.cloudinary.com/dn29cn21x/image/upload/v1774845947/homeBg_compressed_ecbphd.webp"
+        media="(min-width: 1024px)">
+
     <link rel="icon" type="image/png" href="/images/Favicon.png">
+    <!-- Google Tag Manager -->
+    <script>
+        setTimeout(function () {
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || []; w[l].push({
+                    'gtm.start': new Date().getTime(), event: 'gtm.js'
+                }); var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                        'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-TKJM8X7B');
+        }, 3000);
+    </script>
+    <!-- End Google Tag Manager -->
 
 
     <script>
-        !function (f, b, e, v, n, t, s) {
-            if (f.fbq) return; n = f.fbq = function () {
-                n.callMethod ?
-                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-            };
-            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-            n.queue = []; t = b.createElement(e); t.async = !0;
-            t.src = v; s = b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t, s)
-        }(window, document, 'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1635462560666874');
-        fbq('track', 'PageView');
+        window.addEventListener('load', function () {
+            !function (f, b, e, v, n, t, s) {
+                if (f.fbq) return; n = f.fbq = function () {
+                    n.callMethod ?
+                        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                };
+                if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+                n.queue = []; t = b.createElement(e); t.async = !0;
+                t.src = v; s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s)
+            }(window, document, 'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '1635462560666874');
+            fbq('track', 'PageView');
+        });
     </script>
+    <!-- tracking script -->
+    <script defer src="https://ftehcojhebcsmxvmzpar.supabase.co/functions/v1/tracker-script"
+        data-endpoint="https://ftehcojhebcsmxvmzpar.supabase.co/functions/v1/visitor-track"></script>
     <!-- Meta Pixel Code -->
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
+    <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;700&display=swap"
-        rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                        serif: ['Poppins', 'sans-serif'],
-                        cursive: ['Dancing Script', 'cursive'],
-                    },
-                    colors: {
-                        'brand-gold': '#0fb7fb',
-                        'brand-dark': '#02285b',
-                        'brand-bg': '#ffff',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        * {
-            font-family: 'Poppins', sans-serif !important;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        :root {
-            --global-padding-top: 30px;
-            --global-padding-bottom: 30px;
-            --global-padding-left: 20px;
-            --global-padding-right: 20px;
-        }
-
-        .global-page-container {
-            padding-top: var(--global-padding-top);
-            padding-bottom: var(--global-padding-bottom);
-            padding-left: var(--global-padding-left);
-            padding-right: var(--global-padding-right);
-        }
-
-        .hero-gradient {
-            background: linear-gradient(90deg, rgba(15, 36, 84, 0.8) 0%, rgba(15, 36, 84, 0.4) 50%, rgba(15, 36, 84, 0) 100%);
-        }
-
-        .brush-highlight {
-            position: relative;
-            z-index: 1;
-        }
-
-        .brush-highlight::after {
-            content: '';
-            position: absolute;
-            left: -5%;
-            bottom: 15%;
-            width: 110%;
-            height: 45%;
-            background-color: #0fb7fb;
-            z-index: -1;
-            transform: rotate(-1.5deg);
-            opacity: 0.9;
-            border-radius: 4px;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-fade-in-down {
-            animation: fadeInDown 0.8s ease-out forwards;
-        }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        @media (max-width: 480px) {
-            .p-cards {
-                background-image: none !important;
-                padding-bottom: 0px !important;
-                height: 100% !important;
-            }
-        }
-    </style>
-    <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.48.1/+esm"
-  }
-}
-</script>
+        media="print" onload="this.media='all'">
     <link rel="stylesheet" href="/index.css">
 </head>
 
 <body class="bg-brand-bg font-sans text-brand-dark overflow-x-hidden">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKJM8X7B" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=1635462560666874&ev=PageView&noscript=1" /></noscript>
     <div id="root"></div>
@@ -165,14 +76,21 @@
     <script>
         function removeDollar(node) {
             if (node.nodeType === 3) {
-                node.nodeValue = node.nodeValue.replace(/\$/g, '');
+                if (node.nodeValue && node.nodeValue.indexOf('$') !== -1) {
+                    node.nodeValue = node.nodeValue.replace(/\$/g, '');
+                }
             } else {
                 node.childNodes.forEach(removeDollar);
             }
         }
 
-        const observer = new MutationObserver(() => {
-            removeDollar(document.body);
+        const observer = new MutationObserver(function (mutations) {
+            for (var i = 0; i < mutations.length; i++) {
+                var added = mutations[i].addedNodes;
+                for (var j = 0; j < added.length; j++) {
+                    removeDollar(added[j]);
+                }
+            }
         });
 
         observer.observe(document.body, {

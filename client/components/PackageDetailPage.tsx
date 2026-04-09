@@ -32,7 +32,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
       try {
         // Build query safely to avoid type mismatch errors
         let data = null;
-        
+
         if (id) {
           try {
             // Try fetching by numeric id or slug directly from the API
@@ -51,7 +51,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
           const staticMatch = [
             ...listData, ...popularTours, ...indiaTours, ...popularDestinations, ...subhomePackages, ...trendingSubhomeTours
           ].find(p => p.id?.toString() === id || slugify(p.title) === id);
-          
+
           if (staticMatch) setPackageData(staticMatch);
         }
       } catch (err) {
@@ -155,13 +155,13 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
   return (
     <div className="min-h-screen bg-white font-sans text-slate-800">
       {/* Hero Section */}
-      <div className="w-full h-[70vh] flex items-center relative overflow-hidden" style={{
-        backgroundImage: "url('/images/PackageDetailBg.png')",
+      <div className="w-full lg:h-[70vh] h-[50vh] flex items-center relative overflow-hidden" style={{
+        backgroundImage: "url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774933647/PackageDetailBg_compressed_rzm1uo.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center right",
         backgroundRepeat: "no-repeat",
       }}>
-        <div className="max-w-[1440px] mx-auto w-full px-6 md:px-14 relative z-10 pt-20">
+        <div className="max-w-[1440px] mx-auto w-full px-6 md:px-14 relative z-10 ">
           <div className="flex flex-col lg:gap-8 max-w-5xl">
             {/* Top row: Badge and Rating */}
             <div className="flex flex-wrap items-center gap-6">
@@ -183,12 +183,12 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
 
             {/* Bottom row: Info Icons */}
             <div className="flex flex-wrap items-center lg:gap-10 gap-4 text-white/95 font-bold text-lg mt-4">
-              <div className="flex items-center gap-3">
+              {/* <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
                   <MapPin className="w-5 h-5 text-white" />
                 </div>
                 <span>{packageData.location}</span>
-              </div>
+              </div> */}
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
                   <Calendar className="w-5 h-5 text-white" />
@@ -276,20 +276,27 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
           {/* Left Column: Overview & Highlights (68%) */}
           <div className="w-full lg:w-[68%] space-y-12">
             {/* Main Tabs */}
-            <div className="flex items-center gap-10 border-b border-slate-100 pb-0 mb-10">
-              {['OVERVIEW', 'ITINERARY', 'INCLUSIONS', 'REVIEWS'].map((tab) => (
-                <button
-                  key={tab}
-                  className={`text-[13px] font-black tracking-widest pb-4 transition-all relative ${activeTab === tab.toLowerCase() ? 'text-[#00A9D7]' : 'text-slate-400 hover:text-slate-600'
-                    }`}
-                  onClick={() => setActiveTab(tab.toLowerCase())}
-                >
-                  {tab}
-                  {activeTab === tab.toLowerCase() && (
-                    <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-1 bg-[#00A9D7] rounded-full" />
-                  )}
-                </button>
-              ))}
+            <div className="overflow-x-auto overflow-y-hidden border-b border-slate-100 mb-10">
+              <div className="flex items-center gap-6 min-w-max">
+                {['OVERVIEW', 'ITINERARY', 'INCLUSIONS', 'REVIEWS'].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`text-[13px] font-black tracking-widest pb-4 transition-all relative whitespace-nowrap ${activeTab === tab.toLowerCase()
+                      ? 'text-[#00A9D7]'
+                      : 'text-slate-400 hover:text-slate-600'
+                      }`}
+                    onClick={() => setActiveTab(tab.toLowerCase())}
+                  >
+                    {tab}
+                    {activeTab === tab.toLowerCase() && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute bottom-0 left-0 right-0 h-1 bg-[#00A9D7] rounded-full"
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Content Area */}
@@ -304,8 +311,8 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                       </p>
                       {!packageData.overview && (
                         <p>
-                          Whether you're looking for a romantic getaway, a family adventure, or a solo exploration, 
-                          this {packageData.duration} package ensures you see the best of what {packageData.location} has to offer. 
+                          Whether you're looking for a romantic getaway, a family adventure, or a solo exploration,
+                          this {packageData.duration} package ensures you see the best of what {packageData.location} has to offer.
                           From premium accommodations to expert-guided tours, every detail is handled for your comfort and enjoyment.
                         </p>
                       )}
@@ -351,7 +358,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                             {i + 1}
                           </div>
                           <div className="space-y-3">
-                            <h3 className="text-xl font-black text-slate-900 group-hover:text-[#00A9D7] transition-colors line-clamp-1">Day {i + 1}: {item.title}</h3>
+                            <div className="text-xl font-black text-slate-900 group-hover:text-[#00A9D7] transition-colors line-clamp-1">Day {i + 1}: {item.title}</div>
                             <p className="text-slate-600 text-base font-bold opacity-80 leading-relaxed max-w-2xl">
                               {item.detail || item.description || "Explore the local attractions and enjoy the scenic beauty of the region."}
                             </p>
@@ -371,7 +378,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                     <div className="space-y-8 p-8 rounded-3xl bg-green-50/30 border border-green-100/50">
                       <div className="flex items-center gap-3">
                         <Check className="w-6 h-6 text-green-600" />
-                        <h3 className="text-xl font-black text-green-600">Included</h3>
+                        <div className="text-xl font-black text-green-600">Included</div>
                       </div>
                       <div className="space-y-5">
                         {(packageData.inclusions || [
@@ -392,7 +399,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                     <div className="space-y-8 p-8 rounded-3xl bg-red-50/30 border border-red-100/50">
                       <div className="flex items-center gap-3">
                         <Plus className="w-6 h-6 text-red-600 rotate-45" />
-                        <h3 className="text-xl font-black text-red-600">Excluded</h3>
+                        <div className="text-xl font-black text-red-600">Excluded</div>
                       </div>
                       <div className="space-y-5">
                         {(packageData.exclusions || [
@@ -417,8 +424,8 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                 <div className="space-y-12 animate-in fade-in duration-500">
                   <h2 className="text-3xl font-black text-slate-900 tracking-tight">Guest Reviews</h2>
 
-                  <div className="flex items-center gap-8 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
-                    <div className="text-7xl font-black text-slate-900">4.8</div>
+                  <div className="flex items-center gap-8 bg-slate-50/50 p-4 lg:p-8 rounded-3xl border border-slate-100">
+                    <div className="text-2xl font-black text-slate-900">4.8</div>
                     <div className="space-y-2">
                       <div className="flex items-center gap-1">
                         {[...Array(4)].map((_, i) => <Star key={i} className="w-6 h-6 fill-[#FFB700] text-[#FFB700]" />)}

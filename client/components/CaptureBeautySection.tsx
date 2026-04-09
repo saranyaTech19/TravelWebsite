@@ -12,7 +12,8 @@ const CaptureBeautySection: React.FC<CaptureBeautySectionProps> = ({ onBookingCl
 
   {/* Background Image */}
   <div className="absolute inset-0">
-    <img 
+    <img
+      loading="lazy"
       src="https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=2070&auto=format&fit=crop"
       alt="Travel Background"
       className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-[4000ms] ease-out"

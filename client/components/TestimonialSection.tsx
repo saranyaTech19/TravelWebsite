@@ -111,9 +111,10 @@ const TestimonialSection: React.FC = () => {
     <section className="relative w-full global-page-container bg-brand-dark overflow-hidden">
       {/* Background Image Overlay - Matching Reference (Sydney Opera House) */}
       <div className="absolute inset-0 opacity-20 mix-blend-soft-light pointer-events-none">
-        <img 
-          src="https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=2070&auto=format&fit=crop" 
-          alt="Sydney City Skyline" 
+        <img
+          loading="lazy"
+          src="https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=2070&auto=format&fit=crop"
+          alt="Sydney City Skyline"
           className="w-full h-full object-cover grayscale"
         />
       </div>

@@ -10,9 +10,10 @@ const GalleryItem: React.FC<{
   imgClassName?: string;
 }> = ({ src, alt, title, duration, className, imgClassName }) => (
   <div className={`relative rounded-2xl overflow-hidden shadow-lg transition-all duration-500 hover:scale-[1.02] group ${className}`}>
-    <img 
-      src={src} 
-      alt={alt} 
+    <img
+      loading="lazy"
+      src={src}
+      alt={alt}
       className={`w-full object-cover transition-transform duration-700 group-hover:scale-110 ${imgClassName}`}
       referrerPolicy="no-referrer"
       onError={(e) => {

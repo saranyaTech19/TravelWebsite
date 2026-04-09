@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { packages } from '../lib/apiClient';
+import { packages, resolveImageUrl } from '../lib/apiClient';
 import { LocationIcon } from './Icons';
 import { Users } from 'lucide-react';
 
 const OFFERS = [
-  { id: 1, title: 'INTERNATIONAL TOURS FROM INDIA', image: '/images/indiaFrom.png', },
+  { id: 1, title: 'INTERNATIONAL TOURS ', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774849144/indiaFrom_compressed_gwvhxb.webp', },
   // { id: 2, title: 'DUBAI TOURS', image: '/images/airplanes.png', },
-  { id: 3, title: 'INDIA LOCAL TOURS', image: '/images/indiaL.png', },
+  { id: 3, title: 'INDIA LOCAL TOURS', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774849226/indiaL_compressed_djzdti.webp', },
   // { id: 4, title: 'DUBAI LOCAL TOURS', image: '/images/jeep.png', },
 ];
 
@@ -108,15 +108,15 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
               </div>
             </div>
 
-            <div className="mt-[20px]">
-              <img src="/images/INDIA.png" alt="" className=" md:max-w-md" />
+            <div className="lg:mt-[20px] mt-[25px]">
+              <img loading="lazy" src="https://res.cloudinary.com/dn29cn21x/image/upload/v1774849573/INDIA_compressed_xagv6z.webp" alt="" className=" md:max-w-md" />
             </div>
           </div>
 
           {/* Right Content - Hero Image */}
           <div className="lg:w-[600px] lg:h-[492px] w-full h-[300px]"
             style={{
-              backgroundImage: "url('/images/indiaRight.png')",
+              backgroundImage: "url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774848964/indiaRight_compressed_odt48k.webp')",
               backgroundSize: "contain",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
@@ -126,30 +126,37 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
       </section>
 
       {/* Dream Destination Section */}
-      <section className="relative overflow-hidden py-4 bg-white">
+      <section className="relative overflow-hidden lg:py-4 py-2 bg-white">
         <div className="max-w-[1440px] mx-auto relative z-10 px-6 md:px-14">
-          <div className="text-left mb-12">
+          <div className="text-left mb-4">
             <h2 className="text-3xl text-center lg:text-left md:text-[38px] font-sans font-black text-slate-900 leading-tight">
               Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
             </h2>
           </div>
 
-          <div className="flex flex-col lg:flex-row   gap-12 relative">
+          <div className="flex flex-col lg:flex-row   lg:gap-12 gap-8 relative">
             {OFFERS.map((offer) => (
               <div
                 key={offer.id}
                 className="relative rounded-[40px] overflow-hidden lg:p-10  p-5 h-[300px] lg:w-[550px] w-full bg-no-repeat bg-center bg-cover rounded-[2.5rem]   group cursor-pointer"
                 style={{ backgroundImage: `url(${offer.image})` }}
+                onClick={() => {
+                  if (offer.id === 1) navigate('/india-tours/international');
+                  if (offer.id === 3) navigate('/india-tours/local');
+                }}
               >
                 {/* TITLE */}
-                <h3 className="text-white font-black lg:text-[32px] text-[20px] leading-tight">
+                <div className="text-white font-black lg:text-[32px] text-[20px] leading-tight">
                   {offer.title}<br />
-                </h3>
+                </div>
 
                 {/* BUTTON */}
                 <button
-                  onClick={onBookClick}
-                  className="absolute bottom-10 left-10 text-sm border-2 text-[#00A9D7] bg-white px-[32px] py-[14px] rounded-full font-bold hover:bg-white hover:text-[#00A9D7] transition-all"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onBookClick();
+                  }}
+                  className="absolute bottom-10 left-10 text-sm  text-[#00A9D7] bg-white px-[32px] py-[14px] rounded-full font-bold hover:bg-white hover:text-[#00A9D7] transition-all"
                 >
                   Book Now
                 </button>
@@ -160,18 +167,18 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
       </section>
 
       {/* Tours Grid Section */}
-      <div className="max-w-screen-2xl mx-auto px-6 py-4">
+      <div className="max-w-screen-2xl mx-auto px-6 lg:py-4">
         {/* Trending Destinations Banner with First 4 Cards */}
         <div
-          className="w-full h-[360px] mx-auto  relative flex flex-col items-center justify-start lg:pt-24 pb-20 overflow-visible mt-12 rounded-[40px] p-cards"
+          className="w-full h-[360px] mx-auto  relative flex flex-col items-center justify-start lg:pt-24 pb-20 overflow-visible lg:mt-12 mt-4 rounded-[40px] p-cards"
           style={{
-            backgroundImage: "url('/images/bannerfive.png')",
+            backgroundImage: "url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774846701/bannerfive_compressed_zvo9gv.webp')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="lg:text-white text-black lg:text-[38px] text-3xl font-bold text-center mb-12">International to Domestic India Tours
+          <div className="lg:text-white text-black lg:text-[38px] text-3xl font-bold text-center mb-4">International  Tours
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
@@ -181,56 +188,45 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
               <div
                 key={tour.id}
                 onClick={() => onExplore(tour)}
-                className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-2xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50"
               >
                 {/* Image Container */}
-                <div className="relative p-3 h-[200px]">
-                  <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                    <img
-                      src={tour.image_url || tour.image}
-                      alt={tour.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+                <div className="relative h-[185px]">
+                  <img loading="lazy" src={resolveImageUrl(tour.image_url) || tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                  <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                    <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                    <span className="text-xs font-bold text-slate-700">{tour.rating || "4.8"}</span>
                   </div>
                 </div>
 
                 {/* Content Details */}
-                <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                  <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                <div className="p-[18px] flex flex-col flex-grow text-left">
+                  <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                     {tour.title}
-                  </h3>
+                  </div>
 
-                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                      </div>
+                  <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4 p-0 pb-[9px] border-b-[1px] border-[#ebe0e0]">
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                       {tour.duration}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                      </div>
-                      {tour.guest_capacity || '4-6 guest'}
+                    <div className="flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
+                      {tour.guest_capacity || '2-4 guests'}
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-end justify-between mt-auto">
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                      <span className="text-xl font-black text-[#00A9D7]">
+                      <span className="text-[11px] text-slate-400">Starting from</span>
+                      <span className="text-lg font-bold text-[#1B6B93]">
                         {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-center">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onBookClick();
-                      }}
-                      className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                      onClick={(e) => { e.stopPropagation(); onBookClick(); }}
+                      className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                    >
                       Book Now
                     </button>
                   </div>
@@ -241,8 +237,8 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
         </div>
 
         {/* North India Tours Section */}
-        <div className="max-w-[1440px] mx-auto pt-16 px-6 md:px-14 lg:mt-[200px] mt-[20px]">
-          <h2 className="text-4xl md:text-[38px] text-center lg:text-left font-sans font-black text-slate-900 leading-tight mb-12 pt-[30px]">
+        <div className="max-w-[1440px] mx-auto lg:pt-16 px-6 md:px-14 lg:mt-[80px] mt-[20px]">
+          <h2 className="text-2xl md:text-[38px] text-center lg:text-left font-sans font-black text-slate-900 leading-tight lg:mb-4 mb-4 lg:pt-[30px]">
             North India <span className="text-[#00A9D7]">Tours</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-[20px]">
@@ -250,56 +246,45 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
               <div
                 key={tour.id}
                 onClick={() => onExplore(tour)}
-                className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50"
               >
                 {/* Image Container */}
-                <div className="relative p-3 h-[200px]">
-                  <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                    <img
-                      src={tour.image_url || tour.image}
-                      alt={tour.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+                <div className="relative h-[200px]">
+                  <img loading="lazy" src={resolveImageUrl(tour.image_url) || tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                  <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                    <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                    <span className="text-xs font-bold text-slate-700">{tour.rating || "4.8"}</span>
                   </div>
                 </div>
 
                 {/* Content Details */}
-                <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                  <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                <div className="p-[18px] flex flex-col flex-grow text-left">
+                  <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                     {tour.title}
-                  </h3>
+                  </div>
 
-                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                      </div>
+                  <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4 p-0 pb-[9px] border-b-[1px] border-[#ebe0e0]">
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                       {tour.duration}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                      </div>
-                      {tour.guest_capacity || '4-6 guest'}
+                    <div className="flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
+                      {tour.guest_capacity || '2-4 guests'}
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-end justify-between mt-auto">
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                      <span className="text-xl font-black text-[#00A9D7]">
+                      <span className="text-[11px] text-slate-400">Starting from</span>
+                      <span className="text-lg font-bold text-[#1B6B93]">
                         {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-center">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onBookClick();
-                      }}
-                      className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                      onClick={(e) => { e.stopPropagation(); onBookClick(); }}
+                      className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                    >
                       Book Now
                     </button>
                   </div>
@@ -310,65 +295,54 @@ const IndiaToursPage: React.FC<IndiaToursPageProps> = ({ onBack, onExplore, onBo
         </div>
 
         {/* South India Tours Section */}
-        <div className="max-w-[1440px] mx-auto py-16 px-6 md:px-14">
-          <h2 className="text-4xl md:text-[38px] font-sans text-center lg:text-left font-black text-slate-900 leading-tight mb-12">
+        <div className="max-w-[1440px] mx-auto lg:py-8 px-6 md:px-14">
+          <div className="text-2xl md:text-[38px] font-sans text-center lg:text-left font-black text-slate-900 leading-tight lg:mb-4 mb-4">
             South India <span className="text-[#00A9D7]">Tours</span>
-          </h2>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {southTours.map((tour) => (
               <div
                 key={tour.id}
                 onClick={() => onExplore(tour)}
-                className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50"
               >
                 {/* Image Container */}
-                <div className="relative p-3 h-[200px]">
-                  <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                    <img
-                      src={tour.image_url || tour.image}
-                      alt={tour.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+                <div className="relative h-[185px]">
+                  <img loading="lazy" src={resolveImageUrl(tour.image_url) || tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                  <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                    <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                    <span className="text-xs font-bold text-slate-700">{tour.rating || "4.8"}</span>
                   </div>
                 </div>
 
                 {/* Content Details */}
-                <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                  <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                <div className="p-[18px] flex flex-col flex-grow text-left">
+                  <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                     {tour.title}
-                  </h3>
+                  </div>
 
-                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                      </div>
+                  <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4 p-0 pb-[9px] border-b-[1px] border-[#ebe0e0]">
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                       {tour.duration}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                      </div>
-                      {tour.guest_capacity || '4-6 guest'}
+                    <div className="flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
+                      {tour.guest_capacity || '2-4 guests'}
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-end justify-between mt-auto">
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                      <span className="text-xl font-black text-[#00A9D7]">
+                      <span className="text-[11px] text-slate-400">Starting from</span>
+                      <span className="text-lg font-bold text-[#1B6B93]">
                         {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-center">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onBookClick();
-                      }}
-                      className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                      onClick={(e) => { e.stopPropagation(); onBookClick(); }}
+                      className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                    >
                       Book Now
                     </button>
                   </div>

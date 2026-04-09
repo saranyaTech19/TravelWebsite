@@ -19,14 +19,14 @@ router.get('/', async (req, res) => {
 
 // POST /api/trending-destinations  — admin only
 router.post('/', verifyToken, async (req, res) => {
-  const { image_url, name = '', sort_order = 0 } = req.body;
+  const { image_url, name = '', link = '', sort_order = 0 } = req.body;
   if (!image_url) return res.status(400).json({ error: 'image_url is required.' });
   try {
     const [result] = await db.query(
-      'INSERT INTO trending_destinations (name, image_url, sort_order) VALUES (?, ?, ?)',
-      [name, image_url, sort_order]
+      'INSERT INTO trending_destinations (name, image_url, link, sort_order) VALUES (?, ?, ?, ?)',
+      [name, image_url, link, sort_order]
     );
-    res.status(201).json({ id: result.insertId, name, image_url, sort_order });
+    res.status(201).json({ id: result.insertId, name, image_url, link, sort_order });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to add trending destination.' });
@@ -36,13 +36,13 @@ router.post('/', verifyToken, async (req, res) => {
 // PUT /api/trending-destinations/:id  — admin only
 router.put('/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
-  const { name, image_url, sort_order } = req.body;
+  const { name, image_url, link, sort_order } = req.body;
   try {
     await db.query(
-      'UPDATE trending_destinations SET name = ?, image_url = ?, sort_order = ? WHERE id = ?',
-      [name, image_url, sort_order ?? 0, id]
+      'UPDATE trending_destinations SET name = ?, image_url = ?, link = ?, sort_order = ? WHERE id = ?',
+      [name, image_url, link, sort_order ?? 0, id]
     );
-    res.json({ id: Number(id), name, image_url, sort_order: sort_order ?? 0 });
+    res.json({ id: Number(id), name, image_url, link, sort_order: sort_order ?? 0 });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to update trending destination.' });

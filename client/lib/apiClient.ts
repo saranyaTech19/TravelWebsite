@@ -3,7 +3,24 @@
 // All calls go to our Node.js/Express backend at localhost:4000
 // ============================================================
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000/api';
+const API_BASE = import.meta.env.VITE_API_BASE;
+
+// Strip /api suffix to get the server origin for static files like /uploads/...
+const API_ORIGIN = API_BASE.replace(/\/api\/?$/, '');
+
+/**
+ * Resolve an image URL — handles relative paths, old localhost URLs, and full URLs.
+ */
+export const resolveImageUrl = (url: string | undefined | null): string => {
+  if (!url) return '';
+  // Fix old localhost URLs stored in DB (e.g. http://localhost:4000/uploads/...)
+  const localhostMatch = url.match(/^https?:\/\/localhost:\d+(\/uploads\/.+)$/);
+  if (localhostMatch) return `${API_ORIGIN}${localhostMatch[1]}`;
+  // Already a full URL pointing to production or external — return as-is
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  // Relative path like /uploads/file.jpg — prepend API origin
+  return `${API_ORIGIN}${url}`;
+};
 
 // ---------- Token helpers ----------
 export const getToken = (): string | null => localStorage.getItem('auth_token');
@@ -199,14 +216,14 @@ export const trendingDestinations = {
     return apiFetch<any[]>('/trending-destinations');
   },
 
-  async add(image_url: string, name = '', sort_order = 0) {
+  async add(image_url: string, name = '', link = '', sort_order = 0) {
     return apiFetch<any>('/trending-destinations', {
       method: 'POST',
-      body: JSON.stringify({ image_url, name, sort_order }),
+      body: JSON.stringify({ image_url, name, link, sort_order }),
     });
   },
 
-  async update(id: string | number, data: { name: string; image_url: string; sort_order?: number }) {
+  async update(id: string | number, data: { name: string; image_url: string; link?: string; sort_order?: number }) {
     return apiFetch<any>(`/trending-destinations/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),

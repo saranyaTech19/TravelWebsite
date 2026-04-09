@@ -204,7 +204,7 @@ const HolidaysPage: React.FC<HolidaysPageProps> = ({ onBack, onExplore, onBookCl
                         </div>
 
                         <div className="mt-[20px]">
-                            <img src="/images/HOLIDAYS.png" alt="" className="h-[59px] object-cover max-w-[100%] " />
+                            <img loading="lazy" src="/images/HOLIDAYS.png" alt="" className="h-[59px] object-cover max-w-[100%] " />
                         </div>
                     </div>
 
@@ -271,53 +271,43 @@ const HolidaysPage: React.FC<HolidaysPageProps> = ({ onBack, onExplore, onBookCl
                             <div
                                 key={pkg.id}
                                 onClick={() => pkg.tourId && navigate(`/package/${pkg.tourId}`)}
-                                className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-2xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                                className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50"
                             >
                                 {/* Image Container */}
-                                <div className="relative p-3 h-[200px]">
-                                    <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                                        <img
-                                            src={pkg.image}
-                                            alt={pkg.title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
-
-
+                                <div className="relative h-[200px]">
+                                    <img loading="lazy" src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
+                                    <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                                        <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                        <span className="text-xs font-bold text-slate-700">4.8</span>
                                     </div>
                                 </div>
 
                                 {/* Content Details */}
-                                <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                                    <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                                <div className="px-5 pb-5 pt-1 flex flex-col flex-grow text-left">
+                                    <h3 className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                                         {pkg.title}
                                     </h3>
-
-                                    <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                                                <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                                            </div>
+                                    <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4">
+                                        <div className="flex items-center gap-1.5">
+                                            <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                                             6 Days
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                                                <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                                            </div>
-                                            4-6 guest
+                                        <div className="flex items-center gap-1.5">
+                                            <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
+                                            4-6 guests
                                         </div>
                                     </div>
-
-                                    <div className="flex items-center justify-between mb-6">
+                                    <div className="flex items-end justify-between mt-auto">
                                         <div className="flex flex-col">
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                                            <span className="text-xl font-black text-[#00A9D7]">
+                                            <span className="text-[11px] text-slate-400">Starting from</span>
+                                            <span className="text-lg font-bold text-[#1B6B93]">
                                                 {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `₹${pkg.price}`) : '₹0'}
                                             </span>
                                         </div>
-                                    </div>
-
-                                    <div className="mt-auto flex items-center justify-center">
-                                        <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); }}
+                                            className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                                        >
                                             Book Now
                                         </button>
                                     </div>
@@ -334,53 +324,43 @@ const HolidaysPage: React.FC<HolidaysPageProps> = ({ onBack, onExplore, onBookCl
                             <div
                                 key={pkg.id}
                                 onClick={() => pkg.tourId && navigate(`/package/${pkg.tourId}`)}
-                                className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50 mt-[20px]"
+                                className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50 mt-[20px]"
                             >
                                 {/* Image Container */}
-                                <div className="relative p-3 h-[200px]">
-                                    <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                                        <img
-                                            src={pkg.image}
-                                            alt={pkg.title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
-
-
+                                <div className="relative h-[200px]">
+                                    <img loading="lazy" src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
+                                    <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                                        <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                        <span className="text-xs font-bold text-slate-700">4.8</span>
                                     </div>
                                 </div>
 
                                 {/* Content Details */}
-                                <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                                    <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                                <div className="px-5 pb-5 pt-1 flex flex-col flex-grow text-left">
+                                    <h3 className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                                         {pkg.title}
                                     </h3>
-
-                                    <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-8 uppercase tracking-wide">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                                                <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                                            </div>
+                                    <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4">
+                                        <div className="flex items-center gap-1.5">
+                                            <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                                             6 Days
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                                                <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                                            </div>
-                                            4-6 guest
+                                        <div className="flex items-center gap-1.5">
+                                            <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
+                                            4-6 guests
                                         </div>
                                     </div>
-
-                                    <div className="flex items-center justify-between mb-6">
+                                    <div className="flex items-end justify-between mt-auto">
                                         <div className="flex flex-col">
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                                            <span className="text-xl font-black text-[#00A9D7]">
+                                            <span className="text-[11px] text-slate-400">Starting from</span>
+                                            <span className="text-lg font-bold text-[#1B6B93]">
                                                 {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `₹${pkg.price}`) : '₹0'}
                                             </span>
                                         </div>
-                                    </div>
-
-                                    <div className="mt-auto flex items-center justify-center">
-                                        <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); }}
+                                            className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                                        >
                                             Book Now
                                         </button>
                                     </div>

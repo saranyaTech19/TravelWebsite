@@ -39,7 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({ onBookClick, onNavigate }) => {
     // { label: 'Holidays', path: '/holidays', icon: Umbrella },
     { label: 'Dubai', path: '/dubai-tours', icon: Plane },
     { label: 'India', path: '/india-tours', icon: Luggage },
-    { label: 'Packages', path: '/packages', icon: ShoppingBag },
+    // { label: 'Packages', path: '/packages', icon: ShoppingBag },
     { label: 'Contact', path: '/contact', icon: MessageSquare },
   ];
 
@@ -133,7 +133,7 @@ const Navbar: React.FC<NavbarProps> = ({ onBookClick, onNavigate }) => {
         </nav>
       </div> */}
 
-      <header className="  relative z-[1111] top-0 left-0 right-0 z-[70] bg-white  shadow-sm">
+      <header className="  relative z-[1100] bg-white  shadow-sm">
         <div className="max-w-[1440px] mx-auto flex items-center px-6 h-28">
           {/* Logo */}
           <Link to="/" className="shrink-0">
@@ -194,8 +194,22 @@ const Navbar: React.FC<NavbarProps> = ({ onBookClick, onNavigate }) => {
         </div>
       </header>
 
+      {/* Mobile Menu Backdrop */}
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[1110] lg:hidden"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+
       {/* Mobile Menu (simplified for redesign) */}
-      <div className={`fixed inset-0 z-[65] bg-white pt-32 px-6 transition-transform duration-500 lg:hidden ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className={`fixed top-0 right-0 w-[80%] md:w-[30%] h-full z-[1120] bg-white pt-[50px] pb-6 px-6 shadow-2xl transition-transform duration-500 lg:hidden ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <button
+          onClick={() => setIsMenuOpen(false)}
+          className="absolute top-4 right-4 p-2 text-[#00A9D7] hover:bg-slate-50 rounded-xl"
+        >
+          <CloseIcon className="w-8 h-8" />
+        </button>
         <div className="flex flex-col gap-4">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;

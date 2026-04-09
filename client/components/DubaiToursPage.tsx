@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { packages } from '../lib/apiClient';
+import { packages, resolveImageUrl } from '../lib/apiClient';
 import { LocationIcon } from './Icons';
 import { Users } from 'lucide-react';
 
@@ -12,9 +12,9 @@ interface DubaiToursPageProps {
 
 const OFFERS = [
   // { id: 1, title: 'INDIA TOURS', image: '/images/travel.png', },
-  { id: 2, title: 'INTERNATIONAL TOURS FROM DUBAI', image: '/images/dubaii.png', },
+  { id: 2, title: 'INTERNATIONAL TOURS ', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774848589/dubaii_compressed_wnqjzq.webp', },
   // { id: 3, title: 'INDIA LOCAL TOURS', image: '/images/trolly.png', },
-  { id: 4, title: 'DUBAI LOCAL TOURS', image: '/images/dubaiL.png', },
+  { id: 4, title: 'DUBAI LOCAL TOURS', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774848813/dubaiL_compressed_b2g09h.webp', },
 ];
 
 const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBookClick }) => {
@@ -55,7 +55,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
         {/* DUBAI Background Watermark */}
 
 
-        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 ">
+        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 lg:gap-10 gap-2 items-stretch relative z-10 ">
           {/* Left Content */}
           <div className="flex flex-col justify-center">
             <div className="flex flex-col gap-5 justify-center items-center lg:items-start">
@@ -78,15 +78,15 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
               </div>
             </div>
 
-            <div className="mt-[20px]">
-              <img src="/images/DUBAI.png" alt="" className=" md:max-w-md" />
+            <div className="lg:mt-[20px] mt-[25px]">
+              <img loading="lazy" src="https://res.cloudinary.com/dn29cn21x/image/upload/v1774848407/DUBAI_compressed_wwhgos.webp" alt="" className=" md:max-w-md" />
             </div>
           </div>
 
           {/* Right Content - Hero Image */}
-          <div className="lg:w-[600px] lg:h-[492px] w-full h-[300px]"
+          <div className="lg:w-[600px] lg:h-[492px] w-[294px]  h-[259px]  "
             style={{
-              backgroundImage: "url('/images/dubaibanner.png')",
+              backgroundImage: "url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774848164/dubaibanner_compressed_vrqn5r.webp')",
               backgroundSize: "contain",
               backgroundPosition: "center right",
               backgroundRepeat: "no-repeat",
@@ -100,28 +100,35 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
       {/* Dream Destination Section */}
       <section className="relative overflow-hidden py-4 bg-white">
         <div className="max-w-[1440px] mx-auto relative z-10 px-6 md:px-14">
-          <div className="text-left mb-12">
+          <div className="text-left mb-4">
             <h2 className="text-3xl l text-center lg:text-left md:text-[38px] font-sans font-black text-slate-900 leading-tight">
               Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
             </h2>
           </div>
 
-          <div className="flex  flex-col lg:flex-row  gap-12 relative">
+          <div className="flex  flex-col lg:flex-row  lg:gap-12 gap-4 relative">
             {OFFERS.map((offer) => (
               <div
                 key={offer.id}
                 className="relative rounded-[40px] overflow-hidden lg:p-10  p-5 h-[300px] lg:w-[550px] bg-no-repeat bg-center bg-cover rounded-[2.5rem]   group cursor-pointer"
                 style={{ backgroundImage: `url(${offer.image})` }}
+                onClick={() => {
+                  if (offer.id === 2) navigate('/dubai-tours/international');
+                  if (offer.id === 4) navigate('/dubai-tours/local');
+                }}
               >
                 {/* TITLE */}
-                <h3 className="text-white font-black lg:text-[32px] text-[20px] leading-tight">
+                <div className="text-white font-black lg:text-[32px] text-[20px] leading-tight">
                   {offer.title}<br />
-                </h3>
+                </div>
 
                 {/* BUTTON */}
                 <button
-                  onClick={onBookClick}
-                  className="absolute bottom-10 left-10 text-sm border-2 text-[#00A9D7] bg-white px-[32px] py-[14px] rounded-full font-bold hover:bg-white hover:text-[#00A9D7] transition-all"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onBookClick();
+                  }}
+                  className="absolute bottom-10 bottom-[20px] left-10 text-sm  text-[#00A9D7] bg-white px-[32px] py-[14px] rounded-full font-bold hover:bg-white hover:text-[#00A9D7] transition-all"
                 >
                   Book Now
                 </button>
@@ -164,9 +171,9 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
                   <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{tour.location}</span>
                 </div>
 
-                <h3 className="text-2xl font-serif font-bold text-brand-dark mb-4 group-hover:text-brand-gold transition-colors leading-tight">
+                <div className="text-2xl font-serif font-bold text-brand-dark mb-4 group-hover:text-brand-gold transition-colors leading-tight">
                   {tour.title}
-                </h3>
+                </div>
 
                 <div className="mt-auto bg-[#FFF8ED] rounded-2xl p-5 border border-brand-gold/10">
                   <div className="flex justify-between items-center text-[12px] font-bold text-brand-dark">
@@ -192,15 +199,15 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
 
         {/* Trending Destinations Banner with First 4 Cards */}
         <div
-          className="w-full h-[360px] mx-auto  relative flex flex-col items-center justify-start lg:pt-24 pb-20 overflow-visible mt-12 rounded-[40px] p-cards"
+          className="w-full h-[360px] mx-auto  relative flex flex-col items-center justify-start lg:pt-24 pb-20 overflow-visible lg:mt-12 rounded-[40px] p-cards"
           style={{
-            backgroundImage: "url('/images/bannerfive.png')",
+            backgroundImage: "url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774846701/bannerfive_compressed_zvo9gv.webp')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="lg:text-white text-black lg:text-[38px] text-3xl font-bold text-center mb-12">Top International Tour Packages from Dubai</div>
+          <div className="lg:text-white text-black lg:text-[38px] text-2xl font-bold text-center lg:mb-12 mb-4">Top International Tour Packages from Dubai</div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14">
             {isLoading ? (
@@ -211,56 +218,41 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
               <div
                 key={tour.id}
                 onClick={() => onExplore(tour)}
-                className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-2xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50"
               >
-                {/* Image Container */}
-                <div className="relative p-3 h-[200px]">
-                  <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                    <img
-                      src={tour.image_url || tour.image}
-                      alt={tour.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+                <div className="relative h-[185px]">
+                  <img loading="lazy" src={resolveImageUrl(tour.image_url) || tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                  <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                    <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                    <span className="text-xs font-bold text-slate-700">{tour.rating || "4.8"}</span>
                   </div>
                 </div>
 
-                {/* Content Details */}
-                <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                  <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                <div className="p-[18px]  flex flex-col flex-grow text-left">
+                  <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                     {tour.title}
-                  </h3>
-
-                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                      </div>
-                      {tour.duration.match(/(\d+)\s*days?/i) ? `${tour.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : tour.duration.toUpperCase()}
+                  </div>
+                  <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4  p-0 pb-[9px] border-b-[1px] border-[#ebe0e0]">
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+                      {tour.duration}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                      </div>
-                      {tour.guest_capacity || '4-6 guest'}
+                    <div className="flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
+                      {tour.guest_capacity || tour.guest || '2-4 guests'}
                     </div>
                   </div>
-
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-end justify-between mt-auto">
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                      <span className="text-xl font-black text-[#00A9D7]">
+                      <span className="text-[11px] text-slate-400">Starting from</span>
+                      <span className="text-lg font-bold text-[#1B6B93]">
                         {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-center">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onBookClick();
-                      }}
-                      className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                      onClick={(e) => { e.stopPropagation(); onBookClick(); }}
+                      className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                    >
                       Book Now
                     </button>
                   </div>
@@ -271,65 +263,48 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
         </div>
 
         {/* Dubai Tour Section */}
-        <div className="max-w-[1440px] mx-auto pb-16 pt-[200px] px-6 md:px-14 lg:mt-[105px]">
+        <div className="max-w-[1440px] mx-auto lg:pb-16 pb-8 lg:pt-[200px] pt-[22px] px-6 md:px-14 lg:mt-[40px]">
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {standardTours.slice(4).map((tour) => (
               <div
                 key={tour.id}
                 onClick={() => onExplore(tour)}
-                className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50"
               >
-                {/* Image Container */}
-                <div className=" p-3 h-[200px] ">
-                  <div className="w-full h-full rounded-[24px] overflow-hidden">
-                    <img
-                      src={tour.image_url || tour.image}
-                      alt={tour.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-
-
+                <div className="relative h-[185px]">
+                  <img loading="lazy" src={resolveImageUrl(tour.image_url) || tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                  <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                    <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                    <span className="text-xs font-bold text-slate-700">{tour.rating || "4.8"}</span>
                   </div>
                 </div>
 
-                {/* Content Details */}
-                <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                  <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                <div className="p-[18px] flex flex-col flex-grow text-left">
+                  <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                     {tour.title}
-                  </h3>
-
-                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                      </div>
-                      {tour.duration.match(/(\d+)\s*days?/i) ? `${tour.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : tour.duration.toUpperCase()}
+                  </div>
+                  <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4 p-0 pb-[9px] border-b-[1px] border-[#ebe0e0]">
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+                      {tour.duration}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                      </div>
-                      {(tour as any).guest || (tour as any).guest_capacity || "4-6 GUESTS"}
+                    <div className="flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
+                      {tour.guest_capacity || tour.guest || '2-4 guests'}
                     </div>
                   </div>
-
-                  <div className="flex items-center justify-between ">
+                  <div className="flex items-end justify-between mt-auto">
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                      <span className="text-xl font-black text-[#00A9D7]">
+                      <span className="text-[11px] text-slate-400">Starting from</span>
+                      <span className="text-lg font-bold text-[#1B6B93]">
                         {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-center">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onBookClick();
-                      }}
-                      className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                      onClick={(e) => { e.stopPropagation(); onBookClick(); }}
+                      className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                    >
                       Book Now
                     </button>
                   </div>
@@ -341,7 +316,7 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
 
         {/* Dubai Local Tour Section */}
         <div className="max-w-[1440px] mx-auto pb-12 px-6 md:px-14">
-          <h2 className="text-4xl md:text-[38px] text-center lg:text-left font-sans font-black text-slate-900 leading-tight mb-6">
+          <h2 className="text-2xl md:text-[38px] text-center lg:text-left font-sans font-black text-slate-900 leading-tight mb-6">
             Dubai <span className="text-[#00A9D7]">Local Tour</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -349,58 +324,41 @@ const DubaiToursPage: React.FC<DubaiToursPageProps> = ({ onBack, onExplore, onBo
               <div
                 key={tour.id}
                 onClick={() => onExplore(tour)}
-                className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50"
               >
-                {/* Image Container */}
-                <div className="relative p-3 h-[200px]">
-                  <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                    <img
-                      src={tour.image_url || tour.image}
-                      alt={tour.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-
-
+                <div className="relative h-[185px]">
+                  <img loading="lazy" src={resolveImageUrl(tour.image_url) || tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                  <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                    <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                    <span className="text-xs font-bold text-slate-700">{tour.rating || "4.8"}</span>
                   </div>
                 </div>
 
-                {/* Content Details */}
-                <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                  <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                <div className="p-[18px] flex flex-col flex-grow text-left">
+                  <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                     {tour.title}
-                  </h3>
-
-                  <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-2 uppercase tracking-wide">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                      </div>
-                      {tour.duration.match(/(\d+)\s*days?/i) ? `${tour.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : tour.duration.toUpperCase()}
+                  </div>
+                  <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4 p-0 pb-[9px] border-b-[1px] border-[#ebe0e0]">
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+                      {tour.duration}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                        <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                      </div>
-                      {(tour as any).guest || (tour as any).guest_capacity || "4-6 GUESTS"}
+                    <div className="flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
+                      {tour.guest_capacity || tour.guest || '2-4 guests'}
                     </div>
                   </div>
-
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-end justify-between mt-auto">
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                      <span className="text-xl font-black text-[#00A9D7]">
+                      <span className="text-[11px] text-slate-400">Starting from</span>
+                      <span className="text-lg font-bold text-[#1B6B93]">
                         {tour.price ? (tour.price.toString().startsWith('$') || tour.price.toString().startsWith('₹') ? tour.price : `$${tour.price}`) : '$0'}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-center">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onBookClick();
-                      }}
-                      className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                      onClick={(e) => { e.stopPropagation(); onBookClick(); }}
+                      className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                    >
                       Book Now
                     </button>
                   </div>

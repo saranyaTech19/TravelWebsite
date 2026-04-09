@@ -180,10 +180,10 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
               alt="Global Connect"
               className="h-16 md:h-20 w-auto object-contai"
             />
-            <p class="text-sm text-slate-600   mt-2 leading-relaxed">
-              “Travel the world, discover new places, and create unforgettable memories.”
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed hidden lg:block">
+              Travel the world, discover new places, and create unforgettable memories.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-4 lg:pt-[10px] pt-0">
               {[
                 { Icon: Facebook, link: 'https://www.facebook.com/people/Global-Connect-World-Travel/61586916384409/' },
                 { Icon: Twitter, link: 'https://x.com/GlobalT6016' },
@@ -227,13 +227,15 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
           {/* Column 3: Services */}
           <div className="lg:col-span-4 space-y-6">
             <h4 className="text-[#00A9D7] font-bold text-lg">Services</h4>
-            <div className="flex gap-6">
+            <div className="flex gap-3">
               <ul className="space-y-4 flex-1">
                 {[
                   'International & Domestic Flight Booking',
                   'Worldwide Hotel Booking',
                   'Worldwide Transportation Arrangements',
                   'UAE & Global Visa Assistance',
+                  'Luxury Yachts',
+
                 ].map(service => (
                   <li key={service} className="text-slate-600 text-sm">{service}</li>
                 ))}
@@ -244,6 +246,8 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
                   'Car Rentals',
                   '24/7 Availability & Emergency Travel Assistance',
                   'Luxury Staycation',
+                  'Limousines',
+                  'Charter Flight'
                 ].map(service => (
                   <li key={service} className="text-slate-600 text-sm">{service}</li>
                 ))}
@@ -256,17 +260,21 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
             <h4 className="text-[#00A9D7] font-bold text-lg">Contacts us</h4>
             <div className="space-y-4">
               <a href="mailto:booking@globalconnectworldtravel.com" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
-                <Mail className="w-10 h-10 text-[#00A9D7]" />
-                santhosh@globalconnectworldtravel.com,
+                <Mail className="w-5 h-5 text-[#00A9D7]" />
                 booking@globalconnectworldtravel.com
               </a>
-              <a href="tel:+1234567890" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
-                <Phone className="w-5 h-5 text-[#00A9D7]" />
-                +91 89210 95973
+              <a href="mailto:santhosh@globalconnectworldtravel.com" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
+                <Mail className="w-5 h-5 text-[#00A9D7]" />
+                santhosh@globalconnectworldtravel.com
               </a>
-              <a href="tel:+1234567890" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
+
+              <a href="tel:+91 89210 95973" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
                 <Phone className="w-5 h-5 text-[#00A9D7]" />
-                +91 62387 19549
+                +91 89210 95973(india)
+              </a>
+              <a href="tel:+91 62387 19549" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
+                <Phone className="w-5 h-5 text-[#00A9D7]" />
+                +971 58 952 0398(dubai)
               </a>
               <div className="flex items-start gap-3 text-slate-600 text-sm">
                 <MapPin className="w-5 h-5 text-[#00A9D7] mt-1 shrink-0" />
@@ -289,11 +297,47 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
           </div>
         </div>
 
+        {/* Our Branches */}
+        <div className="mt-8 pt-8 border-t border-slate-100">
+          <h4 className="text-[#00A9D7] font-bold text-lg mb-6">Our Branches</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Gurgaon */}
+            <div className="flex items-start gap-3">
+              <MapPin className="w-5 h-5 text-[#00A9D7] mt-1 shrink-0" />
+              <div>
+                <h5 className="font-semibold text-slate-800 text-sm mb-1">Gurgaon</h5>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  DLF Forum, DLF Cyber City, Phase III, Gurugram, Haryana, Pincode - 122002
+                </p>
+              </div>
+            </div>
+            {/* Coimbatore */}
+            <div className="flex items-start gap-3">
+              <MapPin className="w-5 h-5 text-[#00A9D7] mt-1 shrink-0" />
+              <div>
+                <h5 className="font-semibold text-slate-800 text-sm mb-1">Coimbatore</h5>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  1st Floor, Baba Complex, Vivekananda Rd, Ram Nagar, Gandhipuram, Coimbatore, TN, Pincode - 641009
+                </p>
+              </div>
+            </div>
+            {/* Hyderabad */}
+            <div className="flex items-start gap-3">
+              <MapPin className="w-5 h-5 text-[#00A9D7] mt-1 shrink-0" />
+              <div>
+                <h5 className="font-semibold text-slate-800 text-sm mb-1">Hyderabad</h5>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Suite - B1003, 10th Floor, The Platina, Banjara Basthi, Jayabheri Enclave, Gachibowli, Hyderabad, Telangana 500032
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-8 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-slate-500 text-sm">Copyright &copy; 2026 All Rights Reserved</p>
           <div className="flex gap-4 text-sm font-medium">
-            {/* <span className="text-slate-500">All Rights Reserved |</span> */}
             <a href="/terms" className="text-slate-500 hover:underline">Terms and Conditions</a>
             <span className="text-slate-300">|</span>
             <a href="/privacy" className="text-slate-500 hover:underline">Privacy Policy</a>

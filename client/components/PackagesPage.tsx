@@ -7,10 +7,10 @@ import { LocationIcon } from './Icons';
 import { packages } from '../lib/apiClient';
 
 const OFFERS = [
-  { id: 1, title: 'INDIA TOURS', image: '/images/indiaFrom.png', },
-  { id: 2, title: 'DUBAI TOURS', image: '/images/dubaii.png', },
-  { id: 3, title: 'INDIA LOCAL TOURS', image: '/images/trolly.png', },
-  { id: 4, title: 'DUBAI LOCAL TOURS', image: '/images/jeep.png', },
+  { id: 1, title: 'INDIA TOURS', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774849144/indiaFrom_compressed_gwvhxb.webp', },
+  { id: 2, title: 'DUBAI TOURS', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774848813/dubaiL_compressed_b2g09h.webp', },
+  { id: 3, title: 'INDIA LOCAL TOURS', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774855016/trolly_compressed_ewkjjq.webp', },
+  { id: 4, title: 'DUBAI LOCAL TOURS', image: 'https://res.cloudinary.com/dn29cn21x/image/upload/v1774854963/jeep_compressed_fulf9o.webp', },
 ];
 
 const INDIA_DESTINATIONS = [
@@ -253,7 +253,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
     <div className="min-h-screen bg-brand-bg">
       {/* Hero Header */}
       <section className=" w-full flex items-center overflow-hidden bg-white px-6 md:px-14 ">
-        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch relative z-10 ">
+        <div className="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 lg:gap-10 items-stretch relative z-10 ">
           {/* Left Content */}
           <div className="flex flex-col justify-center">
             <div className="flex flex-col gap-5 justify-center items-center lg:items-start">
@@ -277,15 +277,15 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
               </div>
             </div>
 
-            <div className="mt-[20px]">
-              <img src="/images/PACKAGES.png" alt="" className="" />
+            <div className="lg:mt-[20px] mt-[25px]">
+              <img loading="lazy" src="https://res.cloudinary.com/dn29cn21x/image/upload/v1774849758/PACKAGES_compressed_swpdxx.webp" alt="" className="" />
             </div>
           </div>
 
           {/* Right Content - Hero Image */}
           <div className="lg:w-[600px] lg:h-[492px] w-full h-[300px]  lg:bg-center lg:bg-right bg-center "
             style={{
-              backgroundImage: "url('/images/dubaibanner.png')",
+              backgroundImage: "url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774848164/dubaibanner_compressed_vrqn5r.webp')",
               backgroundSize: "contain",
               // backgroundPosition: "center right",
               backgroundRepeat: "no-repeat",
@@ -298,9 +298,9 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
       {searchQuery ? (
         <div className="max-w-screen-2xl mx-auto px-6 md:px-14 py-20">
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-4xl md:text-[38px] font-sans font-black text-slate-900">
+            <div className="text-4xl md:text-[38px] font-sans font-black text-slate-900">
               Search Results for <span className="text-[#00A9D7]">"{searchQuery}"</span>
-            </h2>
+            </div>
             <div className="flex-1 h-px bg-slate-200"></div>
             <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">{filteredPackages.length} Packages</span>
           </div>
@@ -311,46 +311,40 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                 <div
                   key={pkg.id}
                   onClick={() => handleBookNow(pkg)}
-                  className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                  className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50"
                 >
-                  <div className="relative p-3 h-[200px]">
-                    <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                      <img
-                        src={pkg.image}
-                        alt={pkg.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-
+                  <div className="relative h-[200px]">
+                    <img loading="lazy" src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
+                    <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                      <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                      <span className="text-xs font-bold text-slate-700">{(pkg as any).rating || "4.8"}</span>
                     </div>
                   </div>
-                  <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                    <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                  <div className="px-5 pb-5 pt-1 flex flex-col flex-grow text-left">
+                    <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                       {pkg.title}
-                    </h3>
-                    <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                          <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                        </div>
+                    </div>
+                    <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4">
+                      <div className="flex items-center gap-1.5">
+                        <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                         {pkg.duration.match(/(\d+)\s*days?/i) ? `${pkg.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : pkg.duration.toUpperCase()}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                          <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                        </div>
+                      <div className="flex items-center gap-1.5">
+                        <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
                         {(pkg as any).guest_capacity || (pkg as any).guest || "2-4 GUESTS"}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-end justify-between mt-auto">
                       <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                        <span className="text-xl font-black text-[#00A9D7]">
+                        <span className="text-[11px] text-slate-400">Starting from</span>
+                        <span className="text-lg font-bold text-[#1B6B93]">
                           {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `$${pkg.price}`) : '$0'}
                         </span>
                       </div>
-                    </div>
-                    <div className="mt-auto flex items-center justify-center">
-                      <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleBookNow(pkg) }}
+                        className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                      >
                         Book Now
                       </button>
                     </div>
@@ -361,7 +355,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
           ) : (
             <div className="text-center py-20 bg-white rounded-[40px] border border-slate-100 shadow-sm">
               <div className="text-6xl mb-6">🔍</div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-2">No packages found</h3>
+              <div className="text-2xl font-bold text-slate-900 mb-2">No packages found</div>
               <p className="text-slate-500">Try adjusting your search terms to find what you're looking for.</p>
               <button
                 onClick={() => navigate('/packages')}
@@ -377,7 +371,7 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
           {/* Dream Destination Section */}
           <section className="relative overflow-hidden py-4 bg-white">
             <div className="max-w-[1440px] mx-auto relative z-10 px-6 md:px-14">
-              <div className="text-left mb-12">
+              <div className="text-left lg:mb-12 mb-4">
                 <h2 className="text-3xl md:text-[38px] font-sans font-black text-slate-900 leading-tight text-center lg:text-left">
                   Choose Your <br /> <span className="text-[#00A9D7]">Dream Destination</span>
                 </h2>
@@ -390,10 +384,10 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                     className="relative rounded-3xl overflow-hidden p-6 h-[180px] bg-no-repeat bg-right-bottom lg:bg-cover bg-cover shadow-sm border border-slate-100"
                     style={{ backgroundImage: `url(${offer.image})` }}
                   >
-                    <h3 className="text-white font-bold text-[20px] leading-tight">
+                    <div className="text-white font-bold text-[20px] leading-tight">
                       {offer.title.split(' ').slice(0, -1).join(' ')}<br />
                       {offer.title.split(' ').slice(-1)}
-                    </h3>
+                    </div>
                     <button onClick={() => {
                       if (offer.title.includes('INDIA')) {
                         navigate('/india-tours');
@@ -412,15 +406,15 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
           {/* Packages Grid Section */}
           <div className="max-w-screen-2xl mx-auto px-6 py-4">
             <div
-              className="w-full h-[360px] mx-auto relative flex flex-col items-center justify-start lg:pt-24 pb-20 overflow-visible mt-12 rounded-[40px] p-cards"
+              className="w-full h-[360px] mx-auto relative flex flex-col items-center justify-start lg:pt-24 pb-20 overflow-visible lg:mt-12 rounded-[40px] p-cards"
               style={{
-                backgroundImage: "url('/images/bannerfive.png')",
+                backgroundImage: "url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774846701/bannerfive_compressed_zvo9gv.webp')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <div className="text-black lg:text-white lg:text-[38px] text-3xl font-bold text-center lg:mb-12">Amazing Trendings desinations</div>
+              <div className="text-black lg:text-white lg:text-[38px] text-3xl font-bold text-center lg:mb-12">Trending Travel Hotspots</div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative w-full px-6 md:px-14 pt-[30px]">
                 {isLoading ? (
@@ -433,46 +427,40 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
                     <div
                       key={pkg.id}
                       onClick={() => handleBookNow(pkg)}
-                      className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-2xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50"
+                      className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50"
                     >
-                      <div className="relative p-3 h-[200px]">
-                        <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                          <img
-                            src={pkg.image}
-                            alt={pkg.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          />
+                      <div className="relative h-[200px]">
+                        <img loading="lazy" src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
+                        <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                          <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                          <span className="text-xs font-bold text-slate-700">{(pkg as any).rating || "4.8"}</span>
                         </div>
                       </div>
-                      <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                        <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-2 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                      <div className="p-[18px]  flex flex-col flex-grow text-left">
+                        <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                           {pkg.title}
-                        </h3>
-                        <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                              <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                            </div>
+                        </div>
+                        <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4 border-b-[1px] border-[#ebe0e0] p-0 pb-[9px]">
+                          <div className="flex items-center gap-1.5">
+                            <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                             {pkg.duration.match(/(\d+)\s*days?/i) ? `${pkg.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : pkg.duration.toUpperCase()}
                           </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                              <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                            </div>
+                          <div className="flex items-center gap-1.5">
+                            <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
                             {(pkg as any).guest_capacity || (pkg as any).guest || "2-4 GUESTS"}
                           </div>
                         </div>
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-end justify-between mt-auto">
                           <div className="flex flex-col">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                            <span className="text-xl font-black text-[#00A9D7]">
+                            <span className="text-[11px] text-slate-400">Starting from</span>
+                            <span className="text-lg font-bold text-[#1B6B93]">
                               {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `$${pkg.price}`) : '$0'}
                             </span>
                           </div>
-                        </div>
-
-                        <div className="mt-auto flex items-center justify-center">
-                          <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleBookNow(pkg) }}
+                            className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                          >
                             Book Now
                           </button>
                         </div>
@@ -487,51 +475,46 @@ const PackagesPage: React.FC<PackagesPageProps> = ({ onBack, onExplore, onBookCl
               </div>
             </div>
 
-            <div className="max-w-[1440px] mx-auto lg:py-16 px-6 md:px-14 lg:mt-[250px]">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="max-w-[1440px] mx-auto lg:py-16 px-6 md:px-14 lg:mt-[160px]">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
                 {packagesList.slice(4, 8).map((pkg) => (
                   <div
                     key={pkg.id}
                     onClick={() => handleBookNow(pkg)}
-                    className="bg-white rounded-[32px] overflow-hidden flex flex-col shadow-xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer border border-slate-50 mt-[20px]"
+                    className="bg-white rounded-2xl overflow-hidden flex flex-col shadow-xl cursor-pointer border border-slate-50 mt-[20px]"
                   >
-                    <div className="relative p-3 h-[200px]">
-                      <div className="w-full h-full rounded-[24px] overflow-hidden relative">
-                        <img
-                          src={pkg.image}
-                          alt={pkg.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
+                    <div className="relative h-[200px]">
+                      <img loading="lazy" src={pkg.image} alt={pkg.title} className="w-full h-full object-cover" />
+                      <div className="absolute top-3 right-3 bg-white rounded-full px-2.5 py-1 flex items-center gap-1 shadow-lg">
+                        <svg className="w-3.5 h-3.5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                        <span className="text-xs font-bold text-slate-700">{(pkg as any).rating || "4.8"}</span>
                       </div>
                     </div>
-                    <div className="px-7 pb-7 pt-2 flex flex-col flex-grow text-left">
-                      <h3 className="text-[17px] font-black text-slate-900 leading-tight mb-4 group-hover:text-[#00A9D7] transition-colors line-clamp-2 h-12">
+                    <div className=" p-[18px] flex flex-col flex-grow text-left">
+                      <div className="text-[16px] font-bold text-slate-900 leading-snug mb-3">
                         {pkg.title}
-                      </h3>
-                      <div className="flex items-center gap-5 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-wide">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                            <div className="w-1 h-1 rounded-full bg-[#00A9D7]" />
-                          </div>
+                      </div>
+                      <div className="flex items-center gap-4 text-[12px] text-slate-400 mb-4 border-b-[1px] border-[#ebe0e0] p-0 pb-[9px]">
+                        <div className="flex items-center gap-1.5">
+                          <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
                           {pkg.duration.match(/(\d+)\s*days?/i) ? `${pkg.duration.match(/(\d+)\s*days?/i)?.[1]} DAYS` : pkg.duration.toUpperCase()}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-[#00A9D7]/20 flex items-center justify-center">
-                            <Users className="w-3.5 h-3.5 text-[#00A9D7]" strokeWidth={3} />
-                          </div>
+                        <div className="flex items-center gap-1.5">
+                          <Users className="w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
                           {(pkg as any).guest_capacity || (pkg as any).guest || "2-4 GUESTS"}
                         </div>
                       </div>
-                      <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-end justify-between mt-auto">
                         <div className="flex flex-col">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Starting from</span>
-                          <span className="text-xl font-black text-[#00A9D7]">
+                          <span className="text-[11px] text-slate-400">Starting from</span>
+                          <span className="text-lg font-bold text-[#1B6B93]">
                             {pkg.price ? (pkg.price.toString().startsWith('$') || pkg.price.toString().startsWith('₹') ? pkg.price : `$${pkg.price}`) : '$0'}
                           </span>
                         </div>
-                      </div>
-                      <div className="mt-auto flex items-center justify-center">
-                        <button className="w-full bg-[#00A9D7]/10 text-[#00A9D7] px-3 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#00A9D7] hover:text-white transition-all shadow-sm hover:shadow-md">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleBookNow(pkg) }}
+                          className="bg-[#1B6B93] text-white px-[23px] py-[8px] rounded-full text-sm font-semibold"
+                        >
                           Book Now
                         </button>
                       </div>
