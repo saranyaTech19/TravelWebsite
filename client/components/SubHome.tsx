@@ -365,8 +365,12 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             // Fetch each independently so one failure doesn't block the others
             try {
                 const allPackages = await packages.getAll();
-                const toursData = allPackages.filter((t: any) => t.is_featured);
-                console.log(toursData, "toursData");
+                const toursData = allPackages
+                    .filter((t: any) => {
+                        const price = (t.price || '').toString();
+                        return t.region === 'Dubai' || price.startsWith('AED');
+                    })
+                    .slice(0, 8);
                 setDynamicTours(toursData);
                 setDynamicPackages(toursData);
             } catch (err) {
