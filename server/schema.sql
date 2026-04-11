@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS tour_packages (
   exclusions JSON,
   gallery JSON,
   itinerary JSON,
+  flyer_url TEXT DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -133,6 +134,9 @@ CREATE TABLE IF NOT EXISTS dream_destinations (
 
 -- Run this if tour_packages table already exists (to add price column):
 -- ALTER TABLE tour_packages ADD COLUMN price VARCHAR(100) DEFAULT '' AFTER tag;
+
+-- Run this if tour_packages table already exists (to add flyer_url column):
+-- ALTER TABLE tour_packages ADD COLUMN flyer_url TEXT DEFAULT NULL AFTER itinerary;
 
 -- Run these if travel_details table already exists (to add new columns):
 -- ALTER TABLE travel_details ADD COLUMN travel_origin VARCHAR(255) AFTER phone;

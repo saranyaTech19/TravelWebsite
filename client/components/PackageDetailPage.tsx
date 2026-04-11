@@ -222,25 +222,29 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
         </div> */}
 
         {/* Header Section */}
-        <div className="flex flex-col gap-4 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <h1 className="text-3xl md:text-[36px] font-black text-slate-900 tracking-tight leading-tight">{packageData.title}</h1>
-            <div className="flex items-center gap-2 text-sm font-bold bg-white p-1 rounded-xl">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 rounded-lg">
-                <span className="text-slate-800">{packageData.rating?.split(' ')[0] || '4.8'}</span>
-                <Star className="w-4 h-4 fill-[#FFB100] text-[#FFB100]" />
-                <span className="text-slate-400 font-bold ml-1">({packageData.rating?.match(/\(([^)]+)\)/)?.[1] || '124'})</span>
-              </div>
-            </div>
-          </div>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <h1 className="text-3xl md:text-[36px] font-black text-slate-900 tracking-tight leading-tight">{packageData.title}</h1>
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 border border-slate-200 px-3 py-1.5 rounded-lg bg-white shadow-sm">
-              <Share2 className="w-3.5 h-3.5 text-[#00A9D7]" />
-              <span className="text-[11px] font-black text-slate-600 uppercase tracking-widest">Share</span>
-            </div>
+            {packageData.flyer_url && (
+              <a
+                href={packageData.flyer_url}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 border border-slate-200 px-3 py-1.5 rounded-lg bg-white shadow-sm hover:border-[#00A9D7]/30 hover:bg-[#00A9D7]/5 transition-all cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5 text-[#00A9D7]" />
+                <span className="text-[11px] font-black text-slate-600 uppercase tracking-widest">Download Flyer</span>
+              </a>
+            )}
             <div className="flex items-center gap-2 border border-slate-200 px-3 py-1.5 rounded-lg bg-white shadow-sm">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               <span className="text-[11px] font-black text-slate-800 uppercase tracking-widest">{packageData.duration}</span>
+            </div>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 rounded-lg">
+              <span className="text-slate-800 text-sm font-bold">{packageData.rating?.split(' ')[0] || '4.8'}</span>
+              <Star className="w-4 h-4 fill-[#FFB100] text-[#FFB100]" />
+              <span className="text-slate-400 text-sm font-bold ml-1">({packageData.rating?.match(/\(([^)]+)\)/)?.[1] || '124'})</span>
             </div>
           </div>
         </div>

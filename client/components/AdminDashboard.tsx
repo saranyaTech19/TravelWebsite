@@ -7,7 +7,7 @@ import {
   Settings, RefreshCcw, Bell, LogOut, ChevronRight, MapPin,
   Calendar, Image as ImageIcon, Trash2, Save,
   Upload, X, Plus, Mail, MessageSquare, Eye, EyeOff, Pencil,
-  Search, TrendingUp
+  Search, TrendingUp, Download
 } from 'lucide-react';
 
 interface EnquieryEntry {
@@ -46,6 +46,7 @@ interface TourPackage {
   exclusions: string[];
   gallery: string[];
   itinerary: { day: string; title: string; detail: string }[];
+  flyer_url: string;
 }
 
 interface PackageEnquiryEntry {
@@ -88,6 +89,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
+  const flyerInputRef = useRef<HTMLInputElement>(null);
   const trendingInputRef = useRef<HTMLInputElement>(null);
   const trendingEditInputRef = useRef<HTMLInputElement>(null);
   const [trendingDestinationsList, setTrendingDestinationsList] = useState<{ id: number; name: string; image_url: string; link: string }[]>([]);
@@ -557,7 +559,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             <button
               onClick={() => {
                 setView('packages'); setError('');
-                setSelectedPackage({ title: '', slug: '', location: '', region: 'India', category: 'Standard', image_url: '', rating: '5.0 (0)', duration: '', guest_capacity: '4-6 guest', tag: 'Tour', price: '', is_featured: false, overview: '', highlights: [], inclusions: [], exclusions: [], gallery: [], itinerary: [] });
+                setSelectedPackage({ title: '', slug: '', location: '', region: 'India', category: 'Standard', image_url: '', rating: '5.0 (0)', duration: '', guest_capacity: '4-6 guest', tag: 'Tour', price: '', is_featured: false, overview: '', highlights: [], inclusions: [], exclusions: [], gallery: [], itinerary: [], flyer_url: '' });
                 setIsEditingPackage(true); setFormStep(1);
               }}
               className={`w-full text-left px-3 py-2 rounded-lg text-[12px] font-semibold transition-all flex items-center gap-2.5 ${view === 'packages' && isEditingPackage && !selectedPackage?.id ? 'text-[#38BDF8]' : 'text-slate-500 hover:text-slate-300'}`}
@@ -612,7 +614,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           <button
             onClick={() => {
               setView('packages'); setError('');
-              setSelectedPackage({ title: '', slug: '', location: '', region: 'India', category: 'Standard', image_url: '', rating: '5.0 (0)', duration: '', guest_capacity: '4-6 guest', tag: 'Tour', price: '', is_featured: false, overview: '', highlights: [], inclusions: [], exclusions: [], gallery: [], itinerary: [] });
+              setSelectedPackage({ title: '', slug: '', location: '', region: 'India', category: 'Standard', image_url: '', rating: '5.0 (0)', duration: '', guest_capacity: '4-6 guest', tag: 'Tour', price: '', is_featured: false, overview: '', highlights: [], inclusions: [], exclusions: [], gallery: [], itinerary: [], flyer_url: '' });
               setIsEditingPackage(true); setFormStep(1);
             }}
             className="w-full bg-[#38BDF8]/10 hover:bg-[#38BDF8]/20 border border-[#38BDF8]/20 text-[#38BDF8] px-4 py-3 rounded-xl text-[12px] font-bold flex items-center justify-center gap-2 transition-all"
@@ -1058,7 +1060,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               <td className="px-5 py-5 text-xs text-slate-500">{p.category}</td>
                               <td className="px-5 py-5 text-xs text-slate-500">{p.duration || '—'}</td>
                               <td className="px-5 py-5 text-xs font-semibold text-slate-700">
-                                {p.price ? `${p.region === 'Dubai' ? 'AED' : '₹'} ${p.price}` : '—'}
+                                {p.price || '—'}
                               </td>
                               <td className="px-5 py-5 text-xs text-slate-500">{p.guest_capacity}</td>
                               <td className="px-6 py-5 text-right">
@@ -1095,7 +1097,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           <button type="button" onClick={() => setIsEditingPackage(false)} className="p-2 text-slate-400 hover:text-slate-900"><ChevronRight className="w-6 h-6 rotate-180" /></button>
                           <h2 className="text-xl font-black text-slate-900">
                             {selectedPackage.id ? 'Edit Package' : 'Add New Package'}
-                            <span className="text-slate-400 ml-3 text-sm font-bold uppercase tracking-widest">/ Phase {formStep} of 5</span>
+                            <span className="text-slate-400 ml-3 text-sm font-bold uppercase tracking-widest">/ Phase {formStep} of 6</span>
                           </h2>
                         </div>
                         <div className="flex items-center gap-3">
@@ -1119,7 +1121,7 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       </div>
                       {/* Visual Step Progress */}
                       <div className="flex gap-2">
-                        {[1, 2, 3, 4, 5].map(step => (
+                        {[1, 2, 3, 4, 5, 6].map(step => (
                           <div key={step} className={`h-1.5 flex-1 rounded-full transition-all ${step <= formStep ? 'bg-indigo-600' : 'bg-slate-100'}`} />
                         ))}
                       </div>
@@ -1185,7 +1187,28 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                           <div className="grid grid-cols-3 gap-8 pt-4">
                             <div className="space-y-2">
                               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Price</label>
-                              <input value={selectedPackage.price} onChange={e => setSelectedPackage({ ...selectedPackage, price: e.target.value })} className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all" placeholder="e.g. 25000" />
+                              <div className="flex">
+                                <select
+                                  value={selectedPackage.price.startsWith('AED') ? 'AED' : '₹'}
+                                  onChange={e => {
+                                    const amount = selectedPackage.price.replace(/^(₹|AED)\s*/, '');
+                                    setSelectedPackage({ ...selectedPackage, price: amount ? `${e.target.value} ${amount}` : '' });
+                                  }}
+                                  className="bg-[#f8fafc] border border-slate-200 border-r-0 focus:bg-white focus:border-indigo-500 rounded-l-xl px-3 py-4 text-sm font-black outline-none transition-all text-slate-600 shrink-0"
+                                >
+                                  <option value="₹">₹ INR</option>
+                                  <option value="AED">AED</option>
+                                </select>
+                                <input
+                                  value={selectedPackage.price.replace(/^(₹|AED)\s*/, '')}
+                                  onChange={e => {
+                                    const currency = selectedPackage.price.startsWith('AED') ? 'AED' : '₹';
+                                    setSelectedPackage({ ...selectedPackage, price: e.target.value ? `${currency} ${e.target.value}` : '' });
+                                  }}
+                                  className="w-full bg-[#f8fafc] border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-r-xl px-5 py-4 text-sm font-bold outline-none transition-all"
+                                  placeholder="e.g. 25000"
+                                />
+                              </div>
                             </div>
                           </div>
 
@@ -1517,6 +1540,95 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                               </div>
                             )}
                           </div>
+
+                          <div className="flex justify-between items-center pt-8 border-t border-slate-100 mt-8">
+                            <button
+                              type="button"
+                              onClick={() => setFormStep(prev => Math.max(1, prev - 1))}
+                              className="px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all text-slate-400 hover:text-slate-900"
+                            >
+                              Back Phase
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setFormStep(prev => prev + 1)}
+                              className="bg-[#222E3C] text-white px-10 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-brand-gold hover:text-brand-dark transition-all shadow-lg flex items-center gap-2 group"
+                            >
+                              Continue to Phase 6
+                              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* PHASE 6: Flyer Upload */}
+                      {formStep === 6 && (
+                        <div className="bg-white rounded-2xl p-10 border border-slate-200 shadow-sm space-y-10 animate-fade-in">
+                          <div className="flex justify-between items-center border-b pb-6">
+                            <h3 className="text-sm font-black text-slate-500 uppercase tracking-widest">Phase 6: Package Flyer</h3>
+                            <div className="flex items-center gap-4">
+                              <input
+                                type="file"
+                                ref={flyerInputRef}
+                                className="hidden"
+                                accept="image/*,.pdf"
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    const url = await handleFileUpload(file);
+                                    if (url) {
+                                      setSelectedPackage(prev => prev ? { ...prev, flyer_url: url } : prev);
+                                    }
+                                  }
+                                }}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => flyerInputRef.current?.click()}
+                                className="bg-indigo-50 text-indigo-600 px-6 py-2.5 rounded-lg text-[10px] font-black uppercase flex items-center gap-2 hover:bg-indigo-100 transition-all border border-indigo-100"
+                              >
+                                <Upload className="w-4 h-4" /> Upload Flyer (PDF / Image)
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="space-y-4">
+                            <label className="text-[11px] font-black text-slate-500 uppercase tracking-[0.1em]">Flyer URL (or upload above)</label>
+                            <input
+                              type="text"
+                              value={selectedPackage.flyer_url}
+                              onChange={e => setSelectedPackage({ ...selectedPackage, flyer_url: e.target.value })}
+                              className="w-full max-w-2xl bg-[#F3F4F6] border border-transparent focus:bg-white focus:border-indigo-500 rounded-xl px-5 py-4 text-sm font-bold outline-none transition-all"
+                              placeholder="https://example.com/flyer.pdf"
+                            />
+                          </div>
+
+                          {selectedPackage.flyer_url && (
+                            <div className="flex items-center gap-4 p-6 bg-green-50 rounded-xl border border-green-100">
+                              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                                <Download className="w-6 h-6 text-green-600" />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-sm font-black text-green-800">Flyer uploaded</p>
+                                <p className="text-xs text-green-600 truncate max-w-md">{selectedPackage.flyer_url}</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => setSelectedPackage({ ...selectedPackage, flyer_url: '' })}
+                                className="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          )}
+
+                          {!selectedPackage.flyer_url && (
+                            <div className="py-20 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-400">
+                              <Download className="w-12 h-12 mb-4 opacity-20" />
+                              <p className="text-sm font-bold uppercase tracking-widest">No flyer uploaded yet</p>
+                              <p className="text-xs text-slate-300 mt-1">Upload a PDF or image flyer for this package</p>
+                            </div>
+                          )}
 
                           <div className="flex justify-between items-center pt-8 border-t border-slate-100 mt-8">
                             <button
