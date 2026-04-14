@@ -18,16 +18,16 @@ router.get('/', verifyToken, async (req, res) => {
 
 // POST /api/enquiries  - submit a booking / general enquiry (public)
 router.post('/', async (req, res) => {
-  const { full_name, email, phone, travel_origin, destination, travel_date, adults, children, tentative_budget, specific_requirements, message } = req.body;
+  const { full_name, email, phone, travel_origin, destination, travel_date, adults, children, tentative_budget, specific_requirements, message, page_url } = req.body;
   try {
     // 1. Save to database
     await db.query(
-      'INSERT INTO travel_details (full_name, email, phone, travel_origin, destination, travel_date, adults, children, tentative_budget, specific_requirements, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [full_name, email, phone, travel_origin || null, destination || 'General Enquiry', travel_date || null, adults || '1 Adult', children || null, tentative_budget || null, specific_requirements || null, message || null]
+      'INSERT INTO travel_details (full_name, email, phone, travel_origin, destination, travel_date, adults, children, tentative_budget, specific_requirements, message, page_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [full_name, email, phone, travel_origin || null, destination || 'General Enquiry', travel_date || null, adults || '1 Adult', children || null, tentative_budget || null, specific_requirements || null, message || null, page_url || null]
     );
 
     // 2. Send emails (fire-and-forget — don't fail the request if email errors)
-    const data = { full_name, email, phone, travel_origin, destination, travel_date, adults, children, tentative_budget, specific_requirements, message };
+    const data = { full_name, email, phone, travel_origin, destination, travel_date, adults, children, tentative_budget, specific_requirements, message, page_url };
     sendUserEnquiryConfirmation(data)
       .then(r => console.log('✅ User email:', JSON.stringify(r)))
       .catch(e => console.error('❌ User email error:', JSON.stringify(e)));

@@ -111,7 +111,7 @@ const sendUserEnquiryConfirmation = async ({ full_name, email, phone, destinatio
 // ════════════════════════════════════════════════════════════════
 // 2. General Enquiry — notification to ADMIN
 // ════════════════════════════════════════════════════════════════
-const sendAdminEnquiryNotification = async ({ full_name, email, phone, destination, travel_date, adults, children, message }) => {
+const sendAdminEnquiryNotification = async ({ full_name, email, phone, destination, travel_date, adults, children, message, page_url }) => {
   const html = wrapHtml(`
     <h2 style="margin:0 0 8px;color:#1B2534;font-size:20px;">🔔 New Travel Enquiry Received</h2>
     <p style="margin:0 0 24px;color:#64748b;font-size:15px;">A new booking enquiry has been submitted on the website.</p>
@@ -126,6 +126,7 @@ const sendAdminEnquiryNotification = async ({ full_name, email, phone, destinati
         ${row('Travel Date', travel_date)}
         ${row('Adults', adults)}
         ${row('Children', children)}
+        ${page_url ? row('Enquiry Page', `<a href="${page_url}" style="color:#C9A84C;">${page_url}</a>`) : ''}
         ${message ? `<tr><td style="padding:6px 0;"><strong style="color:#1B2534;font-size:13px;">Message:</strong><br/><p style="margin:4px 0 0;color:#475569;font-size:13px;">${message}</p></td></tr>` : ''}
       </table>
     </div>

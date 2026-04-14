@@ -74,8 +74,11 @@ CREATE TABLE IF NOT EXISTS travel_details (
   tentative_budget VARCHAR(100),
   specific_requirements TEXT,
   message TEXT,
+  page_url VARCHAR(500),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ALTER TABLE travel_details ADD COLUMN page_url VARCHAR(500) AFTER message;
 
 -- ============================================================
 -- Table: contact_details  (contact page form)

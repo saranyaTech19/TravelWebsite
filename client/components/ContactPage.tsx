@@ -242,13 +242,10 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               <div className="md:px-3">
                 <h4 className="text-xl font-bold text-slate-900 mb-6">Phone Support</h4>
                 <div className="w-8 h-1 bg-[#00A9D7] mb-8"></div>
-                <div className="">
-                  <p className="text-slate-600 text-[14px]">
-                    +971 58 952 0398(dubai),<br /> +91 89210 95973(india)<span className="text-slate-400 font-medium"></span>
-                  </p>
-                  <p className="text-slate-600 text-[15px]">
-                    +91 80758521708 ,<br /><span className="text-slate-400 font-medium"></span>
-                  </p>
+                <div className="space-y-1">
+                  <p><a href="tel:+971589520398" className="text-slate-600 hover:text-[#00A9D7] text-[14px] transition-colors">(dubai) +971 58 952 0398</a></p>
+                  <p><a href="tel:+918921095973" className="text-slate-600 hover:text-[#00A9D7] text-[14px] transition-colors">(india) +91 89210 95973</a></p>
+                  <p><a href="tel:+9180758521708" className="text-slate-600 hover:text-[#00A9D7] text-[14px] transition-colors">(india) +91 80758521708</a></p>
                 </div>
               </div>
 
@@ -256,10 +253,10 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               <div className="md:pl-3">
                 <h4 className="text-xl font-bold text-slate-900 mb-6">Email Address</h4>
                 <div className="w-8 h-1 bg-[#00A9D7] mb-8"></div>
-                <p className="text-slate-600 text-[14px] break-all leading-relaxed">
-                  santhosh@globalconnectworldtravel.com
-                  <br />  booking@globalconnectworldtravel.com
-                </p>
+                <div className="space-y-1">
+                  <p><a href="mailto:santhosh@globalconnectworldtravel.com" className="text-slate-600 hover:text-[#00A9D7] text-[14px] break-all transition-colors">santhosh@globalconnectworldtravel.com</a></p>
+                  <p><a href="mailto:booking@globalconnectworldtravel.com" className="text-slate-600 hover:text-[#00A9D7] text-[14px] break-all transition-colors">booking@globalconnectworldtravel.com</a></p>
+                </div>
               </div>
             </div>
           </div>
@@ -295,14 +292,11 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <h4 className="text-lg font-bold text-slate-900 mb-4 pb-[2px]">Phone Support</h4>
                 <div className="w-8 h-1 bg-[#00A9D7] mb-6 mx-auto "></div>
 
-                <p className="text-slate-600 text-[12px]">
-                  +971 58 952 0398 <br />
-                  +91 89210 95973
-                </p>
-
-                <p className="text-slate-600 text-[12px]">
-                  +91 8075852170 <br />
-                </p>
+                <div className="space-y-1">
+                  <p><a href="tel:+971589520398" className="text-slate-600 hover:text-[#00A9D7] text-[12px] transition-colors">+971 58 952 0398</a></p>
+                  <p><a href="tel:+918921095973" className="text-slate-600 hover:text-[#00A9D7] text-[12px] transition-colors">+91 89210 95973</a></p>
+                  <p><a href="tel:+918075852170" className="text-slate-600 hover:text-[#00A9D7] text-[12px] transition-colors">+91 8075852170</a></p>
+                </div>
               </div>
 
               {/* Email */}
@@ -310,11 +304,10 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <h4 className="text-lg font-bold text-slate-900 mb-4">Email Address</h4>
                 <div className="w-8 h-1 bg-[#00A9D7] mb-6 mx-auto"></div>
 
-                <p className="text-slate-600 text-[12px] break-all">
-                  santhosh@globalconnectworldtravel.com
-                  <br />
-                  booking@globalconnectworldtravel.com
-                </p>
+                <div className="space-y-1">
+                  <p><a href="mailto:santhosh@globalconnectworldtravel.com" className="text-slate-600 hover:text-[#00A9D7] text-[12px] break-all transition-colors">santhosh@globalconnectworldtravel.com</a></p>
+                  <p><a href="mailto:booking@globalconnectworldtravel.com" className="text-slate-600 hover:text-[#00A9D7] text-[12px] break-all transition-colors">booking@globalconnectworldtravel.com</a></p>
+                </div>
               </div>
 
             </div>

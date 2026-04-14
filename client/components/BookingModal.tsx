@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { CalendarIcon, UsersIcon } from './Icons';
 import { enquiries } from '../lib/apiClient';
 
 interface BookingModalProps {
@@ -48,6 +47,8 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setErrors({});
+      setIsSubmitted(false);
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -55,6 +56,8 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
+
+  const today = new Date().toISOString().split('T')[0];
 
   if (!isOpen) return null;
 
@@ -109,6 +112,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
         children: formData.children,
         tentative_budget: formData.tentativeBudget,
         specific_requirements: formData.specificRequirements,
+        page_url: window.location.href,
       });
 
       setIsSubmitted(true);
@@ -184,26 +188,26 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3">
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Full Name</label>
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Full Name <span className="text-red-500">*</span></label>
                     <input name="fullName" value={formData.fullName} onChange={handleChange} autoComplete="off" placeholder="name" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.fullName ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    {errors.fullName && <p className="text-red-500 text-[9px] ml-1">{errors.fullName}</p>}
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Email Address</label>
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Email Address <span className="text-red-500">*</span></label>
                     <input name="email" value={formData.email} onChange={handleChange} autoComplete="off" type="email" placeholder="email" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.email ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    {errors.email && <p className="text-red-500 text-[9px] ml-1">{errors.email}</p>}
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Preferred Travel Date</label>
-                    <div className="relative">
-                      <input name="travelDate" value={formData.travelDate} onChange={handleChange} type="date" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none appearance-none font-medium text-sm border ${errors.travelDate ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all`} />
-                      <CalendarIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-brand-dark/20 pointer-events-none" />
-                    </div>
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Preferred Travel Date <span className="text-red-500">*</span></label>
+                    <input name="travelDate" value={formData.travelDate} onChange={handleChange} type="date" min={today} className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none font-medium text-sm border ${errors.travelDate ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all`} />
+                    {errors.travelDate && <p className="text-red-500 text-[9px] ml-1">{errors.travelDate}</p>}
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">
-                      Mobile Number
+                      Mobile Number <span className="text-red-500">*</span>
                     </label>
                     <div className={`flex items-center bg-[#FFF8F1] rounded-xl border ${errors.phone ? 'border-red-400' : 'border-transparent'} focus-within:border-brand-gold/30 transition-all`}>
                       <select
@@ -215,7 +219,6 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
                         <option value="+971">+971</option>
                         <option value="+91">+91</option>
                       </select>
-                      {/* <div className="w-px h-5 bg-brand-dark/10 shrink-0"></div> */}
                       <input
                         name="phone"
                         value={formData.phone}
@@ -227,31 +230,37 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
                         className="w-full bg-transparent px-3 py-2.5 text-brand-dark outline-none font-medium text-sm"
                       />
                     </div>
+                    {errors.phone && <p className="text-red-500 text-[9px] ml-1">{errors.phone}</p>}
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Travel Origin</label>
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Travel Origin <span className="text-red-500">*</span></label>
                     <input name="travelOrigin" value={formData.travelOrigin} onChange={handleChange} placeholder="e.g. Dubai" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.travelOrigin ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    {errors.travelOrigin && <p className="text-red-500 text-[9px] ml-1">{errors.travelOrigin}</p>}
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Destination</label>
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Destination <span className="text-red-500">*</span></label>
                     <input name="destination" value={formData.destination} onChange={handleChange} placeholder="e.g. Maldives" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.destination ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    {errors.destination && <p className="text-red-500 text-[9px] ml-1">{errors.destination}</p>}
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">No. of Adults</label>
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">No. of Adults <span className="text-red-500">*</span></label>
                     <input name="adults" value={formData.adults} onChange={handleChange} type="number" min="1" placeholder="e.g. 2" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.adults ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    {errors.adults && <p className="text-red-500 text-[9px] ml-1">{errors.adults}</p>}
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">No. of Children</label>
                     <input name="children" value={formData.children} onChange={handleChange} type="number" min="0" placeholder="e.g. 1" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.children ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    {errors.children && <p className="text-red-500 text-[9px] ml-1">{errors.children}</p>}
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Tentative Budget</label>
+                    <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Tentative Budget <span className="text-red-500">*</span></label>
                     <input name="tentativeBudget" value={formData.tentativeBudget} onChange={handleChange} placeholder="AED 149" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.tentativeBudget ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    {errors.tentativeBudget && <p className="text-red-500 text-[9px] ml-1">{errors.tentativeBudget}</p>}
                   </div>
                 </div>
 

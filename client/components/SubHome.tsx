@@ -1142,7 +1142,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
             </section> */}
             {/* sections 5*/}
 
-            <section className="w-full lg:h-[621px] h-[400px] relative bg-[#00A9D7] lg:bg-white overflow-hidden lg:bg-[url('https://res.cloudinary.com/dn29cn21x/image/upload/v1774847784/bannerFour_compressed_u3osie.webp')] lg:bg-cover lg:bg-no-repeat lg:bg-center flex items-center justify-end px-6 lg:px-40 lg:mt-[280px]" style={{
+            <section className="w-full lg:h-[621px] h-[400px] relative bg-[#00A9D7] lg:bg-white overflow-hidden lg:bg-[url('https://res.cloudinary.com/dn29cn21x/image/upload/v1776152186/Frame_1000007322_2_compressed_iq8mag.webp')] lg:bg-cover lg:bg-no-repeat lg:bg-center flex items-center justify-end px-6 lg:px-40 lg:mt-[280px]" style={{
                 // backgroundImage: "url('/images/bannerFour.png')",
                 // backgroundSize: "cover",
                 // backgroundPosition: "center",

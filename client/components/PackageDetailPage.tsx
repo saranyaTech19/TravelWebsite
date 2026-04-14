@@ -94,10 +94,12 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
     full_name: '',
     email: '',
     travel_date: '',
+    countryCode: '+971',
     phone: '',
     package_id: packageData?.id || '',
     package_name: packageData?.title || ''
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -113,13 +115,53 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
     return <div className="p-20 text-center py-40"><h2 className="text-4xl font-serif font-bold text-brand-dark mb-4">Package Not Found</h2><Link to="/" className="text-brand-gold font-bold underline">Return Home</Link></div>;
   }
 
+  const getPhoneMaxLength = (code: string) => (code === '+91' ? 10 : 9);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === 'phone') {
+      const digitsOnly = value.replace(/\D/g, '');
+      const maxLen = getPhoneMaxLength(formData.countryCode);
+      setFormData(prev => ({ ...prev, phone: digitsOnly.slice(0, maxLen) }));
+    } else if (name === 'countryCode') {
+      const maxLen = getPhoneMaxLength(value);
+      setFormData(prev => ({ ...prev, countryCode: value, phone: prev.phone.slice(0, maxLen) }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+    if (formErrors[name]) {
+      setFormErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
+    }
+    if (name === 'countryCode' && formErrors.phone) {
+      setFormErrors(prev => { const n = { ...prev }; delete n.phone; return n; });
+    }
   };
+
+  const validateForm = (): boolean => {
+    const errs: Record<string, string> = {};
+    if (!formData.full_name.trim()) errs.full_name = 'Full name is required';
+    if (!formData.email.trim()) {
+      errs.email = 'Email is required';
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+      errs.email = 'Enter a valid email address';
+    }
+    if (!formData.travel_date.trim()) errs.travel_date = 'Travel date is required';
+    if (!formData.phone.trim()) {
+      errs.phone = 'Phone number is required';
+    } else if (formData.countryCode === '+91' && formData.phone.length !== 10) {
+      errs.phone = 'Indian number must be exactly 10 digits';
+    } else if (formData.countryCode === '+971' && formData.phone.length !== 9) {
+      errs.phone = 'UAE number must be exactly 9 digits';
+    }
+    setFormErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const today = new Date().toISOString().split('T')[0];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
     setIsSubmitting(true);
     setError(null);
 
@@ -129,7 +171,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
         package_title: formData.package_name,
         name: formData.full_name,
         email: formData.email,
-        phone: formData.phone,
+        phone: `${formData.countryCode} ${formData.phone}`,
         travel_date: formData.travel_date,
       });
 
@@ -480,7 +522,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
 
                 {/* Full Name */}
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Full Name</label>
+                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Full Name <span className="text-red-500">*</span></label>
                   <div className="relative group">
                     <input
                       type="text"
@@ -488,14 +530,15 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                       value={formData.full_name}
                       onChange={handleChange}
                       placeholder="John Doe"
-                      className="w-full px-6 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all"
+                      className={`w-full px-6 py-4 rounded-2xl border-2 ${formErrors.full_name ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all`}
                     />
                   </div>
+                  {formErrors.full_name && <p className="text-red-500 text-[10px] pl-1">{formErrors.full_name}</p>}
                 </div>
 
                 {/* Email Address */}
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Email Address</label>
+                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Email Address <span className="text-red-500">*</span></label>
                   <div className="relative group">
                     <input
                       type="email"
@@ -503,40 +546,52 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="john@example.com"
-                      className="w-full px-6 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all"
+                      className={`w-full px-6 py-4 rounded-2xl border-2 ${formErrors.email ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all`}
                     />
                   </div>
+                  {formErrors.email && <p className="text-red-500 text-[10px] pl-1">{formErrors.email}</p>}
                 </div>
 
                 {/* Travel Date */}
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Travel Date</label>
+                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Travel Date <span className="text-red-500">*</span></label>
                   <div className="relative group">
                     <input
                       type="date"
                       name="travel_date"
                       value={formData.travel_date}
                       onChange={handleChange}
-                      className="w-full px-6 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all appearance-none"
+                      min={today}
+                      className={`w-full px-6 py-4 rounded-2xl border-2 ${formErrors.travel_date ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all`}
                     />
-                    <Calendar className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
                   </div>
+                  {formErrors.travel_date && <p className="text-red-500 text-[10px] pl-1">{formErrors.travel_date}</p>}
                 </div>
 
                 {/* Phone Number */}
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Phone Number</label>
-                  <div className="relative group">
+                  <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Phone Number <span className="text-red-500">*</span></label>
+                  <div className={`flex items-center rounded-2xl border-2 ${formErrors.phone ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 focus-within:border-[#00A9D7]/20 focus-within:bg-white transition-all`}>
+                    <select
+                      name="countryCode"
+                      value={formData.countryCode}
+                      onChange={handleChange}
+                      className="bg-transparent pl-6 py-4 text-slate-600 outline-none font-bold text-sm cursor-pointer"
+                    >
+                      <option value="+971">+971</option>
+                      <option value="+91">+91</option>
+                    </select>
                     <input
                       type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="+1 (555) 000-0000"
-                      className="w-full px-6 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all"
+                      maxLength={formData.countryCode === '+91' ? 10 : 9}
+                      placeholder={formData.countryCode === '+91' ? '9876543210' : '501234567'}
+                      className="w-full bg-transparent px-3 py-4 text-slate-600 font-bold outline-none"
                     />
-                    <PhoneIcon className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                   </div>
+                  {formErrors.phone && <p className="text-red-500 text-[10px] pl-1">{formErrors.phone}</p>}
                 </div>
               </div>
 

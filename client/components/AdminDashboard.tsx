@@ -1711,6 +1711,12 @@ const AdminDashboard: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Customer Message</p>
                   <p className="text-sm font-medium leading-relaxed text-slate-700 whitespace-pre-wrap bg-slate-50 p-6 rounded-2xl border border-slate-100">{selectedLead.message || "No specific instructions provided."}</p>
                 </div>
+                {selectedLead.page_url && (
+                  <div className="pt-8 border-t border-slate-100">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Enquiry Page</p>
+                    <a href={selectedLead.page_url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-indigo-600 underline underline-offset-4 break-all hover:text-indigo-800 transition-colors">{selectedLead.page_url}</a>
+                  </div>
+                )}
                 <div className="pt-8 border-t border-slate-100 flex justify-end">
                   <button
                     onClick={() => handleDeleteLead(selectedLead.id)}

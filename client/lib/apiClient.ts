@@ -141,6 +141,7 @@ export const enquiries = {
     tentative_budget?: string;
     specific_requirements?: string;
     message?: string;
+    page_url?: string;
   }) {
     return apiFetch('/enquiries', {
       method: 'POST',
