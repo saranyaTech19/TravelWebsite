@@ -530,7 +530,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                       value={formData.full_name}
                       onChange={handleChange}
                       placeholder="John Doe"
-                      className={`w-full px-6 py-4 rounded-2xl border-2 ${formErrors.full_name ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all`}
+                      className={`w-full px-6 py-4 rounded-2xl border-2 ${formErrors.full_name ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 transition-all`}
                     />
                   </div>
                   {formErrors.full_name && <p className="text-red-500 text-[10px] pl-1">{formErrors.full_name}</p>}
@@ -546,7 +546,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="john@example.com"
-                      className={`w-full px-6 py-4 rounded-2xl border-2 ${formErrors.email ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all`}
+                      className={`w-full px-6 py-4 rounded-2xl border-2 ${formErrors.email ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 transition-all`}
                     />
                   </div>
                   {formErrors.email && <p className="text-red-500 text-[10px] pl-1">{formErrors.email}</p>}
@@ -562,7 +562,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                       value={formData.travel_date}
                       onChange={handleChange}
                       min={today}
-                      className={`w-full px-6 py-4 rounded-2xl border-2 ${formErrors.travel_date ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 focus:bg-white transition-all`}
+                      className={`w-full px-6 py-4 rounded-2xl border-2 ${formErrors.travel_date ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 text-slate-600 font-bold outline-none focus:border-[#00A9D7]/20 transition-all`}
                     />
                   </div>
                   {formErrors.travel_date && <p className="text-red-500 text-[10px] pl-1">{formErrors.travel_date}</p>}
@@ -571,7 +571,7 @@ const PackageDetailPage: React.FC<PackageDetailPageProps> = ({ onBookClick }) =>
                 {/* Phone Number */}
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Phone Number <span className="text-red-500">*</span></label>
-                  <div className={`flex items-center rounded-2xl border-2 ${formErrors.phone ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 focus-within:border-[#00A9D7]/20 focus-within:bg-white transition-all`}>
+                  <div className={`flex items-center rounded-2xl border-2 ${formErrors.phone ? 'border-red-400' : 'border-slate-50'} bg-slate-50/50 focus-within:border-[#00A9D7]/20 transition-all`}>
                     <select
                       name="countryCode"
                       value={formData.countryCode}

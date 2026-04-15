@@ -1148,7 +1148,7 @@ const SubHome: React.FC<SubHomeProps> = ({ onExplore, onBookClick }) => {
                 // backgroundPosition: "center",
                 // backgroundRepeat: "no-repeat"
             }}>
-                <div className="absolute lg:left-10 left-0 lg:top-4 z-10 max-w-2xl text-white space-y-8 animate-fade-in-right">
+                <div className="absolute lg:left-10 left-0 lg:top-18 z-10 max-w-2xl text-white space-y-8 animate-fade-in-right">
                     <div className="text-3xl md:text-[60px] text-center lg:text-left font-sans font-black leading-[1.1] tracking-tight drop-shadow-lg">
                         Get 5–10% OFF on <br />
                         <span className="text-white">Your First Online Booking</span>

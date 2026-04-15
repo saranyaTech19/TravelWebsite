@@ -184,7 +184,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
                 { Icon: Instagram, link: 'https://www.instagram.com/globalconnectworldtravel/' },
                 { Icon: PinterestIcon, link: 'https://www.pinterest.com/globalconnectworldtravel/' },
                 { Icon: Linkedin, link: 'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQH9QK7mS7DLiQAAAZzsG6KAG0eJRHME6v9mCl9BBAniglAvaWXrNTdhu9X9OAgDS4NPc-VtqqT0cHXKBIVoJdGQDGYtIUV_z7EPRt2hyJOJWXWrqtbAtImEIcVU8Rh5BDx8cxU=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Fglobal-connect-world-travel%2F%3FviewAsMember%3Dtrue' },
-                { Icon: Youtube, link: 'https://www.youtube.com/@GlobalConnectWorldTravels' }
+                { Icon: Youtube, link: '#' }
               ].map((item, idx) => (
                 <a key={idx} href={item.link} target={item.link !== '#' ? "_blank" : undefined} rel={item.link !== '#' ? "noopener noreferrer" : undefined} className="text-[#00A9D7] hover:opacity-70 transition-opacity cursor-pointer">
                   <item.Icon className="w-5 h-5" />
@@ -264,11 +264,11 @@ const Footer: React.FC<FooterProps> = ({ onContactClick, onNavigate }) => {
 
               <a href="tel:+91 89210 95973" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
                 <Phone className="w-5 h-5 text-[#00A9D7]" />
-                (india)+91 89210 95973
+                India +91 89210 95973
               </a>
               <a href="tel:+91 62387 19549" className="flex items-center gap-3 text-slate-600 hover:text-[#00A9D7] text-sm transition-colors">
                 <Phone className="w-5 h-5 text-[#00A9D7]" />
-                (dubai)+971 58 952 0398
+                Dubai +971 58 952 0398
               </a>
               <div className="flex items-start gap-3 text-slate-600 text-sm">
                 <MapPin className="w-5 h-5 text-[#00A9D7] mt-1 shrink-0" />

@@ -26,8 +26,10 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
-    } else if (!/^[0-9+\-\s()]{7,15}$/.test(formData.phone)) {
-      newErrors.phone = "Invalid phone number";
+    } else if (formData.countryCode === '+91' && formData.phone.length !== 10) {
+      newErrors.phone = "Indian number must be exactly 10 digits";
+    } else if (formData.countryCode === '+971' && formData.phone.length !== 9) {
+      newErrors.phone = "UAE number must be exactly 9 digits";
     }
 
     if (!formData.message.trim()) {
@@ -44,16 +46,28 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     firstName: '',
     lastName: '',
     email: '',
+    countryCode: '+971',
     phone: '',
     message: ''
   });
 
+  const getPhoneMaxLength = (code: string) => (code === '+91' ? 10 : 9);
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
 
-    setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === 'phone') {
+      const digitsOnly = value.replace(/\D/g, '');
+      const maxLen = getPhoneMaxLength(formData.countryCode);
+      setFormData(prev => ({ ...prev, phone: digitsOnly.slice(0, maxLen) }));
+    } else if (name === 'countryCode') {
+      const maxLen = getPhoneMaxLength(value);
+      setFormData(prev => ({ ...prev, countryCode: value, phone: prev.phone.slice(0, maxLen) }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
 
     if (errors[name]) {
       setErrors(prev => {
@@ -61,6 +75,9 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         delete updated[name];
         return updated;
       });
+    }
+    if (name === 'countryCode' && errors.phone) {
+      setErrors(prev => { const n = { ...prev }; delete n.phone; return n; });
     }
   };
 
@@ -73,7 +90,7 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
-        phone: formData.phone,
+        phone: `${formData.countryCode} ${formData.phone}`,
         message: formData.message,
       });
       setIsSent(true);
@@ -81,6 +98,7 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         firstName: '',
         lastName: '',
         email: '',
+        countryCode: '+971',
         phone: '',
         message: ''
       });
@@ -170,16 +188,28 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <label className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none transition-all duration-200 peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-[#00A9D7] peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs">Email Address</label>
               </div>
               <div className="relative">
-                <input
-                  required
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  type="tel"
-                  placeholder=" "
-                  className="peer w-full bg-[#f4f7fa] rounded-xl px-4 pt-5 pb-2 text-slate-900 border border-slate-200 focus:border-[#00A9D7] outline-none transition-colors text-base"
-                />
-                <label className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none transition-all duration-200 peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-[#00A9D7] peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs">Phone Number</label>
+                <div className={`flex items-center bg-[#f4f7fa] rounded-xl pt-5 pb-2 border ${errors.phone ? 'border-red-400' : 'border-slate-200'} focus-within:border-[#00A9D7] transition-colors`}>
+                  <select
+                    name="countryCode"
+                    value={formData.countryCode}
+                    onChange={handleChange as any}
+                    className="bg-transparent pl-4 text-slate-900 outline-none font-bold text-sm cursor-pointer"
+                  >
+                    <option value="+971">+971</option>
+                    <option value="+91">+91</option>
+                  </select>
+                  <input
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    type="tel"
+                    placeholder={formData.countryCode === '+91' ? '9876543210' : '501234567'}
+                    maxLength={formData.countryCode === '+91' ? 10 : 9}
+                    className="w-full bg-transparent px-2 text-slate-900 outline-none text-base"
+                  />
+                </div>
+                <label className="absolute left-4 top-1 text-xs text-slate-400 pointer-events-none">Phone Number</label>
+                {errors.phone && <p className="text-red-500 text-xs mt-1 pl-1">{errors.phone}</p>}
               </div>
             </div>
 
@@ -243,9 +273,9 @@ const ContactPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <h4 className="text-xl font-bold text-slate-900 mb-6">Phone Support</h4>
                 <div className="w-8 h-1 bg-[#00A9D7] mb-8"></div>
                 <div className="space-y-1">
-                  <p><a href="tel:+971589520398" className="text-slate-600 hover:text-[#00A9D7] text-[14px] transition-colors">(dubai) +971 58 952 0398</a></p>
-                  <p><a href="tel:+918921095973" className="text-slate-600 hover:text-[#00A9D7] text-[14px] transition-colors">(india) +91 89210 95973</a></p>
-                  <p><a href="tel:+9180758521708" className="text-slate-600 hover:text-[#00A9D7] text-[14px] transition-colors">(india) +91 80758521708</a></p>
+                  <p><a href="tel:+971589520398" className="text-slate-600 hover:text-[#00A9D7] text-[14px] transition-colors">Dubai +971 58 952 0398</a></p>
+                  <p><a href="tel:+918921095973" className="text-slate-600 hover:text-[#00A9D7] text-[14px] transition-colors">India +91 89210 95973</a></p>
+                  <p><a href="tel:+9180758521708" className="text-slate-600 hover:text-[#00A9D7] text-[14px] transition-colors">India +91 80758521708</a></p>
                 </div>
               </div>
 

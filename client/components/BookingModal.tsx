@@ -49,6 +49,11 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
       document.body.style.overflow = 'hidden';
       setErrors({});
       setIsSubmitted(false);
+      setFormData({
+        fullName: '', email: '', travelDate: '', countryCode: '+971', phone: '',
+        travelOrigin: '', destination: '', adults: '', children: '',
+        tentativeBudget: '', specificRequirements: '',
+      });
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -144,6 +149,17 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
         countryCode: value,
         phone: prev.phone.slice(0, maxLen),
       }));
+    } else if (['fullName', 'travelOrigin', 'destination'].includes(name)) {
+      const textOnly = value.replace(/[0-9]/g, '');
+      setFormData(prev => ({ ...prev, [name]: textOnly }));
+    } else if (name === 'adults') {
+      const num = value.replace(/\D/g, '');
+      const clamped = num ? String(Math.min(Math.max(Number(num), 0), 50)) : '';
+      setFormData(prev => ({ ...prev, [name]: clamped }));
+    } else if (name === 'children') {
+      const num = value.replace(/\D/g, '');
+      const clamped = num ? String(Math.min(Number(num), 50)) : '';
+      setFormData(prev => ({ ...prev, [name]: clamped }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
@@ -189,19 +205,19 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3">
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Full Name <span className="text-red-500">*</span></label>
-                    <input name="fullName" value={formData.fullName} onChange={handleChange} autoComplete="off" placeholder="name" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.fullName ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    <input name="fullName" value={formData.fullName} onChange={handleChange} autoComplete="off" placeholder="name" className={`w-full !bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.fullName ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
                     {errors.fullName && <p className="text-red-500 text-[9px] ml-1">{errors.fullName}</p>}
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Email Address <span className="text-red-500">*</span></label>
-                    <input name="email" value={formData.email} onChange={handleChange} autoComplete="off" type="email" placeholder="email" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.email ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    <input name="email" value={formData.email} onChange={handleChange} autoComplete="off" type="email" placeholder="email" className={`w-full !bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.email ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
                     {errors.email && <p className="text-red-500 text-[9px] ml-1">{errors.email}</p>}
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Preferred Travel Date <span className="text-red-500">*</span></label>
-                    <input name="travelDate" value={formData.travelDate} onChange={handleChange} type="date" min={today} className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none font-medium text-sm border ${errors.travelDate ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all`} />
+                    <input name="travelDate" value={formData.travelDate} onChange={handleChange} type="date" min={today} className={`w-full !bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none font-medium text-sm border ${errors.travelDate ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all`} />
                     {errors.travelDate && <p className="text-red-500 text-[9px] ml-1">{errors.travelDate}</p>}
                   </div>
 
@@ -209,7 +225,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">
                       Mobile Number <span className="text-red-500">*</span>
                     </label>
-                    <div className={`flex items-center bg-[#FFF8F1] rounded-xl border ${errors.phone ? 'border-red-400' : 'border-transparent'} focus-within:border-brand-gold/30 transition-all`}>
+                    <div className={`flex items-center !bg-[#FFF8F1] rounded-xl border ${errors.phone ? 'border-red-400' : 'border-transparent'} focus-within:border-brand-gold/30 transition-all`}>
                       <select
                         name="countryCode"
                         value={formData.countryCode}
@@ -235,38 +251,38 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Travel Origin <span className="text-red-500">*</span></label>
-                    <input name="travelOrigin" value={formData.travelOrigin} onChange={handleChange} placeholder="e.g. Dubai" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.travelOrigin ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    <input name="travelOrigin" value={formData.travelOrigin} onChange={handleChange} placeholder="e.g. Dubai" className={`w-full !bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.travelOrigin ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
                     {errors.travelOrigin && <p className="text-red-500 text-[9px] ml-1">{errors.travelOrigin}</p>}
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Destination <span className="text-red-500">*</span></label>
-                    <input name="destination" value={formData.destination} onChange={handleChange} placeholder="e.g. Maldives" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.destination ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    <input name="destination" value={formData.destination} onChange={handleChange} placeholder="e.g. Maldives" className={`w-full !bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.destination ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
                     {errors.destination && <p className="text-red-500 text-[9px] ml-1">{errors.destination}</p>}
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">No. of Adults <span className="text-red-500">*</span></label>
-                    <input name="adults" value={formData.adults} onChange={handleChange} type="number" min="1" placeholder="e.g. 2" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.adults ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    <input name="adults" value={formData.adults} onChange={handleChange} type="number" min="1" max="50" placeholder="e.g. 2" className={`w-full !bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.adults ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
                     {errors.adults && <p className="text-red-500 text-[9px] ml-1">{errors.adults}</p>}
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">No. of Children</label>
-                    <input name="children" value={formData.children} onChange={handleChange} type="number" min="0" placeholder="e.g. 1" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.children ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    <input name="children" value={formData.children} onChange={handleChange} type="number" max="50" placeholder="e.g. 1" className={`w-full !bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.children ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
                     {errors.children && <p className="text-red-500 text-[9px] ml-1">{errors.children}</p>}
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Tentative Budget <span className="text-red-500">*</span></label>
-                    <input name="tentativeBudget" value={formData.tentativeBudget} onChange={handleChange} placeholder="AED 149" className={`w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.tentativeBudget ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
+                    <input name="tentativeBudget" value={formData.tentativeBudget} onChange={handleChange} placeholder="AED 149" className={`w-full !bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border ${errors.tentativeBudget ? 'border-red-400' : 'border-transparent'} focus:border-brand-gold/30 transition-all font-medium text-sm`} />
                     {errors.tentativeBudget && <p className="text-red-500 text-[9px] ml-1">{errors.tentativeBudget}</p>}
                   </div>
                 </div>
 
                 <div className="space-y-1">
                   <label className="text-[9px] font-bold text-[#8E95A5] uppercase tracking-widest ml-1">Any Specific Requirements</label>
-                  <textarea name="specificRequirements" value={formData.specificRequirements} onChange={handleChange} rows={3} placeholder="Please share any special requests, preferences, or travel requirements such as meal preferences, accessibility needs, hotel preferences, or additional assistance" className="w-full bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm resize-none" />
+                  <textarea name="specificRequirements" value={formData.specificRequirements} onChange={handleChange} rows={3} placeholder="Please share any special requests, preferences, or travel requirements such as meal preferences, accessibility needs, hotel preferences, or additional assistance" className="w-full !bg-[#FFF8F1] rounded-xl px-4 py-2.5 text-brand-dark outline-none border border-transparent focus:border-brand-gold/30 transition-all font-medium text-sm resize-none" />
                 </div>
 
                 <div className="pt-1">
